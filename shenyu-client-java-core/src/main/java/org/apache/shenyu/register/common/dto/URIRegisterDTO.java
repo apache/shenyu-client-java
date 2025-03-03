@@ -54,6 +54,7 @@ public class URIRegisterDTO implements DataTypeParent {
      * @param host the host
      * @param port the port
      * @param eventType the event type
+     * @param namespaceId the namespace id
      */
     public URIRegisterDTO(final String protocol, final String appName, final String contextPath,
                           final String rpcType, final String host, final Integer port,

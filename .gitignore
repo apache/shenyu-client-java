@@ -47,3 +47,4 @@ Thumbs.db
 *.lock
 */*/target/
 */*/target/*
+/shenyu-spring-boot-starter-java-client/shenyu-spring-boot-starter-java-client-apache-dubbo/target/

@@ -59,7 +59,7 @@
         </dependency>
         <dependency>
             <groupId>org.apache.shenyu</groupId>
-            <artifactId>shenyu-client-dubbo-common</artifactId>
+            <artifactId>shenyu-client-java-dubbo-common</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

@@ -39,6 +39,8 @@
         <module>shenyu-client-java-websocket</module>
         <module>shenyu-client-java-api-docs-annotations</module>
         <module>shenyu-client-java-autoconfig</module>
+        <module>shenyu-spring-boot-starter-java-client</module>
+        <module>shenyu-java-examples</module>
     </modules>
     
     <properties>

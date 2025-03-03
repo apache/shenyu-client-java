@@ -29,7 +29,7 @@
     <dependencies>
         <dependency>
             <groupId>org.apache.shenyu</groupId>
-            <artifactId>shenyu-client-core</artifactId>
+            <artifactId>shenyu-client-java-core</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
