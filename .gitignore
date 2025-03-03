@@ -1,0 +1,49 @@
+# maven ignore
+target/
+*.class
+*.jar
+*.war
+*.zip
+*.tar
+*.tar.gz
+.flattened-pom.xml
+dependency-reduced-pom.xml
+
+# maven plugin ignore
+release.properties
+cobertura.ser
+*.gpg
+
+# eclipse ignore
+.settings/
+.project
+.classpath
+
+# idea ignore
+.idea/
+!/.idea/icon.svg
+!/.idea/vcs.xml
+*.ipr
+*.iml
+*.iws
+
+# temp ignore
+logs/
+*.log
+*.doc
+*.cache
+*.diff
+*.patch
+*.tmp
+
+# system ignore
+.DS_Store
+Thumbs.db
+
+# agent build ignore
+/agent/
+
+# rust ignore
+*.lock
+*/*/target/
+*/*/target/*
