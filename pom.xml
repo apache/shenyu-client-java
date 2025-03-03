@@ -29,6 +29,7 @@
     <packaging>pom</packaging>
     <version>2.7.1-SNAPSHOT</version>
     <modules>
+        <module>shenyu-java-common</module>
         <module>shenyu-client-java-core</module>
         <module>shenyu-client-java-http</module>
         <module>shenyu-client-java-dubbo</module>
@@ -39,6 +40,8 @@
         <module>shenyu-client-java-websocket</module>
         <module>shenyu-client-java-api-docs-annotations</module>
         <module>shenyu-client-java-autoconfig</module>
+        <module>shenyu-register-java-common</module>
+        <module>shenyu-register-java-client</module>
         <module>shenyu-spring-boot-starter-java-client</module>
         <module>shenyu-java-examples</module>
     </modules>
@@ -66,6 +69,10 @@
         <maven-shade-plugin.version>3.5.1</maven-shade-plugin.version>
         <docker-maven-plugin.version>0.40.1</docker-maven-plugin.version>
         <maven-assembly-plugin.version>3.5.0</maven-assembly-plugin.version>
+        <wiremock.version>2.18.0</wiremock.version>
+        <commons-collections4.version>4.4</commons-collections4.version>
+        <asm.version>9.2</asm.version>
+        <bcprov-jdk18on.version>1.78</bcprov-jdk18on.version>
         <!-- maven plugin version end -->
         
         <!-- dependency version start -->
