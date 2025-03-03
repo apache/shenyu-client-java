@@ -46,8 +46,6 @@ jobs:
             os: ubuntu-latest
           - java: 20
             os: ubuntu-latest
-          - java: 21
-            os: ubuntu-latest
     runs-on: ${{ matrix.os }}
     if: (github.repository == 'apache/shenyu-client-java')
     steps:
