@@ -26,26 +26,7 @@ jobs:
     strategy:
       matrix:
         java: [ 8, 11, 17 ]
-        os: [ ubuntu-latest, windows-latest ]
-        include:
-          - java: 12
-            os: ubuntu-latest
-          - java: 13
-            os: ubuntu-latest
-          - java: 14
-            os: ubuntu-latest
-          - java: 15
-            os: ubuntu-latest
-          - java: 16
-            os: ubuntu-latest
-          - java: 17
-            os: ubuntu-latest
-          - java: 18
-            os: ubuntu-latest
-          - java: 19
-            os: ubuntu-latest
-          - java: 20
-            os: ubuntu-latest
+        os: [ ubuntu-latest ]
     runs-on: ${{ matrix.os }}
     if: (github.repository == 'apache/shenyu-client-java')
     steps:
