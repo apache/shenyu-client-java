@@ -16,7 +16,7 @@
 
 FROM eclipse-temurin:17-centos7
 
-ENV APP_NAME shenyu-examples-grpc
+ENV APP_NAME shenyu-java-examples-grpc
 ENV LOCAL_PATH /opt/${APP_NAME}
 
 RUN mkdir -p ${LOCAL_PATH}
