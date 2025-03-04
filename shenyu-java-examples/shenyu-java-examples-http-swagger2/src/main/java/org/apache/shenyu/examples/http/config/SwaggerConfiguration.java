@@ -18,19 +18,10 @@
 package org.apache.shenyu.examples.http.config;
 
 import io.swagger.annotations.ApiOperation;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 import org.apache.shenyu.common.constant.Constants;
 import org.apache.shenyu.common.utils.VersionUtils;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.util.ReflectionUtils;
-import org.springframework.web.servlet.mvc.method.RequestMappingInfoHandlerMapping;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.PathSelectors;
@@ -41,14 +32,16 @@ import springfox.documentation.service.Contact;
 import springfox.documentation.service.Parameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.spring.web.plugins.WebMvcRequestHandlerProvider;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
+import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Configuration class for Swagger API document.
  */
 @Configuration
-@EnableSwagger2
+@EnableSwagger2WebMvc
 public class SwaggerConfiguration {
 
     private static final String DEFAULT_SWAGGER_API_VERSION = "2.3.0";
@@ -103,44 +96,44 @@ public class SwaggerConfiguration {
             .build();
     }
 
-    /**
-     * use bean to be compatible with springboot 2.6.8.
-     *
-     * @return BeanPostProcessor
-     */
-    @Bean
-    public BeanPostProcessor springfoxBeanHandler() {
-        return new BeanPostProcessor() {
-            @Override
-            public Object postProcessAfterInitialization(final Object bean,
-                final String beanName) throws BeansException {
-                if (bean instanceof WebMvcRequestHandlerProvider) {
-                    customizeSpringfoxHandlerMappings(getHandlerMappings(bean));
-                }
-                return bean;
-            }
-
-            private <T extends RequestMappingInfoHandlerMapping> void customizeSpringfoxHandlerMappings(
-                final List<T> mappings) {
-                List<T> copy = mappings.stream()
-                    .filter(mapping -> Objects.isNull(mapping.getPatternParser()))
-                    .collect(Collectors.toList());
-                mappings.clear();
-                mappings.addAll(copy);
-            }
-
-            @SuppressWarnings("unchecked")
-            private List<RequestMappingInfoHandlerMapping> getHandlerMappings(final Object bean) {
-                try {
-                    Field field = ReflectionUtils.findField(bean.getClass(), "handlerMappings");
-                    field.setAccessible(true);
-                    return (List<RequestMappingInfoHandlerMapping>) field.get(bean);
-                } catch (IllegalArgumentException | IllegalAccessException e) {
-                    throw new IllegalStateException(e);
-                }
-            }
-        };
-    }
+//    /**
+//     * use bean to be compatible with springboot 2.6.8.
+//     *
+//     * @return BeanPostProcessor
+//     */
+//    @Bean
+//    public BeanPostProcessor springfoxBeanHandler() {
+//        return new BeanPostProcessor() {
+//            @Override
+//            public Object postProcessAfterInitialization(final Object bean,
+//                final String beanName) throws BeansException {
+//                if (bean instanceof WebMvcRequestHandlerProvider) {
+//                    customizeSpringfoxHandlerMappings(getHandlerMappings(bean));
+//                }
+//                return bean;
+//            }
+//
+//            private <T extends RequestMappingInfoHandlerMapping> void customizeSpringfoxHandlerMappings(
+//                final List<T> mappings) {
+//                List<T> copy = mappings.stream()
+//                    .filter(mapping -> Objects.isNull(mapping.getPatternParser()))
+//                    .collect(Collectors.toList());
+//                mappings.clear();
+//                mappings.addAll(copy);
+//            }
+//
+//            @SuppressWarnings("unchecked")
+//            private List<RequestMappingInfoHandlerMapping> getHandlerMappings(final Object bean) {
+//                try {
+//                    Field field = ReflectionUtils.findField(bean.getClass(), "handlerMappings");
+//                    field.setAccessible(true);
+//                    return (List<RequestMappingInfoHandlerMapping>) field.get(bean);
+//                } catch (IllegalArgumentException | IllegalAccessException e) {
+//                    throw new IllegalStateException(e);
+//                }
+//            }
+//        };
+//    }
 
     /**
      * Fetch version information from pom.xml and set title, version, description,
