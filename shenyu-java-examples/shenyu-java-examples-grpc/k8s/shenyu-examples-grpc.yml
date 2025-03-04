@@ -23,27 +23,27 @@ metadata:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: shenyu-examples-grpc-deployment
+  name: shenyu-java-examples-grpc-deployment
   namespace: shenyu-ingress
   labels:
-    app: shenyu-examples-grpc
-    all: shenyu-examples-grpc
+    app: shenyu-java-examples-grpc
+    all: shenyu-java-examples-grpc
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: shenyu-examples-grpc
-      all: shenyu-examples-grpc
+      app: shenyu-java-examples-grpc
+      all: shenyu-java-examples-grpc
   strategy: {}
   template:
     metadata:
       namespace: shenyu-ingress
       labels:
-        app: shenyu-examples-grpc
-        all: shenyu-examples-grpc
+        app: shenyu-java-examples-grpc
+        all: shenyu-java-examples-grpc
     spec:
       containers:
-        - image: shenyu-examples-grpc
+        - image: shenyu-java-examples-grpc
           name: shenyu-java-examples-grpc
           livenessProbe:
             initialDelaySeconds: 30
@@ -70,15 +70,15 @@ status: {}
 apiVersion: v1
 kind: Service
 metadata:
-  name: shenyu-examples-grpc-service
+  name: shenyu-java-examples-grpc-service
   namespace: shenyu-ingress
   labels:
-    app: shenyu-examples-grpc
-    all: shenyu-examples-grpc
+    app: shenyu-java-examples-grpc
+    all: shenyu-java-examples-grpc
 spec:
   selector:
-    app: shenyu-examples-grpc
-    all: shenyu-examples-grpc
+    app: shenyu-java-examples-grpc
+    all: shenyu-java-examples-grpc
   type: NodePort
   ports:
     - name: "55290"

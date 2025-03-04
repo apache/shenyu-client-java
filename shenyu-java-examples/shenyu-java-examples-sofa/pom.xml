@@ -29,15 +29,15 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>shenyu-examples-sofa-api</module>
-        <module>shenyu-examples-sofa-service</module>
+        <module>shenyu-java-examples-sofa-api</module>
+        <module>shenyu-java-examples-sofa-service</module>
     </modules>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>org.apache.shenyu</groupId>
-                <artifactId>shenyu-examples-sofa-api</artifactId>
+                <artifactId>shenyu-java-examples-sofa-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>
