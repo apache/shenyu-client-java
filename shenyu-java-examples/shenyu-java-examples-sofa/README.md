@@ -24,7 +24,7 @@ shenyu:
     serverLists : http://localhost:2379
 ```
 
-#### shenyu-examples-sofa-service config
+#### shenyu-java-examples-sofa-service config
 set etcd register config:
 
 ```yaml

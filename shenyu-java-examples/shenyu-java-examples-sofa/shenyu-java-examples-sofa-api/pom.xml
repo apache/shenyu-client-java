@@ -25,9 +25,9 @@
         <version>2.7.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>shenyu-examples-sofa-api</artifactId>
+    <artifactId>shenyu-java-examples-sofa-api</artifactId>
 
     <build>
-        <finalName>shenyu-examples-sofa-api</finalName>
+        <finalName>shenyu-java-examples-sofa-api</finalName>
     </build>
 </project>

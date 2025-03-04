@@ -25,7 +25,7 @@
         <version>2.7.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>shenyu-examples-sofa-service</artifactId>
+    <artifactId>shenyu-java-examples-sofa-service</artifactId>
 
     <properties>
         <rpc-sofa-boot-starter.version>3.22.0</rpc-sofa-boot-starter.version>
@@ -87,7 +87,7 @@
 
         <dependency>
             <groupId>org.apache.shenyu</groupId>
-            <artifactId>shenyu-examples-sofa-api</artifactId>
+            <artifactId>shenyu-java-examples-sofa-api</artifactId>
             <version>${project.version}</version>
         </dependency>
 
@@ -130,7 +130,7 @@
     </dependencies>
 
     <build>
-        <finalName>shenyu-examples-sofa</finalName>
+        <finalName>shenyu-java-examples-sofa</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -147,8 +147,8 @@
         <profile>
             <id>example</id>
             <properties>
-                <docker.buildArg.APP_NAME>shenyu-examples-sofa</docker.buildArg.APP_NAME>
-                <docker.image.tag.repo>shenyu-examples-sofa</docker.image.tag.repo>
+                <docker.buildArg.APP_NAME>shenyu-java-examples-sofa</docker.buildArg.APP_NAME>
+                <docker.image.tag.repo>shenyu-java-examples-sofa</docker.image.tag.repo>
                 <docker.image.tag.tagName>latest</docker.image.tag.tagName>
             </properties>
             <activation>
@@ -163,7 +163,7 @@
                         <configuration>
                             <images>
                                 <image>
-                                    <name>shenyu-examples-sofa</name>
+                                    <name>shenyu-java-examples-sofa</name>
                                     <build>
                                         <contextDir>${project.basedir}</contextDir>
                                     </build>
