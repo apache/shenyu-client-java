@@ -20,9 +20,9 @@ package org.apache.shenyu.client.core.register.registrar;
 import org.apache.shenyu.client.apidocs.annotations.ApiDoc;
 import org.apache.shenyu.client.apidocs.annotations.ApiModule;
 import org.apache.shenyu.client.core.constant.ShenyuClientConstants;
+import org.apache.shenyu.client.core.enums.ApiHttpMethodEnum;
+import org.apache.shenyu.client.core.enums.RpcTypeEnum;
 import org.apache.shenyu.client.core.register.ApiBean;
-import org.apache.shenyu.common.enums.ApiHttpMethodEnum;
-import org.apache.shenyu.common.enums.RpcTypeEnum;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;

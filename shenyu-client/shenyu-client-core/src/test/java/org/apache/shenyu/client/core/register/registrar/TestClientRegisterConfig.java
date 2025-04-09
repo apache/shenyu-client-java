@@ -17,8 +17,8 @@
 
 package org.apache.shenyu.client.core.register.registrar;
 
+import org.apache.shenyu.client.core.enums.RpcTypeEnum;
 import org.apache.shenyu.client.core.register.ClientRegisterConfig;
-import org.apache.shenyu.common.enums.RpcTypeEnum;
 
 public class TestClientRegisterConfig implements ClientRegisterConfig {
     @Override

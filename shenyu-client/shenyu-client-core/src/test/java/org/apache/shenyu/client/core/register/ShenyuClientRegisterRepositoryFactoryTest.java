@@ -17,8 +17,7 @@
 
 package org.apache.shenyu.client.core.register;
 
-import org.apache.shenyu.register.client.api.ShenyuClientRegisterRepository;
-import org.apache.shenyu.register.common.config.ShenyuRegisterCenterConfig;
+import org.apache.shenyu.client.core.register.config.ShenyuRegisterCenterConfig;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

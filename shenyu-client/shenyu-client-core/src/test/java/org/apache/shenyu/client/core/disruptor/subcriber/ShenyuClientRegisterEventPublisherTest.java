@@ -18,8 +18,8 @@
 package org.apache.shenyu.client.core.disruptor.subcriber;
 
 import org.apache.shenyu.client.core.disruptor.ShenyuClientRegisterEventPublisher;
-import org.apache.shenyu.register.client.api.ShenyuClientRegisterRepository;
-import org.apache.shenyu.register.common.type.DataTypeParent;
+import org.apache.shenyu.client.core.register.ShenyuClientRegisterRepository;
+import org.apache.shenyu.client.core.type.DataTypeParent;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;

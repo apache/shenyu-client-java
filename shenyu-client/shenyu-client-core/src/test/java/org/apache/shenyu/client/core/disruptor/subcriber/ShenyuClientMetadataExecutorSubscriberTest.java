@@ -17,9 +17,9 @@
 
 package org.apache.shenyu.client.core.disruptor.subcriber;
 
-import org.apache.shenyu.register.client.api.ShenyuClientRegisterRepository;
-import org.apache.shenyu.register.common.dto.MetaDataRegisterDTO;
-import org.apache.shenyu.register.common.type.DataType;
+import org.apache.shenyu.client.core.dto.MetaDataRegisterDTO;
+import org.apache.shenyu.client.core.register.ShenyuClientRegisterRepository;
+import org.apache.shenyu.client.core.type.DataType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
