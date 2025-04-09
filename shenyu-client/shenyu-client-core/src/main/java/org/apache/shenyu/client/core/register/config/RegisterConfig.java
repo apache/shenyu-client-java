@@ -18,6 +18,7 @@
 package org.apache.shenyu.client.core.register.config;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.Properties;
 
 /**
@@ -127,7 +128,7 @@ public class RegisterConfig {
 
     @Override
     public boolean equals(final Object obj) {
-        if (obj == null) {
+        if (Objects.isNull(obj)) {
             return false;
         }
         RegisterConfig registerConfig = (RegisterConfig) obj;
@@ -137,10 +138,10 @@ public class RegisterConfig {
         if (!this.getServerLists().equals(registerConfig.getServerLists())) {
             return false;
         }
-        if (this.getProps() == null && registerConfig.getProps() == null) {
+        if (Objects.isNull(this.getProps()) && Objects.isNull(registerConfig.getProps())) {
             return true;
         }
-        if (this.getProps() == null || registerConfig.getProps() == null) {
+        if (Objects.isNull(this.getProps()) || Objects.isNull(registerConfig.getProps())) {
             return false;
         }
         if (this.getProps().entrySet().size() != registerConfig.getProps().entrySet().size()) {
@@ -158,13 +159,13 @@ public class RegisterConfig {
 
     @Override
     public int hashCode() {
-        int result = getRegisterType() != null ? getRegisterType().hashCode() : 0;
-        result = 31 * result + (getServerLists() != null ? getServerLists().hashCode() : 0);
+        int result = Objects.nonNull(getRegisterType()) ? getRegisterType().hashCode() : 0;
+        result = 31 * result + (Objects.nonNull(getServerLists()) ? getServerLists().hashCode() : 0);
 
-        if (getProps() != null) {
+        if (Objects.nonNull(getProps())) {
             for (Map.Entry<Object, Object> entry : getProps().entrySet()) {
-                result = 31 * result + (entry.getKey() != null ? entry.getKey().hashCode() : 0);
-                result = 31 * result + (entry.getValue() != null ? entry.getValue().hashCode() : 0);
+                result = 31 * result + (Objects.nonNull(entry.getKey()) ? entry.getKey().hashCode() : 0);
+                result = 31 * result + (Objects.nonNull(entry.getValue()) ? entry.getValue().hashCode() : 0);
             }
         }
 
