@@ -29,7 +29,16 @@
     <packaging>pom</packaging>
     <version>2.7.0.1-jdk8-SNAPSHOT</version>
     <modules>
-        <module>shenyu-client</module>
+        <module>shenyu-client-core</module>
+        <module>shenyu-client-http</module>
+        <module>shenyu-client-dubbo</module>
+        <module>shenyu-client-sofa</module>
+        <module>shenyu-client-tars</module>
+        <module>shenyu-client-grpc</module>
+        <module>shenyu-client-motan</module>
+        <module>shenyu-client-websocket</module>
+        <module>shenyu-client-api-docs-annotations</module>
+        <module>shenyu-client-autoconfig</module>
     </modules>
     
     <properties>

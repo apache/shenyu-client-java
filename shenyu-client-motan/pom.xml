@@ -19,11 +19,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>org.apache.shenyu</groupId>
-        <artifactId>shenyu-client</artifactId>
+        <artifactId>shenyu-client-java</artifactId>
         <version>2.7.0.1-jdk8-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>shenyu-client-grpc</artifactId>
+
+    <artifactId>shenyu-client-motan</artifactId>
 
     <dependencies>
         <dependency>
@@ -31,25 +32,6 @@
             <artifactId>shenyu-client-core</artifactId>
             <version>${project.version}</version>
         </dependency>
-
-        <dependency>
-            <groupId>org.apache.shenyu</groupId>
-            <artifactId>shenyu-protocol-grpc</artifactId>
-            <version>2.6.1</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>shenyu-common</artifactId>
-                    <groupId>org.apache.shenyu</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <dependency>
-            <groupId>com.google.protobuf</groupId>
-            <artifactId>protobuf-java-util</artifactId>
-            <version>${protobuf-java.version}</version>
-        </dependency>
-
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-beans</artifactId>
@@ -65,5 +47,12 @@
             <artifactId>spring-core</artifactId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>com.weibo</groupId>
+            <artifactId>motan-springsupport</artifactId>
+            <version>${motan.version}</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
+
 </project>
