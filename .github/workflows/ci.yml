@@ -36,13 +36,13 @@ jobs:
       - uses: actions/checkout@v3
         with:
           submodules: true
-      - uses: dorny/paths-filter@v2
-        id: filter
-        with:
-          filters: '.github/filters.yml'
-          list-files: json
+#      - uses: dorny/paths-filter@v2
+#        id: filter
+#        with:
+#          filters: '.github/filters.yml'
+#          list-files: json
       - name: Restore ShenYu Maven Repos
-        if: steps.filter.outputs.changed == 'true'
+#        if: steps.filter.outputs.changed == 'true'
         id: restore-maven-cache
         uses: actions/cache/restore@v3
         with:
@@ -51,18 +51,19 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
       - uses: actions/setup-java@v1
-        if: steps.filter.outputs.changed == 'true'
+#        if: steps.filter.outputs.changed == 'true'
         with:
           java-version: ${{ matrix.java }}
       - name: Build with Maven
-        if: steps.filter.outputs.changed == 'true'
+#        if: steps.filter.outputs.changed == 'true'
         run: ./mvnw -B clean test -Prelease
       - uses: codecov/codecov-action@v1
         with:
           token: 2760af6a-3405-4882-9e61-04c5176fecfa
-        if: steps.filter.outputs.changed == 'true'
+#        if: steps.filter.outputs.changed == 'true'
       - name: Save ShenYu Maven Repos
-        if: steps.filter.outputs.changed == 'true' && steps.restore-maven-cache.outputs.cache-hit != 'true'
+#        if: steps.filter.outputs.changed == 'true' && steps.restore-maven-cache.outputs.cache-hit != 'true'
+        if: steps.restore-maven-cache.outputs.cache-hit != 'true'
         uses: actions/cache/save@v3
         with:
           path: ~/.m2/repository
