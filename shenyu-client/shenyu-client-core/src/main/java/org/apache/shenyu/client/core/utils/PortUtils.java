@@ -43,7 +43,7 @@ public class PortUtils {
      *
      * @param beanFactory beanFactory
      * @return port number
-     * @throws ShenyuException when can not find port
+     * @throws RuntimeException when failed to get port
      */
     @SuppressWarnings("all")
     public static int findPort(final BeanFactory beanFactory) {

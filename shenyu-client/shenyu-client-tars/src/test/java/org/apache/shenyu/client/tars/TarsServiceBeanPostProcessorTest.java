@@ -17,16 +17,16 @@
 
 package org.apache.shenyu.client.tars;
 
+import org.apache.shenyu.client.core.enums.RpcTypeEnum;
 import org.apache.shenyu.client.core.exception.ShenyuClientIllegalArgumentException;
+import org.apache.shenyu.client.core.register.ShenyuClientRegisterRepository;
 import org.apache.shenyu.client.core.register.ShenyuClientRegisterRepositoryFactory;
+import org.apache.shenyu.client.core.register.config.ShenyuClientConfig;
+import org.apache.shenyu.client.core.register.config.ShenyuClientConfig.ClientPropertiesConfig;
+import org.apache.shenyu.client.core.register.config.ShenyuRegisterCenterConfig;
+import org.apache.shenyu.client.core.utils.RegisterUtils;
 import org.apache.shenyu.client.tars.common.annotation.ShenyuTarsClient;
 import org.apache.shenyu.client.tars.common.annotation.ShenyuTarsService;
-import org.apache.shenyu.common.enums.RpcTypeEnum;
-import org.apache.shenyu.register.client.api.ShenyuClientRegisterRepository;
-import org.apache.shenyu.register.client.http.utils.RegisterUtils;
-import org.apache.shenyu.register.common.config.ShenyuClientConfig;
-import org.apache.shenyu.register.common.config.ShenyuClientConfig.ClientPropertiesConfig;
-import org.apache.shenyu.register.common.config.ShenyuRegisterCenterConfig;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;

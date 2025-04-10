@@ -17,17 +17,17 @@
 
 package org.apache.shenyu.client.spring.websocket.init;
 
+import org.apache.shenyu.client.core.constant.Constants;
 import org.apache.shenyu.client.core.constant.ShenyuClientConstants;
 import org.apache.shenyu.client.core.disruptor.ShenyuClientRegisterEventPublisher;
+import org.apache.shenyu.client.core.dto.MetaDataRegisterDTO;
+import org.apache.shenyu.client.core.dto.URIRegisterDTO;
+import org.apache.shenyu.client.core.enums.RpcTypeEnum;
+import org.apache.shenyu.client.core.register.ShenyuClientRegisterRepository;
+import org.apache.shenyu.client.core.register.config.PropertiesConfig;
+import org.apache.shenyu.client.core.register.config.ShenyuClientConfig;
+import org.apache.shenyu.client.core.register.config.ShenyuClientConfig.ClientPropertiesConfig;
 import org.apache.shenyu.client.spring.websocket.annotation.ShenyuSpringWebSocketClient;
-import org.apache.shenyu.common.constant.Constants;
-import org.apache.shenyu.common.enums.RpcTypeEnum;
-import org.apache.shenyu.register.client.api.ShenyuClientRegisterRepository;
-import org.apache.shenyu.register.common.config.PropertiesConfig;
-import org.apache.shenyu.register.common.config.ShenyuClientConfig;
-import org.apache.shenyu.register.common.config.ShenyuClientConfig.ClientPropertiesConfig;
-import org.apache.shenyu.register.common.dto.MetaDataRegisterDTO;
-import org.apache.shenyu.register.common.dto.URIRegisterDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

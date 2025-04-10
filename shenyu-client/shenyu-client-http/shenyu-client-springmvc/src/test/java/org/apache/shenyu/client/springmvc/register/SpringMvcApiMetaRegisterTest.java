@@ -18,13 +18,13 @@
 package org.apache.shenyu.client.springmvc.register;
 
 import org.apache.shenyu.client.core.disruptor.ShenyuClientRegisterEventPublisher;
+import org.apache.shenyu.client.core.dto.MetaDataRegisterDTO;
+import org.apache.shenyu.client.core.enums.RpcTypeEnum;
 import org.apache.shenyu.client.core.register.ApiBean;
 import org.apache.shenyu.client.core.register.ClientRegisterConfig;
+import org.apache.shenyu.client.core.register.ShenyuClientRegisterRepository;
+import org.apache.shenyu.client.core.type.DataTypeParent;
 import org.apache.shenyu.client.springmvc.annotation.ShenyuSpringMvcClient;
-import org.apache.shenyu.common.enums.RpcTypeEnum;
-import org.apache.shenyu.register.client.api.ShenyuClientRegisterRepository;
-import org.apache.shenyu.register.common.dto.MetaDataRegisterDTO;
-import org.apache.shenyu.register.common.type.DataTypeParent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.bind.annotation.RequestMapping;

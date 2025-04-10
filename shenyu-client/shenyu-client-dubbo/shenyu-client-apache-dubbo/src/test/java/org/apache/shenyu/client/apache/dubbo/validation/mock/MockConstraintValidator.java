@@ -17,8 +17,8 @@
 
 package org.apache.shenyu.client.apache.dubbo.validation.mock;
 
-import jakarta.validation.ConstraintValidator;
-import jakarta.validation.ConstraintValidatorContext;
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
 
 /**
  * MockConstraintValidator.

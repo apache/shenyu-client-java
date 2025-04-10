@@ -19,15 +19,14 @@ package org.apache.shenyu.client.springmvc.init;
 
 import org.apache.shenyu.client.core.constant.ShenyuClientConstants;
 import org.apache.shenyu.client.core.exception.ShenyuClientIllegalArgumentException;
+import org.apache.shenyu.client.core.register.ShenyuClientRegisterRepository;
 import org.apache.shenyu.client.core.register.ShenyuClientRegisterRepositoryFactory;
+import org.apache.shenyu.client.core.register.config.ShenyuClientConfig;
+import org.apache.shenyu.client.core.register.config.ShenyuClientConfig.ClientPropertiesConfig;
+import org.apache.shenyu.client.core.register.config.ShenyuRegisterCenterConfig;
+import org.apache.shenyu.client.core.utils.RegisterUtils;
 import org.apache.shenyu.client.springmvc.annotation.ShenyuSpringMvcClient;
-import org.apache.shenyu.common.exception.ShenyuException;
 import org.apache.shenyu.client.core.utils.PortUtils;
-import org.apache.shenyu.register.client.api.ShenyuClientRegisterRepository;
-import org.apache.shenyu.register.client.http.utils.RegisterUtils;
-import org.apache.shenyu.register.common.config.ShenyuClientConfig;
-import org.apache.shenyu.register.common.config.ShenyuClientConfig.ClientPropertiesConfig;
-import org.apache.shenyu.register.common.config.ShenyuRegisterCenterConfig;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -174,7 +173,7 @@ public class SpringMvcClientEventListenerTest {
     public void testOnApplicationEventError() {
         init();
         SpringMvcClientEventListener springMvcClientEventListener = buildSpringMvcClientEventListener(false, false);
-        Assert.assertThrows(ShenyuException.class, () -> springMvcClientEventListener.onApplicationEvent(contextRefreshedEvent));
+        Assert.assertThrows(RuntimeException.class, () -> springMvcClientEventListener.onApplicationEvent(contextRefreshedEvent));
         registerUtilsMockedStatic.close();
     }
 
