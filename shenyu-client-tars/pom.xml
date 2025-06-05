@@ -23,41 +23,45 @@
         <version>2.7.0.1-jdk8-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>shenyu-client</artifactId>
-    <packaging>pom</packaging>
-
-    <modules>
-        <module>shenyu-client-core</module>
-        <module>shenyu-client-http</module>
-        <module>shenyu-client-dubbo</module>
-        <module>shenyu-client-sofa</module>
-        <module>shenyu-client-tars</module>
-        <module>shenyu-client-grpc</module>
-        <module>shenyu-client-motan</module>
-        <module>shenyu-client-websocket</module>
-        <module>shenyu-client-api-docs-annotations</module>
-        <module>shenyu-client-autoconfig</module>
-    </modules>
+    <artifactId>shenyu-client-tars</artifactId>
 
     <dependencies>
         <dependency>
-            <groupId>com.squareup.okhttp3</groupId>
-            <artifactId>okhttp</artifactId>
-            <version>${okhttp.version}</version>
+            <groupId>org.apache.shenyu</groupId>
+            <artifactId>shenyu-client-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.tencent.tars</groupId>
+            <artifactId>tars-spring-boot-starter</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>log4j</groupId>
+                    <artifactId>log4j</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-dependencies</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.google.guava</groupId>
+                    <artifactId>guava</artifactId>
+                </exclusion>
+            </exclusions>
+            <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>${gson.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.javatuples</groupId>
-            <artifactId>javatuples</artifactId>
-            <version>${javatuples.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-test</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
