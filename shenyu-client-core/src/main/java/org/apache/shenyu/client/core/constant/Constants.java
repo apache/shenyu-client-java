@@ -270,6 +270,11 @@ public interface Constants {
     String HEARTBEAT = "heartbeat";
 
     /**
+     * The constant BEAT_URI_PATH.
+     */
+    String BEAT_URI_PATH = "/instance/beat";
+
+    /**
      * The constant header key of sign plugin version-2.
      */
     String SHENYU_AUTHORIZATION = "ShenYu-Authorization";
@@ -623,6 +628,16 @@ public interface Constants {
      * When register by http, the uri path.
      */
     String URI_PATH = "/shenyu-client/register-uri";
+
+    /**
+     * When register by http, the mcp tools path.
+     */
+    String MCP_TOOLS_PATH = "/shenyu-client/register-mcp";
+
+    /**
+     * When register by http, the mcp tools type.
+     */
+    String MCP_TOOLS_TYPE = "mcp";
     
     /**
      * When register by http, the offline path.

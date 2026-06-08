@@ -24,8 +24,9 @@ on:
 jobs:
   build:
     strategy:
+      fail-fast: false
       matrix:
-        java: [ 8, 11, 17 ]
+        java: [ 8, 17, 21, 23, 25 ]
         os: [ ubuntu-latest ]
     runs-on: ${{ matrix.os }}
     if: (github.repository == 'apache/shenyu-client-java')
@@ -33,7 +34,7 @@ jobs:
       - name: Support longpaths
         if: ${{ matrix.os == 'windows-latest'}}
         run: git config --system core.longpaths true
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: true
 #      - uses: dorny/paths-filter@v2
@@ -41,40 +42,26 @@ jobs:
 #        with:
 #          filters: '.github/filters.yml'
 #          list-files: json
-      - name: Restore ShenYu Maven Repos
-#        if: steps.filter.outputs.changed == 'true'
-        id: restore-maven-cache
-        uses: actions/cache/restore@v3
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
-      - uses: actions/setup-java@v1
+      - uses: actions/setup-java@v4
 #        if: steps.filter.outputs.changed == 'true'
         with:
+          distribution: temurin
           java-version: ${{ matrix.java }}
+          cache: maven
       - name: Build with Maven
 #        if: steps.filter.outputs.changed == 'true'
-        run: ./mvnw -B clean test -Prelease
-      - uses: codecov/codecov-action@v1
+        run: ./mvnw -B clean test
+      - uses: codecov/codecov-action@v4
         with:
           token: 2760af6a-3405-4882-9e61-04c5176fecfa
 #        if: steps.filter.outputs.changed == 'true'
-      - name: Save ShenYu Maven Repos
-#        if: steps.filter.outputs.changed == 'true' && steps.restore-maven-cache.outputs.cache-hit != 'true'
-        if: steps.restore-maven-cache.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v3
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
 
   check-license-header:
     name: check-license-header
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: true
       - name: Check License Header
@@ -92,4 +79,3 @@ jobs:
       - name: checking job status
         run: |
           [[ "${{ needs.build.result }}" == "success" ]] || exit -1
-
