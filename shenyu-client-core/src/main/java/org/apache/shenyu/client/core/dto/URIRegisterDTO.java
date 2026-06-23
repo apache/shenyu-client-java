@@ -269,15 +269,15 @@ public class URIRegisterDTO implements DataTypeParent {
         this.eventType = eventType;
     }
 
-    public void setInstanceInfo(String instanceInfo) {
-      this.instanceInfo = instanceInfo;
+    public void setInstanceInfo(final String instanceInfo) {
+        this.instanceInfo = instanceInfo;
     }
 
     public String getInstanceInfo() {
         return instanceInfo;
     }
 
-  @Override
+    @Override
     public boolean equals(final Object o) {
         if (this == o) {
             return Boolean.TRUE;
@@ -447,8 +447,8 @@ public class URIRegisterDTO implements DataTypeParent {
         }
 
         public Builder instanceInfo(final String instanceInfo) {
-          this.instanceInfo = instanceInfo;
-          return this;
+            this.instanceInfo = instanceInfo;
+            return this;
         }
 
         /**
