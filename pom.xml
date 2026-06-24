@@ -29,8 +29,10 @@
     <packaging>pom</packaging>
     <version>2.7.0.1-jdk8-SNAPSHOT</version>
     <modules>
+        <module>shenyu-registry-api</module>
         <module>shenyu-client-core</module>
         <module>shenyu-client-http</module>
+        <module>shenyu-client-mcp</module>
         <module>shenyu-client-dubbo</module>
         <module>shenyu-client-sofa</module>
         <module>shenyu-client-tars</module>
@@ -39,7 +41,38 @@
         <module>shenyu-client-websocket</module>
         <module>shenyu-client-api-docs-annotations</module>
         <module>shenyu-client-autoconfig</module>
+        <module>shenyu-register-client-beat</module>
+        <module>shenyu-spring-boot-starter-client</module>
     </modules>
+    
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    
+    <scm>
+        <url>https://github.com/apache/shenyu-client-java</url>
+        <connection>scm:git:https://github.com/apache/shenyu-client-java.git</connection>
+        <developerConnection>scm:git:https://github.com/apache/shenyu-client-java.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+    
+    <mailingLists>
+        <mailingList>
+            <name>Apache ShenYu Developer List</name>
+            <post>dev@shenyu.apache.org</post>
+            <subscribe>dev-subscribe@shenyu.apache.org</subscribe>
+            <unsubscribe>dev-unsubscribe@shenyu.apache.org</unsubscribe>
+        </mailingList>
+    </mailingLists>
+    
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/apache/shenyu/issues</url>
+    </issueManagement>
     
     <properties>
         <java.version>1.8</java.version>
@@ -47,7 +80,7 @@
         <skipTests>false</skipTests>
         <!-- maven plugin version start -->
         <exec-maven-plugin.version>1.6.0</exec-maven-plugin.version>
-        <jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
+        <jacoco-maven-plugin.version>0.8.15</jacoco-maven-plugin.version>
         <nexus-staging-maven-plugin.version>1.6.3</nexus-staging-maven-plugin.version>
         <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
         <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
@@ -87,7 +120,9 @@
         <okhttp.version>4.9.3</okhttp.version>
         <bcprov-jdk18on.version>1.78</bcprov-jdk18on.version>
         <mockito.version>3.5.15</mockito.version>
+        <byte-buddy.version>1.18.10</byte-buddy.version>
         <awaitility.version>4.0.3</awaitility.version>
+        <swagger-core.version>2.2.21</swagger-core.version>
     </properties>
     
     <dependencyManagement>
@@ -167,6 +202,16 @@
                 <groupId>org.bouncycastle</groupId>
                 <artifactId>bcprov-jdk18on</artifactId>
                 <version>${bcprov-jdk18on.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.bytebuddy</groupId>
+                <artifactId>byte-buddy</artifactId>
+                <version>${byte-buddy.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.bytebuddy</groupId>
+                <artifactId>byte-buddy-agent</artifactId>
+                <version>${byte-buddy.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
