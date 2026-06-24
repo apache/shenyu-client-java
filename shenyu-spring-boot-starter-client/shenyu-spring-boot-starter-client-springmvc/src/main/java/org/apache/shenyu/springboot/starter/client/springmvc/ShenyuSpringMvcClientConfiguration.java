@@ -70,7 +70,6 @@ public class ShenyuSpringMvcClientConfiguration {
         ClientPropertiesConfig clientPropertiesConfig = clientConfig.getClient().get(RpcTypeEnum.HTTP.getName());
         Properties props = Optional.ofNullable(clientPropertiesConfig).map(ClientPropertiesConfig::getProps).orElse(null);
         String applicationName = env.getProperty("spring.application.name");
-        String discoveryMode = env.getProperty("shenyu.discovery.type", ShenyuClientConstants.DISCOVERY_LOCAL_MODE);
         if (Objects.nonNull(props)) {
             String appName = props.getProperty(ShenyuClientConstants.APP_NAME);
             if (StringUtils.isBlank(appName) && StringUtils.isBlank(applicationName)) {
@@ -83,7 +82,6 @@ public class ShenyuSpringMvcClientConfiguration {
             if (StringUtils.isBlank(contextPath)) {
                 props.setProperty(ShenyuClientConstants.CONTEXT_PATH, String.format("/%s", applicationName));
             }
-            props.setProperty(ShenyuClientConstants.DISCOVERY_LOCAL_MODE_KEY, Boolean.valueOf(ShenyuClientConstants.DISCOVERY_LOCAL_MODE.equals(discoveryMode)).toString());
         }
         return new SpringMvcClientEventListener(clientConfig, shenyuClientRegisterRepository, env);
     }
