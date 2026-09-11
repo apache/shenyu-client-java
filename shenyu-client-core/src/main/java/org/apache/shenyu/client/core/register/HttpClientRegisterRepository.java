@@ -26,6 +26,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.shenyu.client.core.constant.Constants;
 import org.apache.shenyu.client.core.dto.ApiDocRegisterDTO;
 import org.apache.shenyu.client.core.dto.DiscoveryConfigRegisterDTO;
+import org.apache.shenyu.client.core.dto.McpToolsRegisterDTO;
 import org.apache.shenyu.client.core.dto.MetaDataRegisterDTO;
 import org.apache.shenyu.client.core.dto.URIRegisterDTO;
 import org.apache.shenyu.client.core.enums.EventType;
@@ -150,6 +151,11 @@ public class HttpClientRegisterRepository extends FailbackRegistryRepository {
     @Override
     public void doPersistInterface(final MetaDataRegisterDTO metadata) {
         doRegister(metadata, Constants.META_PATH, Constants.META_TYPE);
+    }
+
+    @Override
+    protected void doPersistMcpTools(final McpToolsRegisterDTO registerDTO) {
+        doRegister(registerDTO, Constants.MCP_TOOLS_PATH, Constants.MCP_TOOLS_TYPE);
     }
 
     @Override

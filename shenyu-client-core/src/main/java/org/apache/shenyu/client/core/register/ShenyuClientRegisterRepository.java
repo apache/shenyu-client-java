@@ -19,6 +19,7 @@ package org.apache.shenyu.client.core.register;
 
 
 import org.apache.shenyu.client.core.dto.ApiDocRegisterDTO;
+import org.apache.shenyu.client.core.dto.McpToolsRegisterDTO;
 import org.apache.shenyu.client.core.dto.MetaDataRegisterDTO;
 import org.apache.shenyu.client.core.dto.URIRegisterDTO;
 import org.apache.shenyu.client.core.register.config.ShenyuRegisterCenterConfig;
@@ -72,6 +73,14 @@ public interface ShenyuClientRegisterRepository {
      * @param apiDocRegisterDTO apiDocRegisterDTO
      */
     default void persistApiDoc(ApiDocRegisterDTO apiDocRegisterDTO) {
+    }
+
+    /**
+     * persistMcpTools.
+     *
+     * @param mcpToolsRegisterDTO mcpToolsRegisterDTO
+     */
+    default void persistMcpTools(McpToolsRegisterDTO mcpToolsRegisterDTO) {
     }
     
     /**
