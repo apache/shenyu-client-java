@@ -103,8 +103,6 @@ public abstract class AbstractContextRefreshedEventListener<T, A extends Annotat
 
     private ApplicationContext context;
 
-    private final Boolean isDiscoveryLocalMode;
-    
     /**
      * multiple namespace support.
      */
@@ -139,7 +137,6 @@ public abstract class AbstractContextRefreshedEventListener<T, A extends Annotat
         this.ipAndPort = props.getProperty(ShenyuClientConstants.IP_PORT);
         this.host = props.getProperty(ShenyuClientConstants.HOST);
         this.port = props.getProperty(ShenyuClientConstants.PORT);
-        this.isDiscoveryLocalMode = Boolean.valueOf(props.getProperty(ShenyuClientConstants.DISCOVERY_LOCAL_MODE_KEY));
         publisher.start(shenyuClientRegisterRepository);
     }
 
@@ -153,6 +150,9 @@ public abstract class AbstractContextRefreshedEventListener<T, A extends Annotat
         if (!registered.compareAndSet(false, true)) {
             return;
         }
+        String discoveryMode = context.getEnvironment()
+                .getProperty("shenyu.discovery.type", ShenyuClientConstants.DISCOVERY_LOCAL_MODE);
+        boolean isDiscoveryLocalMode = ShenyuClientConstants.DISCOVERY_LOCAL_MODE.equals(discoveryMode);
         if (isDiscoveryLocalMode) {
             List<String> namespaceIds = this.getNamespace();
             namespaceIds.forEach(namespaceId -> publisher.publishEvent(buildURIRegisterDTO(context, beans, namespaceId)));

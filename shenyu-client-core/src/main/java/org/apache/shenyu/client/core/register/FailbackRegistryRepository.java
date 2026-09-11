@@ -19,6 +19,7 @@ package org.apache.shenyu.client.core.register;
 
 import org.apache.shenyu.client.core.constant.Constants;
 import org.apache.shenyu.client.core.dto.ApiDocRegisterDTO;
+import org.apache.shenyu.client.core.dto.McpToolsRegisterDTO;
 import org.apache.shenyu.client.core.dto.MetaDataRegisterDTO;
 import org.apache.shenyu.client.core.dto.URIRegisterDTO;
 import org.apache.shenyu.client.core.register.retry.FailureRegistryTask;
@@ -97,11 +98,33 @@ public abstract class FailbackRegistryRepository implements ShenyuClientRegister
     }
 
     /**
+     * Persist mcp tools.
+     *
+     * @param registerDTO registerDTO
+     */
+    @Override
+    public void persistMcpTools(final McpToolsRegisterDTO registerDTO) {
+        try {
+            this.doPersistMcpTools(registerDTO);
+        } catch (Exception ex) {
+            logger.warn("Failed to persistMcpTools {}, cause:{}", registerDTO, ex.getMessage());
+            this.addFailureMcpToolsRegister(registerDTO);
+        }
+    }
+
+    /**
      * doPersistApiDoc.
      *
      * @param apiDocRegisterDTO apiDocRegisterDTO
      */
     protected abstract void doPersistApiDoc(ApiDocRegisterDTO apiDocRegisterDTO);
+
+    /**
+     * doPersistMcpTools.
+     *
+     * @param mcpToolsRegisterDTO mcpToolsRegisterDTO
+     */
+    protected abstract void doPersistMcpTools(McpToolsRegisterDTO mcpToolsRegisterDTO);
 
     /**
      * Add failure meta data register.
@@ -145,6 +168,20 @@ public abstract class FailbackRegistryRepository implements ShenyuClientRegister
         }
     }
 
+    /**
+     * Add failure mcp tools register.
+     *
+     * @param <T> the type parameter
+     * @param t   the t
+     */
+    protected <T> void addFailureMcpToolsRegister(final T t) {
+        if (t instanceof McpToolsRegisterDTO) {
+            McpToolsRegisterDTO dto = (McpToolsRegisterDTO) t;
+            String address = String.join(":", dto.getNamespaceId(), dto.getMcpConfig());
+            addToFail(new Holder(t, address, Constants.MCP_TOOLS_TYPE));
+        }
+    }
+
     private <T> void addToFail(final Holder t) {
         Holder oldObj = concurrentHashMap.get(t.getKey());
         if (Objects.nonNull(oldObj)) {
@@ -185,6 +222,9 @@ public abstract class FailbackRegistryRepository implements ShenyuClientRegister
                 break;
             case Constants.API_DOC_TYPE:
                 this.doPersistApiDoc((ApiDocRegisterDTO) holder.getObj());
+                break;
+            case Constants.MCP_TOOLS_TYPE:
+                this.doPersistMcpTools((McpToolsRegisterDTO) holder.getObj());
                 break;
             default:
                 break;

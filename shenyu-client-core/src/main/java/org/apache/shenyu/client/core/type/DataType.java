@@ -46,4 +46,9 @@ public enum DataType {
      * Discovery config type enum.
      */
     DISCOVERY_CONFIG,
+
+    /**
+     * Mcp tools type enum.
+     */
+    MCP_TOOLS,
 }
