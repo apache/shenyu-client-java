@@ -118,6 +118,12 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-collections4</artifactId>
         </dependency>
+
+        <dependency>
+          <groupId>com.github.oshi</groupId>
+          <artifactId>oshi-core</artifactId>
+          <version>6.10.0</version>
+        </dependency>
     
     </dependencies>
 </project>
