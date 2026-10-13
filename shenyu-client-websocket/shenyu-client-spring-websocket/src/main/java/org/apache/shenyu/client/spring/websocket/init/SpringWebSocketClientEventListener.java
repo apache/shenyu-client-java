@@ -21,18 +21,18 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shenyu.client.core.client.AbstractContextRefreshedEventListener;
 import org.apache.shenyu.client.core.constant.ShenyuClientConstants;
-import org.apache.shenyu.client.core.disruptor.ShenyuClientRegisterEventPublisher;
-import org.apache.shenyu.client.core.dto.MetaDataRegisterDTO;
-import org.apache.shenyu.client.core.dto.URIRegisterDTO;
-import org.apache.shenyu.client.core.enums.ApiHttpMethodEnum;
-import org.apache.shenyu.client.core.enums.EventType;
-import org.apache.shenyu.client.core.enums.RpcTypeEnum;
-import org.apache.shenyu.client.core.register.ShenyuClientRegisterRepository;
-import org.apache.shenyu.client.core.register.config.ShenyuClientConfig;
-import org.apache.shenyu.client.core.utils.PathUtils;
 import org.apache.shenyu.client.core.utils.PortUtils;
 import org.apache.shenyu.client.spring.websocket.annotation.ShenyuServerEndpoint;
 import org.apache.shenyu.client.spring.websocket.annotation.ShenyuSpringWebSocketClient;
+import org.apache.shenyu.common.enums.ApiHttpMethodEnum;
+import org.apache.shenyu.common.enums.RpcTypeEnum;
+import org.apache.shenyu.common.exception.ShenyuException;
+import org.apache.shenyu.common.utils.PathUtils;
+import org.apache.shenyu.register.client.api.ShenyuClientRegisterRepository;
+import org.apache.shenyu.register.common.config.ShenyuClientConfig;
+import org.apache.shenyu.register.common.dto.MetaDataRegisterDTO;
+import org.apache.shenyu.register.common.dto.URIRegisterDTO;
+import org.apache.shenyu.register.common.enums.EventType;
 import org.javatuples.Sextet;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
@@ -55,21 +55,22 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * The type Shenyu websocket client event listener.
  */
 public class SpringWebSocketClientEventListener extends AbstractContextRefreshedEventListener<Object, ShenyuSpringWebSocketClient> {
-    
-    private final ShenyuClientRegisterEventPublisher publisher = ShenyuClientRegisterEventPublisher.getInstance();
-    
-    private final String[] pathAttributeNames = new String[] {"path", "value"};
+
+    private final String[] pathAttributeNames = new String[]{"path", "value"};
 
     private final List<Class<? extends Annotation>> mappingAnnotation = new ArrayList<>(7);
 
     private final Boolean isFull;
 
     private final String protocol;
+
+    private final AtomicBoolean endpointsRegistered = new AtomicBoolean();
 
     /**
      * Instantiates a new Spring websocket client event listener.
@@ -104,9 +105,23 @@ public class SpringWebSocketClientEventListener extends AbstractContextRefreshed
     protected Map<String, Object> getBeans(final ApplicationContext context) {
         // Filter out is not controller out
         if (Boolean.TRUE.equals(isFull)) {
+            if (!markRegistered()) {
+                return Collections.emptyMap();
+            }
             LOG.info("init spring websocket client success with isFull mode");
             List<String> namespaceIds = super.getNamespace();
-            namespaceIds.forEach(namespaceId -> publisher.publishEvent(buildURIRegisterDTO(context, Collections.emptyMap(), namespaceId)));
+            namespaceIds.forEach(namespaceId -> {
+                getPublisher().publishEvent(MetaDataRegisterDTO.builder()
+                        .contextPath(getContextPath())
+                        .appName(getAppName())
+                        .path(getContextPath())
+                        .rpcType(RpcTypeEnum.WEB_SOCKET.getName())
+                        .enabled(true)
+                        .ruleName(getContextPath())
+                        .namespaceId(namespaceId)
+                        .build());
+                getPublisher().publishEvent(buildURIRegisterDTO(context, Collections.emptyMap(), namespaceId));
+            });
             return Collections.emptyMap();
         }
         Map<String, Object> endpointBeans = context.getBeansWithAnnotation(ShenyuServerEndpoint.class);
@@ -129,16 +144,16 @@ public class SpringWebSocketClientEventListener extends AbstractContextRefreshed
                     .eventType(EventType.REGISTER)
                     .namespaceId(namespaceId)
                     .build();
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage() + "please config ${shenyu.client.http.props.port} in xml/yml !");
+        } catch (ShenyuException e) {
+            throw new ShenyuException(e.getMessage() + "please config ${shenyu.client.http.props.port} in xml/yml !");
         }
     }
-    
+
     @Override
     protected String getClientName() {
         return RpcTypeEnum.WEB_SOCKET.getName();
     }
-    
+
     @Override
     protected void handle(final String beanName, final Object bean) {
         Class<?> clazz = getCorrectedClass(bean);
@@ -225,12 +240,13 @@ public class SpringWebSocketClientEventListener extends AbstractContextRefreshed
                 .appName(getAppName())
                 .path(UriComponentsBuilder.fromUriString(PathUtils.decoratorPathWithSlash(getContextPath())).build().encode().toUriString())
                 .rpcType(RpcTypeEnum.WEB_SOCKET.getName())
-                .enabled(true)
+                .enabled(webSocketClient.enabled())
                 .ruleName(StringUtils.defaultIfBlank(webSocketClient.ruleName(), getContextPath()))
+                .registerMetaData(webSocketClient.registerMetaData())
                 .namespaceId(namespaceId)
                 .build();
     }
-    
+
     @Override
     public String getPort() {
         final int port = Integer.parseInt(Optional.ofNullable(super.getPort()).orElseGet(() -> "-1"));
@@ -239,7 +255,7 @@ public class SpringWebSocketClientEventListener extends AbstractContextRefreshed
     }
 
     private void registerEndpointsBeans(final ApplicationContext context, final Map<String, Object> endpointBeans) {
-        if (CollectionUtils.isEmpty(endpointBeans)) {
+        if (CollectionUtils.isEmpty(endpointBeans) || !endpointsRegistered.compareAndSet(false, true)) {
             return;
         }
         ShenyuServerEndpointerExporter exporter = (ShenyuServerEndpointerExporter) registerBean(context, ShenyuServerEndpointerExporter.class, "shenyuServerEndpointerExporter");

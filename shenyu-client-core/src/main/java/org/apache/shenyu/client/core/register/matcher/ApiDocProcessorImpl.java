@@ -18,9 +18,9 @@
 package org.apache.shenyu.client.core.register.matcher;
 
 import org.apache.shenyu.client.apidocs.annotations.ApiDoc;
-import org.apache.shenyu.client.core.dto.ApiDocRegisterDTO;
 import org.apache.shenyu.client.core.register.ApiBean;
-import org.apache.shenyu.client.core.utils.ListUtil;
+import org.apache.shenyu.common.utils.ListUtil;
+import org.apache.shenyu.register.common.dto.ApiDocRegisterDTO;
 
 import java.util.List;
 
@@ -31,26 +31,26 @@ import java.util.List;
  * @see ApiDoc
  */
 public class ApiDocProcessorImpl extends BaseAnnotationApiProcessor<ApiDoc> {
-    
+
     @Override
     public void process(final ApiBean apiBean, final ApiDoc annotation) {
         apiBean.addProperties("desc", annotation.desc());
         apiBean.addProperties("tags", String.join(",", annotation.tags()));
         apiBean.setStatus(ApiBean.Status.REGISTRABLE_API);
     }
-    
+
     @Override
     public void process(final ApiBean.ApiDefinition definition, final ApiDoc annotation) {
         definition.addProperties("desc", annotation.desc());
         definition.addProperties("tags", String.join(",", annotation.tags()));
         definition.setStatus(ApiBean.Status.REGISTRABLE);
     }
-    
+
     @Override
     public Class<ApiDoc> matchAnnotation() {
         return ApiDoc.class;
     }
-    
+
     @Override
     public List<Class<?>> supportedRegisterDataType() {
         return ListUtil.of(ApiDocRegisterDTO.class);

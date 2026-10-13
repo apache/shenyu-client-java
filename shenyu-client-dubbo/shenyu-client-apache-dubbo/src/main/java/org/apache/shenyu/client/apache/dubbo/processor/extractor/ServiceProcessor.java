@@ -17,12 +17,14 @@
 
 package org.apache.shenyu.client.apache.dubbo.processor.extractor;
 
-import org.apache.shenyu.client.core.enums.RpcTypeEnum;
+import org.apache.dubbo.config.annotation.Service;
+import org.apache.dubbo.config.spring.ServiceBean;
 import org.apache.shenyu.client.core.register.ApiBean;
 import org.apache.shenyu.client.core.register.matcher.ApiAnnotationProcessor;
 import org.apache.shenyu.client.core.register.matcher.ExtractorProcessor;
-import org.apache.shenyu.client.core.utils.ListUtil;
-import org.springframework.stereotype.Service;
+import org.apache.shenyu.client.dubbo.common.dto.DubboRpcExtBuilders;
+import org.apache.shenyu.common.enums.RpcTypeEnum;
+import org.apache.shenyu.common.utils.ListUtil;
 
 import java.util.List;
 
@@ -30,24 +32,47 @@ import java.util.List;
  * ServiceProcessor.
  */
 public class ServiceProcessor implements ApiAnnotationProcessor<Service>, ExtractorProcessor {
-    
+
     @Override
     public List<String> supportedClient() {
         return ListUtil.of(RpcTypeEnum.DUBBO.getName());
     }
-    
+
     @Override
     public void process(final ApiBean apiBean, final Service annotation) {
-        apiBean.setBeanPath(annotation.value());
+        apiBean.setBeanPath(annotation.path());
+
+        apiBean.addProperties("rpcExt", getRpcExt(apiBean));
     }
-    
+
+    @Override
+    public void process(final ApiBean.ApiDefinition definition) {
+        definition.addProperties("rpcExt", getRpcExt(definition));
+    }
+
     @Override
     public void process(final ApiBean.ApiDefinition definition, final Service annotation) {
         // nothing
     }
-    
+
     @Override
     public Class<Service> matchAnnotation() {
         return Service.class;
+    }
+
+    private String getRpcExt(final ApiBean apiBean) {
+        final Object beanInstance = apiBean.getBeanInstance();
+        if (beanInstance instanceof ServiceBean) {
+            return DubboRpcExtBuilders.buildRpcExt((ServiceBean<?>) beanInstance);
+        }
+        return "{}";
+    }
+
+    private String getRpcExt(final ApiBean.ApiDefinition definition) {
+        final Object beanInstance = definition.getApiBean().getBeanInstance();
+        if (beanInstance instanceof ServiceBean) {
+            return DubboRpcExtBuilders.buildRpcExt((ServiceBean<?>) beanInstance);
+        }
+        return "{}";
     }
 }

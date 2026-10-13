@@ -24,7 +24,7 @@ import org.apache.shenyu.client.apache.dubbo.validation.service.TestService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import javax.validation.ValidationException;
+import jakarta.validation.ValidationException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -43,7 +43,7 @@ public final class ApacheDubboClientValidatorTest {
     private ApacheDubboClientValidator apacheDubboClientValidatorUnderTest;
 
     /**
-     * test method {@link ApacheDubboClientValidator#validate(String, Class[], Object[])}.
+     * test method {@link ApacheDubboClientValidator#validate(java.lang.String, java.lang.Class[], java.lang.Object[])}.
      */
     @Test
     public void validate() throws Exception {

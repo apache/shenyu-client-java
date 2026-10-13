@@ -1,0 +1,453 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.apache.shenyu.register.client.api;
+
+import org.apache.shenyu.common.timer.TaskEntity;
+import org.apache.shenyu.common.timer.Timer;
+import org.apache.shenyu.common.timer.TimerTask;
+import org.apache.shenyu.common.timer.WheelTimerFactory;
+import org.apache.shenyu.register.client.api.retry.FailureRegistryTask;
+import org.apache.shenyu.register.common.dto.ApiDocRegisterDTO;
+import org.apache.shenyu.register.common.dto.McpToolsRegisterDTO;
+import org.apache.shenyu.register.common.dto.MetaDataRegisterDTO;
+import org.apache.shenyu.register.common.dto.URIRegisterDTO;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.ArgumentCaptor;
+import org.mockito.MockedStatic;
+
+import java.lang.reflect.Field;
+import java.util.Map;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.same;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.clearInvocations;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+/**
+ * Test case for {@link FailbackRegistryRepository}.
+ */
+public final class FailbackRegistryRepositoryTest {
+
+    private TestFailbackRegistryRepository repository;
+
+    private MockedStatic<WheelTimerFactory> timerFactory;
+
+    private Timer timer;
+
+    @BeforeEach
+    public void setUp() {
+        timer = mock(Timer.class);
+        timerFactory = mockStatic(WheelTimerFactory.class);
+        timerFactory.when(WheelTimerFactory::getSharedTimer).thenReturn(timer);
+        repository = spy(new TestFailbackRegistryRepository());
+    }
+
+    @AfterEach
+    void closeTimerMock() {
+        timerFactory.close();
+    }
+
+    @ParameterizedTest
+    @ValueSource(booleans = {false, true})
+    void preservesNewFailureDuringRetry(final boolean retryFails) throws Exception {
+        URIRegisterDTO original = createURIRegisterDTO();
+        doThrow(new IllegalStateException("offline")).when(repository).doPersistURI(same(original));
+        repository.persistURI(original);
+        String key = getFirstKeyFromFailureMap();
+        CountDownLatch entered = new CountDownLatch(1);
+        CountDownLatch release = new CountDownLatch(1);
+        doAnswer(invocation -> {
+            entered.countDown();
+            assertTrue(release.await(5, TimeUnit.SECONDS));
+            if (retryFails) {
+                throw new IllegalStateException("still offline");
+            }
+            return null;
+        }).when(repository).doPersistURI(same(original));
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        try {
+            final Future<?> retry = executor.submit(() -> repository.retry(key));
+            assertTrue(entered.await(5, TimeUnit.SECONDS));
+            URIRegisterDTO newer = createURIRegisterDTO();
+            doThrow(new IllegalStateException("new failure")).when(repository).doPersistURI(same(newer));
+            repository.persistURI(newer);
+            release.countDown();
+            retry.get(5, TimeUnit.SECONDS);
+            assertEquals(1, getFailureMapSize());
+            verify(timer, times(2)).add(any());
+            doNothing().when(repository).doPersistURI(same(newer));
+            repository.retry(key);
+            verify(repository, times(2)).doPersistURI(same(newer));
+            assertEquals(0, getFailureMapSize());
+        } finally {
+            release.countDown();
+            executor.shutdownNow();
+        }
+    }
+
+    @Test
+    void restoresFailedRetryWhenNoNewFailureExists() {
+        URIRegisterDTO original = createURIRegisterDTO();
+        doThrow(new IllegalStateException("offline")).when(repository).doPersistURI(original);
+        repository.persistURI(original);
+        String key = getFirstKeyFromFailureMap();
+        assertThrows(IllegalStateException.class, () -> repository.retry(key));
+        assertEquals(1, getFailureMapSize());
+        doNothing().when(repository).doPersistURI(original);
+        repository.retry(key);
+        assertEquals(0, getFailureMapSize());
+        repository.retry(key);
+        verify(repository, times(3)).doPersistURI(original);
+    }
+
+    @Test
+    void retriesNewFailureQueuedAfterRetryBudgetIsExhausted() {
+        URIRegisterDTO original = createURIRegisterDTO();
+        URIRegisterDTO newer = createURIRegisterDTO();
+        doThrow(new IllegalStateException("offline")).when(repository).doPersistURI(same(original));
+        doThrow(new IllegalStateException("new failure")).when(repository).doPersistURI(same(newer));
+        repository.persistURI(original);
+
+        ArgumentCaptor<TimerTask> taskCaptor = ArgumentCaptor.forClass(TimerTask.class);
+        verify(timer, atLeastOnce()).add(taskCaptor.capture());
+        FailureRegistryTask originalTask = (FailureRegistryTask) taskCaptor.getAllValues().get(0);
+        TaskEntity originalTaskEntity = mock(TaskEntity.class);
+        when(originalTaskEntity.getTimer()).thenReturn(timer);
+        when(originalTaskEntity.getTimerTask()).thenReturn(originalTask);
+        for (int attempt = 0; attempt < 18; attempt++) {
+            originalTask.run(originalTaskEntity);
+        }
+
+        repository.persistURI(newer);
+        originalTask.run(originalTaskEntity);
+        assertEquals(1, getFailureMapSize());
+
+        verify(timer, atLeastOnce()).add(taskCaptor.capture());
+        FailureRegistryTask newerTask = (FailureRegistryTask) taskCaptor.getAllValues()
+                .get(taskCaptor.getAllValues().size() - 1);
+        TaskEntity newerTaskEntity = mock(TaskEntity.class);
+        when(newerTaskEntity.getTimer()).thenReturn(timer);
+        when(newerTaskEntity.getTimerTask()).thenReturn(newerTask);
+        doNothing().when(repository).doPersistURI(same(newer));
+        newerTask.run(newerTaskEntity);
+        assertEquals(0, getFailureMapSize());
+    }
+
+    @Test
+    public void testPersistInterfaceSuccess() {
+        MetaDataRegisterDTO metadata = createMetaDataRegisterDTO();
+
+        repository.persistInterface(metadata);
+
+        verify(repository, times(1)).doPersistInterface(metadata);
+        assertEquals(0, getFailureMapSize());
+    }
+
+    @Test
+    public void testPersistInterfaceFailure() {
+        MetaDataRegisterDTO metadata = createMetaDataRegisterDTO();
+        doThrow(new RuntimeException("Test exception")).when(repository).doPersistInterface(any());
+
+        repository.persistInterface(metadata);
+
+        verify(repository, times(1)).doPersistInterface(metadata);
+        assertEquals(1, getFailureMapSize());
+    }
+
+    @Test
+    public void testPersistURISuccess() {
+        URIRegisterDTO registerDTO = createURIRegisterDTO();
+
+        repository.persistURI(registerDTO);
+
+        verify(repository, times(1)).doPersistURI(registerDTO);
+        assertEquals(0, getFailureMapSize());
+    }
+
+    @Test
+    public void testPersistURIFailure() {
+        URIRegisterDTO registerDTO = createURIRegisterDTO();
+        doThrow(new RuntimeException("Test exception")).when(repository).doPersistURI(any());
+
+        repository.persistURI(registerDTO);
+
+        verify(repository, times(1)).doPersistURI(registerDTO);
+        assertEquals(1, getFailureMapSize());
+    }
+
+    @Test
+    public void testPersistApiDocSuccess() {
+        ApiDocRegisterDTO registerDTO = createApiDocRegisterDTO();
+
+        repository.persistApiDoc(registerDTO);
+
+        verify(repository, times(1)).doPersistApiDoc(registerDTO);
+        assertEquals(0, getFailureMapSize());
+    }
+
+    @Test
+    public void testPersistApiDocFailure() {
+        ApiDocRegisterDTO registerDTO = createApiDocRegisterDTO();
+        doThrow(new RuntimeException("Test exception")).when(repository).doPersistApiDoc(any());
+
+        repository.persistApiDoc(registerDTO);
+
+        verify(repository, times(1)).doPersistApiDoc(registerDTO);
+        assertEquals(1, getFailureMapSize());
+    }
+
+    @Test
+    public void testPersistMcpToolsSuccess() {
+        McpToolsRegisterDTO registerDTO = createMcpToolsRegisterDTO();
+
+        repository.persistMcpTools(registerDTO);
+
+        verify(repository, times(1)).doPersistMcpTools(registerDTO);
+        assertEquals(0, getFailureMapSize());
+    }
+
+    @Test
+    public void testPersistMcpToolsFailure() {
+        McpToolsRegisterDTO registerDTO = createMcpToolsRegisterDTO();
+        doThrow(new RuntimeException("Test exception")).when(repository).doPersistMcpTools(any());
+
+        repository.persistMcpTools(registerDTO);
+
+        verify(repository, times(1)).doPersistMcpTools(registerDTO);
+        assertEquals(1, getFailureMapSize());
+    }
+
+    @Test
+    public void testFailuresFromDifferentNamespacesDoNotCollide() {
+        MetaDataRegisterDTO first = createMetaDataRegisterDTO();
+        first.setNamespaceId("namespace-one");
+        MetaDataRegisterDTO second = createMetaDataRegisterDTO();
+        second.setNamespaceId("namespace-two");
+        doThrow(new RuntimeException("Test exception")).when(repository).doPersistInterface(any());
+
+        repository.persistInterface(first);
+        repository.persistInterface(second);
+
+        assertEquals(2, getFailureMapSize());
+    }
+
+    @Test
+    public void testTypeSpecificFailureIdentitiesDoNotCollide() {
+        URIRegisterDTO firstUri = createURIRegisterDTO();
+        firstUri.setNamespaceId("namespace-one");
+        URIRegisterDTO secondUri = createURIRegisterDTO();
+        secondUri.setNamespaceId("namespace-two");
+        ApiDocRegisterDTO firstApiDoc = createApiDocRegisterDTO();
+        firstApiDoc.setVersion("v1");
+        ApiDocRegisterDTO secondApiDoc = createApiDocRegisterDTO();
+        secondApiDoc.setVersion("v2");
+        McpToolsRegisterDTO firstMcp = createMcpToolsRegisterDTO();
+        firstMcp.setNamespaceId("namespace-one");
+        McpToolsRegisterDTO secondMcp = createMcpToolsRegisterDTO();
+        secondMcp.setNamespaceId("namespace-two");
+        doThrow(new RuntimeException("Test exception")).when(repository).doPersistURI(any());
+        doThrow(new RuntimeException("Test exception")).when(repository).doPersistApiDoc(any());
+        doThrow(new RuntimeException("Test exception")).when(repository).doPersistMcpTools(any());
+
+        repository.persistURI(firstUri);
+        repository.persistURI(secondUri);
+        repository.persistApiDoc(firstApiDoc);
+        repository.persistApiDoc(secondApiDoc);
+        repository.persistMcpTools(firstMcp);
+        repository.persistMcpTools(secondMcp);
+
+        assertEquals(6, getFailureMapSize());
+    }
+
+    @Test
+    public void testNewerFailureReplacesStalePayload() {
+        MetaDataRegisterDTO stale = createMetaDataRegisterDTO();
+        stale.setRpcExt("stale");
+        MetaDataRegisterDTO latest = createMetaDataRegisterDTO();
+        latest.setRpcExt("latest");
+        doThrow(new RuntimeException("Test exception")).when(repository).doPersistInterface(any());
+
+        repository.persistInterface(stale);
+        repository.persistInterface(latest);
+
+        assertEquals(1, getFailureMapSize());
+        doNothing().when(repository).doPersistInterface(any());
+        clearInvocations(repository);
+        repository.accept(getFirstKeyFromFailureMap());
+        verify(repository).doPersistInterface(latest);
+    }
+
+    @Test
+    public void testRemove() {
+        // First add a failure
+        MetaDataRegisterDTO metadata = createMetaDataRegisterDTO();
+        doThrow(new RuntimeException("Test exception")).when(repository).doPersistInterface(any());
+        repository.persistInterface(metadata);
+
+        assertEquals(1, getFailureMapSize());
+
+        /* Get the key and remove it */
+        String key = getFirstKeyFromFailureMap();
+        assertNotNull(key);
+
+        repository.remove(key);
+        assertEquals(0, getFailureMapSize());
+    }
+
+    @Test
+    public void testAcceptWithNonExistentKey() {
+        repository.accept("non-existent-key");
+        /* Should not throw any exception */
+    }
+
+    @Test
+    public void testAcceptWithUnknownType() throws Exception {
+        // Manually add an entry with unknown type
+        Map<String, Object> failureMap = getFailureMap();
+        Object holder = createHolder(new Object(), "test-path", "unknown-type");
+        failureMap.put("test-key", holder);
+
+        repository.accept("test-key");
+        /* Should not throw any exception */
+    }
+
+    private MetaDataRegisterDTO createMetaDataRegisterDTO() {
+        return MetaDataRegisterDTO.builder()
+                .appName("testApp")
+                .path("/test")
+                .rpcType("http")
+                .host("127.0.0.1")
+                .port(8080)
+                .build();
+    }
+
+    private URIRegisterDTO createURIRegisterDTO() {
+        return URIRegisterDTO.builder()
+                .appName("testApp")
+                .host("127.0.0.1")
+                .port(8080)
+                .rpcType("http")
+                .build();
+    }
+
+    private ApiDocRegisterDTO createApiDocRegisterDTO() {
+        return ApiDocRegisterDTO.builder()
+                .contextPath("/api")
+                .apiPath("/test")
+                .httpMethod(0)
+                .rpcType("http")
+                .build();
+    }
+
+    private McpToolsRegisterDTO createMcpToolsRegisterDTO() {
+        MetaDataRegisterDTO metaData = createMetaDataRegisterDTO();
+        McpToolsRegisterDTO mcpToolsRegisterDTO = new McpToolsRegisterDTO();
+        mcpToolsRegisterDTO.setMetaDataRegisterDTO(metaData);
+
+        return mcpToolsRegisterDTO;
+    }
+
+    @SuppressWarnings("unchecked")
+    private int getFailureMapSize() {
+        try {
+            Field field = FailbackRegistryRepository.class.getDeclaredField("concurrentHashMap");
+            field.setAccessible(true);
+            Map<String, Object> map = (Map<String, Object>) field.get(repository);
+            return map.size();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private String getFirstKeyFromFailureMap() {
+        try {
+            Field field = FailbackRegistryRepository.class.getDeclaredField("concurrentHashMap");
+            field.setAccessible(true);
+            Map<String, Object> map = (Map<String, Object>) field.get(repository);
+            return map.keySet().iterator().hasNext() ? map.keySet().iterator().next() : null;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private Map<String, Object> getFailureMap() {
+        try {
+            Field field = FailbackRegistryRepository.class.getDeclaredField("concurrentHashMap");
+            field.setAccessible(true);
+            return (Map<String, Object>) field.get(repository);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private Object createHolder(final Object obj, final String path, final String type) throws Exception {
+        Class<?> holderClass = Class.forName("org.apache.shenyu.register.client.api.FailbackRegistryRepository$Holder");
+        return holderClass.getDeclaredConstructor(Object.class, String.class, String.class)
+                .newInstance(obj, path, type);
+    }
+
+    /**
+     * Test implementation of FailbackRegistryRepository.
+     */
+    private static class TestFailbackRegistryRepository extends FailbackRegistryRepository {
+
+        @Override
+        protected void doPersistApiDoc(final ApiDocRegisterDTO apiDocRegisterDTO) {
+            /* Test implementation */
+        }
+
+        @Override
+        protected void doPersistURI(final URIRegisterDTO registerDTO) {
+            /* Test implementation */
+        }
+
+        @Override
+        protected void doPersistInterface(final MetaDataRegisterDTO registerDTO) {
+            /* Test implementation */
+        }
+
+        @Override
+        protected void doPersistMcpTools(final McpToolsRegisterDTO registerDTO) {
+            /* Test implementation */
+        }
+    }
+}

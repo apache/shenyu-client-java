@@ -17,12 +17,12 @@
 
 package org.apache.shenyu.springboot.starter.client.common.config;
 
-import org.apache.shenyu.client.core.register.ShenyuClientRegisterRepository;
-import org.apache.shenyu.client.core.utils.RegisterUtils;
-import org.apache.shenyu.client.core.register.config.ShenyuClientConfig;
-import org.apache.shenyu.client.core.register.config.ShenyuDiscoveryConfig;
-import org.apache.shenyu.client.core.register.config.ShenyuRegisterCenterConfig;
-import org.apache.shenyu.client.core.enums.RegisterTypeEnum;
+import org.apache.shenyu.register.client.api.ShenyuClientRegisterRepository;
+import org.apache.shenyu.register.client.http.utils.ClientRegisterUtils;
+import org.apache.shenyu.register.common.config.ShenyuClientConfig;
+import org.apache.shenyu.register.common.config.ShenyuDiscoveryConfig;
+import org.apache.shenyu.register.common.config.ShenyuRegisterCenterConfig;
+import org.apache.shenyu.register.common.enums.RegisterTypeEnum;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
@@ -73,8 +73,8 @@ public class ShenyuClientCommonBeanConfigurationTest {
 
     @Test
     public void testShenyuClientRegisterRepository() {
-        MockedStatic<RegisterUtils> registerUtilsMockedStatic = mockStatic(RegisterUtils.class);
-        registerUtilsMockedStatic.when(() -> RegisterUtils.doLogin(any(), any(), any())).thenReturn(Optional.ofNullable("token"));
+        MockedStatic<ClientRegisterUtils> registerUtilsMockedStatic = mockStatic(ClientRegisterUtils.class);
+        registerUtilsMockedStatic.when(() -> ClientRegisterUtils.doLogin(any(), any(), any())).thenReturn(Optional.ofNullable("token"));
         applicationContextRunner.run(context -> {
             ShenyuClientRegisterRepository repository = context.getBean("shenyuClientRegisterRepository", ShenyuClientRegisterRepository.class);
             assertNotNull(repository);
@@ -84,8 +84,8 @@ public class ShenyuClientCommonBeanConfigurationTest {
 
     @Test
     public void testShenyuRegisterCenterConfig() {
-        MockedStatic<RegisterUtils> registerUtilsMockedStatic = mockStatic(RegisterUtils.class);
-        registerUtilsMockedStatic.when(() -> RegisterUtils.doLogin(any(), any(), any())).thenReturn(Optional.ofNullable("token"));
+        MockedStatic<ClientRegisterUtils> registerUtilsMockedStatic = mockStatic(ClientRegisterUtils.class);
+        registerUtilsMockedStatic.when(() -> ClientRegisterUtils.doLogin(any(), any(), any())).thenReturn(Optional.ofNullable("token"));
         applicationContextRunner.run(context -> {
             ShenyuRegisterCenterConfig config = context.getBean("shenyuRegisterCenterConfig", ShenyuRegisterCenterConfig.class);
             assertNotNull(config);
@@ -96,8 +96,8 @@ public class ShenyuClientCommonBeanConfigurationTest {
 
     @Test
     public void testShenyuClientConfig() {
-        MockedStatic<RegisterUtils> registerUtilsMockedStatic = mockStatic(RegisterUtils.class);
-        registerUtilsMockedStatic.when(() -> RegisterUtils.doLogin(any(), any(), any())).thenReturn(Optional.ofNullable("token"));
+        MockedStatic<ClientRegisterUtils> registerUtilsMockedStatic = mockStatic(ClientRegisterUtils.class);
+        registerUtilsMockedStatic.when(() -> ClientRegisterUtils.doLogin(any(), any(), any())).thenReturn(Optional.ofNullable("token"));
         applicationContextRunner.run(context -> {
             ShenyuClientConfig config = context.getBean("shenyuClientConfig", ShenyuClientConfig.class);
             assertNotNull(config);
@@ -108,8 +108,8 @@ public class ShenyuClientCommonBeanConfigurationTest {
 
     @Test
     public void testShenyuDiscoveryConfig() {
-        MockedStatic<RegisterUtils> registerUtilsMockedStatic = mockStatic(RegisterUtils.class);
-        registerUtilsMockedStatic.when(() -> RegisterUtils.doLogin(any(), any(), any())).thenReturn(Optional.ofNullable("token"));
+        MockedStatic<ClientRegisterUtils> registerUtilsMockedStatic = mockStatic(ClientRegisterUtils.class);
+        registerUtilsMockedStatic.when(() -> ClientRegisterUtils.doLogin(any(), any(), any())).thenReturn(Optional.ofNullable("token"));
         applicationContextRunner.run(context -> {
             ShenyuDiscoveryConfig config = context.getBean("shenyuDiscoveryConfig", ShenyuDiscoveryConfig.class);
             assertNotNull(config);

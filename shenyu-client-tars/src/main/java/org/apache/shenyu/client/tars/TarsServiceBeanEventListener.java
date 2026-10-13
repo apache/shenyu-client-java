@@ -22,18 +22,18 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.apache.shenyu.client.core.client.AbstractContextRefreshedEventListener;
 import org.apache.shenyu.client.core.constant.ShenyuClientConstants;
 import org.apache.shenyu.client.core.disruptor.ShenyuClientRegisterEventPublisher;
-import org.apache.shenyu.client.core.dto.MetaDataRegisterDTO;
-import org.apache.shenyu.client.core.dto.URIRegisterDTO;
-import org.apache.shenyu.client.core.enums.ApiHttpMethodEnum;
-import org.apache.shenyu.client.core.enums.EventType;
-import org.apache.shenyu.client.core.enums.RpcTypeEnum;
 import org.apache.shenyu.client.core.exception.ShenyuClientIllegalArgumentException;
-import org.apache.shenyu.client.core.register.ShenyuClientRegisterRepository;
-import org.apache.shenyu.client.core.register.config.ShenyuClientConfig;
-import org.apache.shenyu.client.core.utils.GsonUtils;
 import org.apache.shenyu.client.tars.common.annotation.ShenyuTarsClient;
 import org.apache.shenyu.client.tars.common.annotation.ShenyuTarsService;
 import org.apache.shenyu.client.tars.common.dto.TarsRpcExt;
+import org.apache.shenyu.common.enums.ApiHttpMethodEnum;
+import org.apache.shenyu.common.enums.RpcTypeEnum;
+import org.apache.shenyu.common.utils.GsonUtils;
+import org.apache.shenyu.register.client.api.ShenyuClientRegisterRepository;
+import org.apache.shenyu.register.common.config.ShenyuClientConfig;
+import org.apache.shenyu.register.common.dto.MetaDataRegisterDTO;
+import org.apache.shenyu.register.common.dto.URIRegisterDTO;
+import org.apache.shenyu.register.common.enums.EventType;
 import org.javatuples.Sextet;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.context.ApplicationContext;
@@ -77,7 +77,6 @@ public class TarsServiceBeanEventListener extends AbstractContextRefreshedEventL
         }
         this.contextPath = contextPath;
         this.ipAndPort = this.getHost() + ":" + port;
-        publisher.start(shenyuClientRegisterRepository);
     }
 
     @Override
@@ -113,12 +112,12 @@ public class TarsServiceBeanEventListener extends AbstractContextRefreshedEventL
                 .namespaceId(namespaceId)
                 .build();
     }
-    
+
     @Override
     protected String getClientName() {
         return RpcTypeEnum.TARS.getName();
     }
-    
+
     @Override
     protected String buildApiSuperPath(final Class<?> clazz, @Nullable final ShenyuTarsClient shenyuTarsClient) {
         if (Objects.nonNull(shenyuTarsClient) && !StringUtils.isBlank(shenyuTarsClient.path())) {
@@ -166,7 +165,10 @@ public class TarsServiceBeanEventListener extends AbstractContextRefreshedEventL
                                                 @NonNull final ShenyuTarsClient shenyuTarsClient,
                                                 final String path, final Class<?> clazz,
                                                 final Method method, final String namespaceId) {
-        String serviceName = clazz.getAnnotation(ShenyuTarsService.class).serviceName();
+        // the annotation may be declared on an interface or a superclass - the bean lookup above
+        // finds those, so resolve the annotation the same way instead of using plain reflection
+        ShenyuTarsService shenyuTarsService = AnnotatedElementUtils.findMergedAnnotation(clazz, ShenyuTarsService.class);
+        String serviceName = Objects.isNull(shenyuTarsService) ? StringUtils.EMPTY : shenyuTarsService.serviceName();
         String ipAndPort = this.ipAndPort;
         String desc = shenyuTarsClient.desc();
         String configRuleName = shenyuTarsClient.ruleName();

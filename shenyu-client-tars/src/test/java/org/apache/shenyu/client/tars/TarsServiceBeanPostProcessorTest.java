@@ -18,16 +18,16 @@
 package org.apache.shenyu.client.tars;
 
 import org.apache.shenyu.client.core.constant.ShenyuClientConstants;
-import org.apache.shenyu.client.core.enums.RpcTypeEnum;
 import org.apache.shenyu.client.core.exception.ShenyuClientIllegalArgumentException;
-import org.apache.shenyu.client.core.register.ShenyuClientRegisterRepository;
 import org.apache.shenyu.client.core.register.ShenyuClientRegisterRepositoryFactory;
-import org.apache.shenyu.client.core.register.config.ShenyuClientConfig;
-import org.apache.shenyu.client.core.register.config.ShenyuClientConfig.ClientPropertiesConfig;
-import org.apache.shenyu.client.core.register.config.ShenyuRegisterCenterConfig;
-import org.apache.shenyu.client.core.utils.RegisterUtils;
 import org.apache.shenyu.client.tars.common.annotation.ShenyuTarsClient;
 import org.apache.shenyu.client.tars.common.annotation.ShenyuTarsService;
+import org.apache.shenyu.common.enums.RpcTypeEnum;
+import org.apache.shenyu.register.client.api.ShenyuClientRegisterRepository;
+import org.apache.shenyu.register.client.http.utils.ClientRegisterUtils;
+import org.apache.shenyu.register.common.config.ShenyuClientConfig;
+import org.apache.shenyu.register.common.config.ShenyuClientConfig.ClientPropertiesConfig;
+import org.apache.shenyu.register.common.config.ShenyuRegisterCenterConfig;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
@@ -59,13 +59,15 @@ import static org.mockito.Mockito.times;
 @ExtendWith(MockitoExtension.class)
 @TestMethodOrder(MethodOrderer.Alphanumeric.class)
 public final class TarsServiceBeanPostProcessorTest {
-    private final MockedStatic<RegisterUtils> registerUtilsMockedStatic = mockStatic(RegisterUtils.class);
+    private final MockedStatic<ClientRegisterUtils> registerUtilsMockedStatic = mockStatic(ClientRegisterUtils.class);
 
     private final TarsDemoService tarsDemoService = new TarsDemoService();
 
     private final TarsDemoService2 tarsDemoService2 = new TarsDemoService2();
 
     private final TarsDemoService3 tarsDemoService3 = new TarsDemoService3();
+
+    private final TarsInterfaceServiceImpl tarsInterfaceServiceImpl = new TarsInterfaceServiceImpl();
 
     @Mock
     private ApplicationContext applicationContext;
@@ -81,18 +83,19 @@ public final class TarsServiceBeanPostProcessorTest {
         results.put("tarsDemoService", tarsDemoService);
         results.put("tarsDemoService2", tarsDemoService2);
         results.put("tarsDemoService3", tarsDemoService3);
+        results.put("tarsInterfaceService", tarsInterfaceServiceImpl);
         when(applicationContext.getBeansWithAnnotation(any())).thenReturn(results);
         when(applicationContext.getEnvironment()).thenReturn(env);
         when(env.getProperty("shenyu.discovery.type", ShenyuClientConstants.DISCOVERY_LOCAL_MODE)).thenReturn("local");
         contextRefreshedEvent = new ContextRefreshedEvent(applicationContext);
-        
+
         ShenyuClientConfig shenyuClientConfig = mock(ShenyuClientConfig.class);
         Assert.assertThrows(ShenyuClientIllegalArgumentException.class, () -> new TarsServiceBeanEventListener(shenyuClientConfig, mock(ShenyuClientRegisterRepository.class)));
     }
 
     @Test
     public void testPostProcessAfterInitialization() {
-        registerUtilsMockedStatic.when(() -> RegisterUtils.doLogin(any(), any(), any())).thenReturn(Optional.of("token"));
+        registerUtilsMockedStatic.when(() -> ClientRegisterUtils.doLogin(any(), any(), any())).thenReturn(Optional.of("token"));
         TarsServiceBeanEventListener tarsServiceBeanEventListener = buildTarsServiceBeanEventListener(true);
         tarsServiceBeanEventListener.onApplicationEvent(contextRefreshedEvent);
         verify(applicationContext, times(2)).getBeansWithAnnotation(any());
@@ -101,7 +104,7 @@ public final class TarsServiceBeanPostProcessorTest {
 
     @Test
     public void testPostProcessNormalBean() {
-        registerUtilsMockedStatic.when(() -> RegisterUtils.doLogin(any(), any(), any())).thenReturn(Optional.of("token"));
+        registerUtilsMockedStatic.when(() -> ClientRegisterUtils.doLogin(any(), any(), any())).thenReturn(Optional.of("token"));
         TarsServiceBeanEventListener tarsServiceBeanEventListener = buildTarsServiceBeanEventListener(false);
         tarsServiceBeanEventListener.onApplicationEvent(contextRefreshedEvent);
         verify(applicationContext, times(2)).getBeansWithAnnotation(any());
@@ -120,7 +123,7 @@ public final class TarsServiceBeanPostProcessorTest {
         mockRegisterCenter.setServerLists("http://localhost:58080");
         mockRegisterCenter.setRegisterType("http");
         mockRegisterCenter.setProps(properties);
-        
+
         ShenyuClientConfig clientConfig = new ShenyuClientConfig();
         ClientPropertiesConfig clientPropertiesConfig = new ClientPropertiesConfig();
         clientPropertiesConfig.setProps(properties);
@@ -129,6 +132,30 @@ public final class TarsServiceBeanPostProcessorTest {
         clientConfig.setClient(client);
 
         return new TarsServiceBeanEventListener(clientConfig, ShenyuClientRegisterRepositoryFactory.newInstance(mockRegisterCenter));
+    }
+
+    @Test
+    public void testPostProcessServantAnnotatedOnInterface() {
+        registerUtilsMockedStatic.when(() -> ClientRegisterUtils.doLogin(any(), any(), any())).thenReturn(Optional.of("token"));
+        TarsServiceBeanEventListener tarsServiceBeanEventListener = buildTarsServiceBeanEventListener(true);
+        tarsServiceBeanEventListener.onApplicationEvent(contextRefreshedEvent);
+        verify(applicationContext, times(2)).getBeansWithAnnotation(any());
+        registerUtilsMockedStatic.close();
+    }
+
+    @ShenyuTarsService(serviceName = "ifaceService")
+    interface TarsInterfaceService {
+
+        String hello(String hello);
+    }
+
+    static class TarsInterfaceServiceImpl implements TarsInterfaceService {
+
+        @Override
+        @ShenyuTarsClient("ifaceHello")
+        public String hello(final String hello) {
+            return hello;
+        }
     }
 
     @ShenyuTarsService(serviceName = "testObj")

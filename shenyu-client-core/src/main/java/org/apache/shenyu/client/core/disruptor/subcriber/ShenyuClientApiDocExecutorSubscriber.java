@@ -17,11 +17,10 @@
 
 package org.apache.shenyu.client.core.disruptor.subcriber;
 
-import org.apache.shenyu.client.core.dto.ApiDocRegisterDTO;
-import org.apache.shenyu.client.core.register.ShenyuClientRegisterRepository;
-import org.apache.shenyu.client.core.register.subsriber.ExecutorTypeSubscriber;
-import org.apache.shenyu.client.core.type.DataType;
-
+import org.apache.shenyu.register.client.api.ShenyuClientRegisterRepository;
+import org.apache.shenyu.register.common.dto.ApiDocRegisterDTO;
+import org.apache.shenyu.register.common.subsriber.ExecutorTypeSubscriber;
+import org.apache.shenyu.register.common.type.DataType;
 import java.util.Collection;
 
 /**

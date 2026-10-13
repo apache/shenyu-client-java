@@ -18,16 +18,16 @@
 package org.apache.shenyu.client.sofa;
 
 import com.alipay.sofa.runtime.spring.factory.ServiceFactoryBean;
-import org.apache.shenyu.client.core.constant.Constants;
-import org.apache.shenyu.client.core.dto.MetaDataRegisterDTO;
-import org.apache.shenyu.client.core.dto.URIRegisterDTO;
-import org.apache.shenyu.client.core.enums.EventType;
-import org.apache.shenyu.client.core.enums.RpcTypeEnum;
 import org.apache.shenyu.client.core.register.ShenyuClientRegisterRepositoryFactory;
-import org.apache.shenyu.client.core.register.config.ShenyuClientConfig;
-import org.apache.shenyu.client.core.register.config.ShenyuClientConfig.ClientPropertiesConfig;
-import org.apache.shenyu.client.core.register.config.ShenyuRegisterCenterConfig;
 import org.apache.shenyu.client.sofa.common.annotation.ShenyuSofaClient;
+import org.apache.shenyu.common.constant.Constants;
+import org.apache.shenyu.common.enums.RpcTypeEnum;
+import org.apache.shenyu.register.common.config.ShenyuClientConfig;
+import org.apache.shenyu.register.common.config.ShenyuClientConfig.ClientPropertiesConfig;
+import org.apache.shenyu.register.common.config.ShenyuRegisterCenterConfig;
+import org.apache.shenyu.register.common.dto.MetaDataRegisterDTO;
+import org.apache.shenyu.register.common.dto.URIRegisterDTO;
+import org.apache.shenyu.register.common.enums.EventType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -204,11 +204,12 @@ public class SofaServiceEventListenerTest {
         String expectedPath = "/sofa/findByIdsAndName/path";
         String expectedRpcExt = "{\"loadbalance\":\"loadBalance\",\"retries\":0,\"timeout\":0}";
 
+        String apiPath = sofaServiceEventListener.buildApiPath(method, SUPER_PATH_NOT_CONTAINS_STAR, shenyuSofaClient);
         MetaDataRegisterDTO realMetaDataRegisterDTO = sofaServiceEventListener
                 .buildMetaDataDTO(
                         serviceFactoryBean,
                         shenyuSofaClient,
-                        SUPER_PATH_NOT_CONTAINS_STAR,
+                        apiPath,
                         SofaServiceEventListener.class,
                         method, Constants.SYS_DEFAULT_NAMESPACE_ID);
         MetaDataRegisterDTO expectedMetaDataRegisterDTO = MetaDataRegisterDTO
@@ -242,7 +243,7 @@ public class SofaServiceEventListenerTest {
         properties.setProperty("appName", APP_NAME);
         ClientPropertiesConfig config = new ClientPropertiesConfig();
         config.setProps(properties);
-        
+
         ShenyuClientConfig clientConfig = new ShenyuClientConfig();
         Map<String, ClientPropertiesConfig> client = new HashMap<>();
         client.put(RpcTypeEnum.SOFA.getName(), config);

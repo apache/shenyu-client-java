@@ -27,7 +27,7 @@ import java.util.Objects;
  * API processor that supports annotations.
  */
 public abstract class BaseAnnotationApiProcessor<T extends Annotation> implements ApiAnnotationProcessor<T>, ApiRegisterProcessor {
-    
+
     @Override
     public void process(final ApiBean apiBean) {
         final T annotation = apiBean.getAnnotation(matchAnnotation());
@@ -41,12 +41,12 @@ public abstract class BaseAnnotationApiProcessor<T extends Annotation> implement
             }
         }
     }
-    
+
     @Override
     public boolean match(final ApiBean element) {
-        return false;
+        return true;
     }
-    
+
     /**
      * match.
      *
@@ -54,6 +54,6 @@ public abstract class BaseAnnotationApiProcessor<T extends Annotation> implement
      * @return true
      */
     public boolean match(final ApiBean.ApiDefinition definition) {
-        return false;
+        return true;
     }
 }

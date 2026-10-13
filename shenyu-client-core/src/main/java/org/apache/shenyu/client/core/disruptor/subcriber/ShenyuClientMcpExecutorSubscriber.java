@@ -17,10 +17,10 @@
 
 package org.apache.shenyu.client.core.disruptor.subcriber;
 
-import org.apache.shenyu.client.core.dto.McpToolsRegisterDTO;
-import org.apache.shenyu.client.core.register.ShenyuClientRegisterRepository;
-import org.apache.shenyu.client.core.register.subsriber.ExecutorTypeSubscriber;
-import org.apache.shenyu.client.core.type.DataType;
+import org.apache.shenyu.register.client.api.ShenyuClientRegisterRepository;
+import org.apache.shenyu.register.common.dto.McpToolsRegisterDTO;
+import org.apache.shenyu.register.common.subsriber.ExecutorTypeSubscriber;
+import org.apache.shenyu.register.common.type.DataType;
 
 import java.util.Collection;
 
@@ -29,10 +29,11 @@ import java.util.Collection;
  */
 public class ShenyuClientMcpExecutorSubscriber implements ExecutorTypeSubscriber<McpToolsRegisterDTO> {
 
+
     private final ShenyuClientRegisterRepository shenyuClientRegisterRepository;
 
     /**
-     * Instantiates a new Shenyu client mcp executor subscriber.
+     * Instantiates a new Shenyu client uri executor subscriber.
      *
      * @param shenyuClientRegisterRepository the shenyu client register repository
      */

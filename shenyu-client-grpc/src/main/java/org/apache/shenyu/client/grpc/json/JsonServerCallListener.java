@@ -24,7 +24,8 @@ import io.grpc.ForwardingServerCallListener;
 import io.grpc.ServerCall;
 import io.grpc.ServerCall.Listener;
 import io.grpc.Status;
-import org.apache.shenyu.client.core.utils.ReflectUtils;
+import org.apache.shenyu.common.exception.ShenyuException;
+import org.apache.shenyu.common.utils.ReflectUtils;
 import org.apache.shenyu.protocol.grpc.message.JsonMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,7 +67,7 @@ public class JsonServerCallListener<R, P> extends ForwardingServerCallListener<R
             String reqData = JsonMessage.getDataFromDynamicMessage((DynamicMessage) message);
             JsonFormat.parser().ignoringUnknownFields().merge(reqData, builder);
             if (Objects.isNull(builder)) {
-                throw new RuntimeException("build json response message is error, newBuilder method is null");
+                throw new ShenyuException("build json response message is error, newBuilder method is null");
             }
 
             delegate.onMessage((R) builder.build());

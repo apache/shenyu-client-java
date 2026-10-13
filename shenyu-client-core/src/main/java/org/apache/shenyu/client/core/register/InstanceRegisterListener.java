@@ -18,11 +18,13 @@
 package org.apache.shenyu.client.core.register;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shenyu.client.core.dto.DiscoveryUpstreamData;
-import org.apache.shenyu.client.core.register.config.ShenyuDiscoveryConfig;
+import org.apache.shenyu.common.dto.DiscoveryUpstreamData;
+import org.apache.shenyu.common.exception.ShenyuException;
+import org.apache.shenyu.register.common.config.ShenyuDiscoveryConfig;
 import org.apache.shenyu.registry.api.ShenyuInstanceRegisterRepository;
 import org.apache.shenyu.registry.api.config.RegisterConfig;
 import org.apache.shenyu.registry.api.entity.InstanceEntity;
+import org.apache.shenyu.registry.api.path.InstancePathConstants;
 import org.apache.shenyu.spi.ExtensionLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +38,10 @@ import java.util.Optional;
 import java.util.Properties;
 
 /**
- * Instance register listener.
+ * InstanceRegisterListener.
+ * <p>
+ * instance register into discovery.
+ * </p>
  */
 public class InstanceRegisterListener implements ApplicationListener<ContextRefreshedEvent>, Ordered {
 
@@ -46,9 +51,11 @@ public class InstanceRegisterListener implements ApplicationListener<ContextRefr
 
     private final RegisterConfig discoveryConfig;
 
-    private final String path;
+    private final ShenyuDiscoveryConfig shenyuDiscoveryConfig;
 
     private ShenyuInstanceRegisterRepository discoveryService;
+
+    private final String path;
 
     public InstanceRegisterListener(final DiscoveryUpstreamData discoveryUpstream, final ShenyuDiscoveryConfig shenyuDiscoveryConfig) {
         this.currentInstanceUpstream = discoveryUpstream;
@@ -57,14 +64,12 @@ public class InstanceRegisterListener implements ApplicationListener<ContextRefr
         this.discoveryConfig.setServerLists(shenyuDiscoveryConfig.getServerList());
         this.discoveryConfig.setRegisterType(shenyuDiscoveryConfig.getType());
         this.discoveryConfig.setProps(Optional.ofNullable(shenyuDiscoveryConfig.getProps()).orElse(new Properties()));
+        this.shenyuDiscoveryConfig = shenyuDiscoveryConfig;
         this.path = shenyuDiscoveryConfig.getRegisterPath();
-        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-            @Override
-            public void run() {
-                LOGGER.info("unregister upstream server by jvm runtime hook");
-                if (Objects.nonNull(discoveryService)) {
-                    discoveryService.close();
-                }
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            LOGGER.info("unregister upstream server by jvm runtime hook");
+            if (Objects.nonNull(discoveryService)) {
+                discoveryService.close();
             }
         }));
     }
@@ -76,20 +81,26 @@ public class InstanceRegisterListener implements ApplicationListener<ContextRefr
                 return;
             }
             this.discoveryService = ExtensionLoader.getExtensionLoader(ShenyuInstanceRegisterRepository.class).getJoin(discoveryConfig.getRegisterType());
-            discoveryConfig.getProps().put("watchPath", path);
+            boolean zookeeper = StringUtils.equalsIgnoreCase(discoveryConfig.getRegisterType(), "zookeeper");
+            if (!zookeeper) {
+                discoveryConfig.getProps().put("watchPath", path);
+            }
             discoveryService.init(discoveryConfig);
             InstanceEntity instance = new InstanceEntity();
             instance.setStatus(currentInstanceUpstream.getStatus());
             instance.setWeight(currentInstanceUpstream.getWeight());
-            URI uri = URI.create(currentInstanceUpstream.getProtocol() + currentInstanceUpstream.getUrl());
+            final URI uri = URI.create(currentInstanceUpstream.getProtocol() + currentInstanceUpstream.getUrl());
             instance.setPort(uri.getPort());
             instance.setHost(uri.getHost());
             instance.setAppName(discoveryConfig.getProps().getProperty("name"));
             discoveryService.persistInstance(instance);
+            if (zookeeper) {
+                shenyuDiscoveryConfig.setRegisterPath(InstancePathConstants.buildInstanceParentPath(instance.getAppName()));
+            }
             LOGGER.info("shenyu register into ShenyuDiscoveryService {} success", discoveryConfig.getRegisterType());
         } catch (Exception e) {
-            LOGGER.error("shenyu register into ShenyuDiscoveryService {} type find error", discoveryConfig.getRegisterType(), e);
-            throw new IllegalStateException(String.format("shenyu register into ShenyuDiscoveryService %s type find error", discoveryConfig.getRegisterType()), e);
+            LOGGER.error("shenyu register into ShenyuDiscoveryService  {} type find error", discoveryConfig.getRegisterType(), e);
+            throw new ShenyuException(String.format("shenyu register into ShenyuDiscoveryService %s type find error", discoveryConfig.getRegisterType()));
         }
     }
 

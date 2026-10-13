@@ -21,26 +21,26 @@ import org.apache.dubbo.config.annotation.DubboService;
 import org.apache.dubbo.config.annotation.Service;
 import org.apache.shenyu.client.apache.dubbo.processor.extractor.DubboServiceProcessor;
 import org.apache.shenyu.client.apache.dubbo.processor.extractor.ServiceProcessor;
-import org.apache.shenyu.client.core.enums.RpcTypeEnum;
 import org.apache.shenyu.client.core.register.extractor.BaseAnnotationApiBeansExtractor;
 import org.apache.shenyu.client.core.register.extractor.RpcApiBeansExtractor;
+import org.apache.shenyu.common.enums.RpcTypeEnum;
 
 public class ApacheDubboApiBeansExtractor extends BaseAnnotationApiBeansExtractor implements RpcApiBeansExtractor {
-    
+
     public ApacheDubboApiBeansExtractor() {
         // Annotations supported by class
         addSupportedApiAnnotations(DubboService.class);
         addSupportedApiAnnotations(Service.class);
-        
+
         // Annotations supported by the method
-        
+
         addExtractorProcessor(new DubboServiceProcessor());
         addExtractorProcessor(new ServiceProcessor());
     }
-    
+
     @Override
     public String clientName() {
         return RpcTypeEnum.DUBBO.getName();
     }
-    
+
 }

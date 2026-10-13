@@ -19,6 +19,7 @@ package org.apache.shenyu.client.spring.websocket.init;
 
 import java.util.Objects;
 import org.apache.shenyu.client.spring.websocket.annotation.ShenyuServerEndpoint;
+import org.apache.shenyu.common.exception.ShenyuException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.AnnotatedElementUtils;
@@ -26,10 +27,10 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 import org.springframework.web.context.support.WebApplicationObjectSupport;
 
-import javax.servlet.ServletContext;
-import javax.websocket.DeploymentException;
-import javax.websocket.server.ServerContainer;
-import javax.websocket.server.ServerEndpointConfig;
+import jakarta.servlet.ServletContext;
+import jakarta.websocket.DeploymentException;
+import jakarta.websocket.server.ServerContainer;
+import jakarta.websocket.server.ServerEndpointConfig;
 import java.util.Arrays;
 
 public class ShenyuServerEndpointerExporter extends WebApplicationObjectSupport {
@@ -75,7 +76,7 @@ public class ShenyuServerEndpointerExporter extends WebApplicationObjectSupport 
     public void registerEndpoint(final Class<?> pojo) {
         ShenyuServerEndpoint annotation = AnnotatedElementUtils.findMergedAnnotation(pojo, ShenyuServerEndpoint.class);
         if (Objects.isNull(annotation)) {
-            throw new RuntimeException("Class missing annotation ShenyuServerEndpoint! class name: " + pojo.getName());
+            throw new ShenyuException("Class missing annotation ShenyuServerEndpoint! class name: " + pojo.getName());
         }
 
         String path = annotation.value();
@@ -86,7 +87,7 @@ public class ShenyuServerEndpointerExporter extends WebApplicationObjectSupport 
                 configurator = annotation.configurator().getConstructor().newInstance();
             } catch (ReflectiveOperationException ex) {
                 LOG.error("ShenyuServerEndpoint configurator init fail! Class name: {}, configurator name: {}", pojo.getName(), annotation.configurator().getName());
-                throw new RuntimeException(ex);
+                throw new ShenyuException(ex);
             }
         }
         ServerEndpointConfig sec = ServerEndpointConfig.Builder.create(pojo, path)

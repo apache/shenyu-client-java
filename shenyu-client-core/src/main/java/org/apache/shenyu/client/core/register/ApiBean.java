@@ -35,49 +35,49 @@ import java.util.stream.Collectors;
  * An API bean maps a collection of API pairs whose information comes from a class.
  */
 public class ApiBean {
-    
+
     /**
      * client name.<br>
      * In general, it refers to the client type (RPC type), and users distinguish between multiple clients.
      */
     private final String clientName;
-    
+
     /**
      * bean Instance name.<br>
      * It can be a bean name for spring, it can be a Java variable name.
      */
     private final String beanName;
-    
+
     /**
      * bean instance.
      */
     private final Object beanInstance;
-    
+
     /**
      * bean class.
      */
     private final Class<?> beanClass;
-    
+
     /**
      * API collection.
      */
     private final List<ApiDefinition> apiDefinitions;
-    
+
     /**
      * supper uri.
      */
     private String beanPath = "";
-    
+
     /**
      * Custom properties for beans.
      */
     private final Properties beanProperties = new Properties();
-    
+
     /**
      * status.
      */
     private Status status = Status.INIT;
-    
+
     public ApiBean(@NonNull final String clientName, @NonNull final String beanName, @NonNull final Object beanInstance, @NonNull final List<ApiDefinition> apiDefinitions) {
         this.clientName = clientName;
         this.beanName = beanName;
@@ -88,7 +88,7 @@ public class ApiBean {
             apiDefinition.apiBean = this;
         }
     }
-    
+
     public ApiBean(@NonNull final String clientName, @NonNull final String beanName, @NonNull final Object beanInstance) {
         this.clientName = clientName;
         this.beanName = beanName;
@@ -96,7 +96,7 @@ public class ApiBean {
         this.beanClass = getCorrectedClass(beanInstance);
         this.apiDefinitions = new ArrayList<>(5);
     }
-    
+
     public ApiBean(@NonNull final String clientName, @NonNull final String beanName, @NonNull final Object beanInstance, final String beanPath) {
         this.clientName = clientName;
         this.beanName = beanName;
@@ -105,7 +105,7 @@ public class ApiBean {
         this.beanPath = beanPath;
         this.apiDefinitions = new ArrayList<>(5);
     }
-    
+
     /**
      * Adds apiDefinition to apiBean.
      *
@@ -116,7 +116,7 @@ public class ApiBean {
         ApiDefinition apiDefinition = new ApiDefinition(this, method, methodPath);
         apiDefinitions.add(apiDefinition);
     }
-    
+
     /**
      * get clientName.
      *
@@ -125,7 +125,7 @@ public class ApiBean {
     public String getClientName() {
         return clientName;
     }
-    
+
     /**
      * Gets apiDefinitions.
      *
@@ -134,7 +134,7 @@ public class ApiBean {
     public List<ApiDefinition> getApiDefinitions() {
         return apiDefinitions;
     }
-    
+
     /**
      * Gets bean instance.
      *
@@ -143,7 +143,7 @@ public class ApiBean {
     public Object getBeanInstance() {
         return beanInstance;
     }
-    
+
     /**
      * Gets bean name.
      *
@@ -152,7 +152,7 @@ public class ApiBean {
     public String getBeanName() {
         return beanName;
     }
-    
+
     /**
      * Gets bean class.
      *
@@ -161,7 +161,7 @@ public class ApiBean {
     public Class<?> getBeanClass() {
         return beanClass;
     }
-    
+
     /**
      * Gets bean path.
      *
@@ -170,7 +170,7 @@ public class ApiBean {
     public String getBeanPath() {
         return beanPath;
     }
-    
+
     /**
      * add properties value.
      *
@@ -180,7 +180,7 @@ public class ApiBean {
     public void addProperties(final String name, final String value) {
         beanProperties.put(name, value);
     }
-    
+
     /**
      * get properties.
      *
@@ -190,7 +190,7 @@ public class ApiBean {
     public String getPropertiesValue(final String name) {
         return beanProperties.getProperty(name);
     }
-    
+
     /**
      * get status.
      *
@@ -199,7 +199,7 @@ public class ApiBean {
     public Status getStatus() {
         return status;
     }
-    
+
     /**
      * set status.
      *
@@ -208,7 +208,7 @@ public class ApiBean {
     public void setStatus(final Status status) {
         this.status = status;
     }
-    
+
     /**
      * Gets annotation from Bean Class.
      *
@@ -219,7 +219,7 @@ public class ApiBean {
     public <A extends Annotation> A getAnnotation(final Class<A> annotationClass) {
         return AnnotatedElementUtils.findMergedAnnotation(beanClass, annotationClass);
     }
-    
+
     private Class<?> getCorrectedClass(final Object bean) {
         Class<?> clazz = bean.getClass();
         if (AopUtils.isAopProxy(bean)) {
@@ -227,7 +227,7 @@ public class ApiBean {
         }
         return clazz;
     }
-    
+
     /**
      * set beanPath.
      *
@@ -236,9 +236,10 @@ public class ApiBean {
     public void setBeanPath(final String beanPath) {
         this.beanPath = beanPath;
     }
-    
+
     /**
-     * deep copy.
+     * Copy API metadata for independent processing by another registrar.
+     * Bean and definition registration states intentionally restart at INIT; the bean instance and Methods are shared.
      *
      * @return ApiBean
      */
@@ -246,61 +247,62 @@ public class ApiBean {
         final ApiBean copy = new ApiBean(clientName, beanName, beanInstance, beanPath);
         beanProperties.forEach((k, v) -> copy.addProperties(k.toString(), Objects.toString(v)));
         for (ApiDefinition definition : apiDefinitions) {
-            final ApiDefinition newDefinition = new ApiDefinition(this, definition.apiMethod, definition.methodPath);
+            final ApiDefinition newDefinition = new ApiDefinition(copy, definition.apiMethod, definition.methodPath);
             definition.apiProperties.forEach((k, v) -> newDefinition.addProperties(k.toString(), Objects.toString(v)));
             copy.apiDefinitions.add(newDefinition);
         }
         return copy;
     }
-    
+
     /**
      * API corresponds to an accessible interface proxy service, which can be an http service, RPC service, TCP service.
      */
-    
+
     public static final class ApiDefinition {
-        
+
         /**
          * Function information for the service.
          */
         private final Method apiMethod;
-        
+
         /**
          * The instance of the class in which the function resides.
+         * Assigned later when an initially unbound definition is supplied to the ApiBean list constructor.
          */
         private ApiBean apiBean;
-        
+
         /**
          * The URI path after conversion to the HTTP service.
          */
         private String methodPath;
-        
+
         /**
          * api custom properties.<br>
          * The properties of each client are different.
          */
         private final Properties apiProperties = new Properties();
-        
+
         /**
          * status.
          */
         private Status status = Status.INIT;
-        
+
         public ApiDefinition(final Method apiMethod) {
             this.apiMethod = apiMethod;
             this.methodPath = apiMethod.getName();
         }
-        
+
         public ApiDefinition(final ApiBean apiBean, final Method apiMethod) {
             this.apiBean = apiBean;
             this.apiMethod = apiMethod;
         }
-        
+
         private ApiDefinition(final ApiBean apiBean, final Method apiMethod, final String methodPath) {
             this.apiBean = apiBean;
             this.apiMethod = apiMethod;
             this.methodPath = methodPath;
         }
-        
+
         /**
          * set methodPath.
          *
@@ -309,7 +311,7 @@ public class ApiBean {
         public void setMethodPath(final String methodPath) {
             this.methodPath = methodPath;
         }
-        
+
         /**
          * add properties value.
          *
@@ -319,7 +321,7 @@ public class ApiBean {
         public void addProperties(final String name, final String value) {
             apiProperties.put(name, value);
         }
-        
+
         /**
          * get properties.
          *
@@ -329,7 +331,7 @@ public class ApiBean {
         public String getPropertiesValue(final String name) {
             return apiProperties.getProperty(name);
         }
-        
+
         /**
          * Get Api Method.
          *
@@ -338,7 +340,7 @@ public class ApiBean {
         public Method getApiMethod() {
             return apiMethod;
         }
-        
+
         /**
          * Gets api method Name.
          *
@@ -347,7 +349,7 @@ public class ApiBean {
         public String getApiMethodName() {
             return apiMethod.getName();
         }
-        
+
         /**
          * Gets bean path.
          *
@@ -356,7 +358,7 @@ public class ApiBean {
         public String getBeanPath() {
             return apiBean.beanPath;
         }
-        
+
         /**
          * Gets method path.
          *
@@ -365,7 +367,7 @@ public class ApiBean {
         public String getMethodPath() {
             return methodPath;
         }
-        
+
         /**
          * Gets bean class.
          *
@@ -374,7 +376,7 @@ public class ApiBean {
         public Class<?> getBeanClass() {
             return apiBean.beanClass;
         }
-        
+
         /**
          * Gets api bean.
          *
@@ -383,7 +385,7 @@ public class ApiBean {
         public ApiBean getApiBean() {
             return apiBean;
         }
-        
+
         /**
          * get status.
          *
@@ -392,7 +394,7 @@ public class ApiBean {
         public Status getStatus() {
             return status;
         }
-        
+
         /**
          * set status.
          *
@@ -401,7 +403,7 @@ public class ApiBean {
         public void setStatus(final Status status) {
             this.status = status;
         }
-        
+
         /**
          * Get the annotation from Method.
          *
@@ -412,7 +414,7 @@ public class ApiBean {
         public <A extends Annotation> A getAnnotation(final Class<A> annotationClass) {
             return AnnotatedElementUtils.findMergedAnnotation(apiMethod, annotationClass);
         }
-        
+
         /**
          * Gets parameterTypes.
          *
@@ -426,38 +428,38 @@ public class ApiBean {
                     .orElse(null);
         }
     }
-    
+
     public enum Status {
-        
+
         /**
          * init status.
          */
         INIT,
-        
+
         /**
          * Cannot be registered.
          */
         CAN_NO_BE_REGISTERED,
-        
+
         /**
          * Registrable.
          */
         REGISTRABLE,
-        
+
         /**
          * Registrable(only api).
          * <br>
          * Only register APIs included in the bean.
          */
         REGISTRABLE_API,
-        
+
         /**
          * Registrable(only bean).
          * <br>
          * A registrable bean means that the bean needs to be registered, ignoring the APIs in it.
          */
         REGISTRABLE_BEAN,
-        
+
         /**
          * Already registered.
          * <br>

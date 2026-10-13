@@ -1,0 +1,1741 @@
+{
+  "main_repository": "https://github.com/yangjj-iso/shenyu.git",
+  "main_revision": "6210d4cbab53ad6b2a44ae48382d80a13d89a99d",
+  "main_pull_request": "https://github.com/apache/shenyu/pull/7605",
+  "foundation_version": "2.7.2-SNAPSHOT",
+  "client_preparation_version": "2.7.2-migration-SNAPSHOT",
+  "source_roots": {
+    "shenyu-client/shenyu-client-core": "shenyu-client-core",
+    "shenyu-client/shenyu-client-grpc": "shenyu-client-grpc",
+    "shenyu-client/shenyu-client-autoconfig": "shenyu-client-autoconfig",
+    "shenyu-client/shenyu-client-tars": "shenyu-client-tars",
+    "shenyu-client/shenyu-client-sofa": "shenyu-client-sofa",
+    "shenyu-client/shenyu-client-dubbo": "shenyu-client-dubbo",
+    "shenyu-client/shenyu-client-mcp": "shenyu-client-mcp",
+    "shenyu-client/shenyu-client-api-docs-annotations": "shenyu-client-api-docs-annotations",
+    "shenyu-client/shenyu-client-websocket": "shenyu-client-websocket",
+    "shenyu-client/shenyu-client-http": "shenyu-client-http",
+    "shenyu-register-center/shenyu-register-client/shenyu-register-client-api": "shenyu-register-client-api",
+    "shenyu-register-center/shenyu-register-client/shenyu-register-client-http": "shenyu-register-client-http",
+    "shenyu-spring-boot-starter/shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-apache-dubbo": "shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-apache-dubbo",
+    "shenyu-spring-boot-starter/shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-common": "shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-common",
+    "shenyu-spring-boot-starter/shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-grpc": "shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-grpc",
+    "shenyu-spring-boot-starter/shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-mcp": "shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-mcp",
+    "shenyu-spring-boot-starter/shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-sofa": "shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-sofa",
+    "shenyu-spring-boot-starter/shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-spring-websocket": "shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-spring-websocket",
+    "shenyu-spring-boot-starter/shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-springmvc": "shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-springmvc",
+    "shenyu-spring-boot-starter/shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-tars": "shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-tars",
+    "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service",
+    "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service-annotation": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service-annotation",
+    "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service-xml": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service-xml",
+    "shenyu-examples/shenyu-examples-grpc": "shenyu-examples/shenyu-examples-grpc",
+    "shenyu-examples/shenyu-examples-http": "shenyu-examples/shenyu-examples-http",
+    "shenyu-examples/shenyu-examples-http-swagger3": "shenyu-examples/shenyu-examples-http-swagger3",
+    "shenyu-examples/shenyu-examples-https": "shenyu-examples/shenyu-examples-https",
+    "shenyu-examples/shenyu-examples-mcp": "shenyu-examples/shenyu-examples-mcp",
+    "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-dubbo/shenyu-examples-sdk-apache-dubbo-provider": "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-dubbo/shenyu-examples-sdk-apache-dubbo-provider",
+    "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-feign": "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-feign",
+    "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-grpc/shenyu-examples-sdk-grpc-provider": "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-grpc/shenyu-examples-sdk-grpc-provider",
+    "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-http": "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-http",
+    "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-springcloud/shenyu-examples-sdk-springcloud-provider": "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-springcloud/shenyu-examples-sdk-springcloud-provider",
+    "shenyu-examples/shenyu-examples-springcloud": "shenyu-examples/shenyu-examples-springcloud",
+    "shenyu-examples/shenyu-examples-springmvc": "shenyu-examples/shenyu-examples-springmvc",
+    "shenyu-examples/shenyu-examples-springmvc-tomcat": "shenyu-examples/shenyu-examples-springmvc-tomcat",
+    "shenyu-examples/shenyu-examples-websocket/shenyu-example-spring-annotation-websocket": "shenyu-examples/shenyu-examples-websocket/shenyu-example-spring-annotation-websocket",
+    "shenyu-examples/shenyu-examples-websocket/shenyu-example-spring-native-websocket": "shenyu-examples/shenyu-examples-websocket/shenyu-example-spring-native-websocket",
+    "shenyu-examples/shenyu-examples-websocket/shenyu-example-spring-reactive-websocket": "shenyu-examples/shenyu-examples-websocket/shenyu-example-spring-reactive-websocket",
+    "shenyu-examples/shenyu-examples-common": "shenyu-examples/shenyu-client-examples-common",
+    "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-dubbo-api": "shenyu-examples/shenyu-examples-dubbo/shenyu-client-examples-dubbo-api"
+  },
+  "source_files": [
+    {
+      "source": "shenyu-client/shenyu-client-api-docs-annotations/src/main/java/org/apache/shenyu/client/apidocs/annotations/ApiDoc.java",
+      "destination": "shenyu-client-api-docs-annotations/src/main/java/org/apache/shenyu/client/apidocs/annotations/ApiDoc.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-api-docs-annotations/src/main/java/org/apache/shenyu/client/apidocs/annotations/ApiModule.java",
+      "destination": "shenyu-client-api-docs-annotations/src/main/java/org/apache/shenyu/client/apidocs/annotations/ApiModule.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-autoconfig/src/main/java/org/apache/shenyu/client/auto/config/ClientRegisterConfiguration.java",
+      "destination": "shenyu-client-autoconfig/src/main/java/org/apache/shenyu/client/auto/config/ClientRegisterConfiguration.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-autoconfig/src/main/java/org/apache/shenyu/client/auto/config/EnableClientRegister.java",
+      "destination": "shenyu-client-autoconfig/src/main/java/org/apache/shenyu/client/auto/config/EnableClientRegister.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/main/java/org/apache/shenyu/client/core/client/AbstractContextRefreshedEventListener.java",
+      "destination": "shenyu-client-core/src/main/java/org/apache/shenyu/client/core/client/AbstractContextRefreshedEventListener.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/main/java/org/apache/shenyu/client/core/constant/ShenyuClientConstants.java",
+      "destination": "shenyu-client-core/src/main/java/org/apache/shenyu/client/core/constant/ShenyuClientConstants.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/main/java/org/apache/shenyu/client/core/disruptor/ShenyuClientRegisterEventPublisher.java",
+      "destination": "shenyu-client-core/src/main/java/org/apache/shenyu/client/core/disruptor/ShenyuClientRegisterEventPublisher.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/main/java/org/apache/shenyu/client/core/disruptor/executor/RegisterClientConsumerExecutor.java",
+      "destination": "shenyu-client-core/src/main/java/org/apache/shenyu/client/core/disruptor/executor/RegisterClientConsumerExecutor.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/main/java/org/apache/shenyu/client/core/disruptor/subcriber/ShenyuClientApiDocExecutorSubscriber.java",
+      "destination": "shenyu-client-core/src/main/java/org/apache/shenyu/client/core/disruptor/subcriber/ShenyuClientApiDocExecutorSubscriber.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/main/java/org/apache/shenyu/client/core/disruptor/subcriber/ShenyuClientMcpExecutorSubscriber.java",
+      "destination": "shenyu-client-core/src/main/java/org/apache/shenyu/client/core/disruptor/subcriber/ShenyuClientMcpExecutorSubscriber.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/main/java/org/apache/shenyu/client/core/disruptor/subcriber/ShenyuClientMetadataExecutorSubscriber.java",
+      "destination": "shenyu-client-core/src/main/java/org/apache/shenyu/client/core/disruptor/subcriber/ShenyuClientMetadataExecutorSubscriber.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/main/java/org/apache/shenyu/client/core/disruptor/subcriber/ShenyuClientURIExecutorSubscriber.java",
+      "destination": "shenyu-client-core/src/main/java/org/apache/shenyu/client/core/disruptor/subcriber/ShenyuClientURIExecutorSubscriber.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/main/java/org/apache/shenyu/client/core/exception/ShenyuClientIllegalArgumentException.java",
+      "destination": "shenyu-client-core/src/main/java/org/apache/shenyu/client/core/exception/ShenyuClientIllegalArgumentException.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/ApiBean.java",
+      "destination": "shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/ApiBean.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/ClientApiRefreshedEventListener.java",
+      "destination": "shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/ClientApiRefreshedEventListener.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/ClientDiscoveryConfigRefreshedEventListener.java",
+      "destination": "shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/ClientDiscoveryConfigRefreshedEventListener.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/ClientRegisterConfig.java",
+      "destination": "shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/ClientRegisterConfig.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/ClientRegisterConfigImpl.java",
+      "destination": "shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/ClientRegisterConfigImpl.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/InstanceRegisterListener.java",
+      "destination": "shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/InstanceRegisterListener.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/ShenyuClientRegisterRepositoryFactory.java",
+      "destination": "shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/ShenyuClientRegisterRepositoryFactory.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/extractor/ApiBeansExtractor.java",
+      "destination": "shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/extractor/ApiBeansExtractor.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/extractor/BaseAnnotationApiBeansExtractor.java",
+      "destination": "shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/extractor/BaseAnnotationApiBeansExtractor.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/extractor/BaseApiBeansExtractor.java",
+      "destination": "shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/extractor/BaseApiBeansExtractor.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/extractor/MultiClientApiBeansExtractorImpl.java",
+      "destination": "shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/extractor/MultiClientApiBeansExtractorImpl.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/extractor/RpcApiBeansExtractor.java",
+      "destination": "shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/extractor/RpcApiBeansExtractor.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/matcher/AnnotatedApiBeanMatcher.java",
+      "destination": "shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/matcher/AnnotatedApiBeanMatcher.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/matcher/AnnotatedApiDefinitionMatcher.java",
+      "destination": "shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/matcher/AnnotatedApiDefinitionMatcher.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/matcher/ApiAnnotationProcessor.java",
+      "destination": "shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/matcher/ApiAnnotationProcessor.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/matcher/ApiBeanMatcher.java",
+      "destination": "shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/matcher/ApiBeanMatcher.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/matcher/ApiBeanProcessor.java",
+      "destination": "shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/matcher/ApiBeanProcessor.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/matcher/ApiDefinitionMatcher.java",
+      "destination": "shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/matcher/ApiDefinitionMatcher.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/matcher/ApiDocProcessorImpl.java",
+      "destination": "shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/matcher/ApiDocProcessorImpl.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/matcher/ApiRegisterProcessor.java",
+      "destination": "shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/matcher/ApiRegisterProcessor.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/matcher/BaseAnnotationApiProcessor.java",
+      "destination": "shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/matcher/BaseAnnotationApiProcessor.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/matcher/ExtractorProcessor.java",
+      "destination": "shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/matcher/ExtractorProcessor.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/matcher/Matcher.java",
+      "destination": "shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/matcher/Matcher.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/registrar/AbstractApiDocRegistrar.java",
+      "destination": "shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/registrar/AbstractApiDocRegistrar.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/registrar/AbstractApiMetaRegistrar.java",
+      "destination": "shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/registrar/AbstractApiMetaRegistrar.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/registrar/AbstractApiRegistrar.java",
+      "destination": "shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/registrar/AbstractApiRegistrar.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/registrar/ApiDocRegistrarImpl.java",
+      "destination": "shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/registrar/ApiDocRegistrarImpl.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/registrar/ApiRegistrar.java",
+      "destination": "shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/registrar/ApiRegistrar.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/registrar/BaseApiRegistrarImpl.java",
+      "destination": "shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/registrar/BaseApiRegistrarImpl.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/registrar/HttpApiDocRegistrar.java",
+      "destination": "shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/registrar/HttpApiDocRegistrar.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/registrar/MateDataApiRegistrarImpl.java",
+      "destination": "shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/registrar/MateDataApiRegistrarImpl.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/registrar/NoHttpApiDocRegistrar.java",
+      "destination": "shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/registrar/NoHttpApiDocRegistrar.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/registrar/UriApiRegistrarImplImpl.java",
+      "destination": "shenyu-client-core/src/main/java/org/apache/shenyu/client/core/register/registrar/UriApiRegistrarImplImpl.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/main/java/org/apache/shenyu/client/core/shutdown/ShenyuClientShutdownHook.java",
+      "destination": "shenyu-client-core/src/main/java/org/apache/shenyu/client/core/shutdown/ShenyuClientShutdownHook.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/main/java/org/apache/shenyu/client/core/shutdown/ShutdownHookManager.java",
+      "destination": "shenyu-client-core/src/main/java/org/apache/shenyu/client/core/shutdown/ShutdownHookManager.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/main/java/org/apache/shenyu/client/core/utils/ApiBeanUtil.java",
+      "destination": "shenyu-client-core/src/main/java/org/apache/shenyu/client/core/utils/ApiBeanUtil.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/main/java/org/apache/shenyu/client/core/utils/OpenApiUtils.java",
+      "destination": "shenyu-client-core/src/main/java/org/apache/shenyu/client/core/utils/OpenApiUtils.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/main/java/org/apache/shenyu/client/core/utils/PortUtils.java",
+      "destination": "shenyu-client-core/src/main/java/org/apache/shenyu/client/core/utils/PortUtils.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/main/java/org/apache/shenyu/client/core/utils/RequestMethodUtils.java",
+      "destination": "shenyu-client-core/src/main/java/org/apache/shenyu/client/core/utils/RequestMethodUtils.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/main/java/org/apache/shenyu/client/core/utils/UrlPathUtils.java",
+      "destination": "shenyu-client-core/src/main/java/org/apache/shenyu/client/core/utils/UrlPathUtils.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/test/java/org/apache/shenyu/client/core/disruptor/subcriber/HeartbeatFailureIsolationTest.java",
+      "destination": "shenyu-client-core/src/test/java/org/apache/shenyu/client/core/disruptor/subcriber/HeartbeatFailureIsolationTest.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/test/java/org/apache/shenyu/client/core/disruptor/subcriber/ShenyuClientApiDocExecutorSubscriberTest.java",
+      "destination": "shenyu-client-core/src/test/java/org/apache/shenyu/client/core/disruptor/subcriber/ShenyuClientApiDocExecutorSubscriberTest.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/test/java/org/apache/shenyu/client/core/disruptor/subcriber/ShenyuClientMetadataExecutorSubscriberTest.java",
+      "destination": "shenyu-client-core/src/test/java/org/apache/shenyu/client/core/disruptor/subcriber/ShenyuClientMetadataExecutorSubscriberTest.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/test/java/org/apache/shenyu/client/core/disruptor/subcriber/ShenyuClientRegisterEventPublisherTest.java",
+      "destination": "shenyu-client-core/src/test/java/org/apache/shenyu/client/core/disruptor/subcriber/ShenyuClientRegisterEventPublisherTest.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/test/java/org/apache/shenyu/client/core/disruptor/subcriber/ShenyuClientURIExecutorSubscriberTest.java",
+      "destination": "shenyu-client-core/src/test/java/org/apache/shenyu/client/core/disruptor/subcriber/ShenyuClientURIExecutorSubscriberTest.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/test/java/org/apache/shenyu/client/core/disruptor/subcriber/UriReadinessTimeoutTest.java",
+      "destination": "shenyu-client-core/src/test/java/org/apache/shenyu/client/core/disruptor/subcriber/UriReadinessTimeoutTest.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/test/java/org/apache/shenyu/client/core/exception/ShenyuClientIllegalArgumentExceptionTest.java",
+      "destination": "shenyu-client-core/src/test/java/org/apache/shenyu/client/core/exception/ShenyuClientIllegalArgumentExceptionTest.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/test/java/org/apache/shenyu/client/core/register/ApiBeanCopyTest.java",
+      "destination": "shenyu-client-core/src/test/java/org/apache/shenyu/client/core/register/ApiBeanCopyTest.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/test/java/org/apache/shenyu/client/core/register/ShenyuClientRegisterRepositoryFactoryTest.java",
+      "destination": "shenyu-client-core/src/test/java/org/apache/shenyu/client/core/register/ShenyuClientRegisterRepositoryFactoryTest.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/test/java/org/apache/shenyu/client/core/register/matcher/AnnotatedApiBeanMatcherTest.java",
+      "destination": "shenyu-client-core/src/test/java/org/apache/shenyu/client/core/register/matcher/AnnotatedApiBeanMatcherTest.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/test/java/org/apache/shenyu/client/core/register/matcher/AnnotatedApiDefinitionMatcherTest.java",
+      "destination": "shenyu-client-core/src/test/java/org/apache/shenyu/client/core/register/matcher/AnnotatedApiDefinitionMatcherTest.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/test/java/org/apache/shenyu/client/core/register/matcher/BaseAnnotationApiProcessorTest.java",
+      "destination": "shenyu-client-core/src/test/java/org/apache/shenyu/client/core/register/matcher/BaseAnnotationApiProcessorTest.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/test/java/org/apache/shenyu/client/core/register/matcher/ExtractorProcessorTest.java",
+      "destination": "shenyu-client-core/src/test/java/org/apache/shenyu/client/core/register/matcher/ExtractorProcessorTest.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/test/java/org/apache/shenyu/client/core/register/matcher/MatcherTest.java",
+      "destination": "shenyu-client-core/src/test/java/org/apache/shenyu/client/core/register/matcher/MatcherTest.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/test/java/org/apache/shenyu/client/core/register/registrar/AbstractApiDocRegistrarTest.java",
+      "destination": "shenyu-client-core/src/test/java/org/apache/shenyu/client/core/register/registrar/AbstractApiDocRegistrarTest.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/test/java/org/apache/shenyu/client/core/register/registrar/ApiDocRegistrarImplTest.java",
+      "destination": "shenyu-client-core/src/test/java/org/apache/shenyu/client/core/register/registrar/ApiDocRegistrarImplTest.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/test/java/org/apache/shenyu/client/core/register/registrar/HttpApiDocRegistrarTest.java",
+      "destination": "shenyu-client-core/src/test/java/org/apache/shenyu/client/core/register/registrar/HttpApiDocRegistrarTest.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/test/java/org/apache/shenyu/client/core/register/registrar/NoHttpApiDocRegistrarTest.java",
+      "destination": "shenyu-client-core/src/test/java/org/apache/shenyu/client/core/register/registrar/NoHttpApiDocRegistrarTest.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/test/java/org/apache/shenyu/client/core/register/registrar/RegistrarNamespaceTest.java",
+      "destination": "shenyu-client-core/src/test/java/org/apache/shenyu/client/core/register/registrar/RegistrarNamespaceTest.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/test/java/org/apache/shenyu/client/core/register/registrar/TestClientRegisterConfig.java",
+      "destination": "shenyu-client-core/src/test/java/org/apache/shenyu/client/core/register/registrar/TestClientRegisterConfig.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/test/java/org/apache/shenyu/client/core/shutdown/ShenyuClientShutdownHookTest.java",
+      "destination": "shenyu-client-core/src/test/java/org/apache/shenyu/client/core/shutdown/ShenyuClientShutdownHookTest.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/test/java/org/apache/shenyu/client/core/utils/OpenApiUtilsTest.java",
+      "destination": "shenyu-client-core/src/test/java/org/apache/shenyu/client/core/utils/OpenApiUtilsTest.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/test/java/org/apache/shenyu/client/core/utils/PortUtilsTest.java",
+      "destination": "shenyu-client-core/src/test/java/org/apache/shenyu/client/core/utils/PortUtilsTest.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-core/src/test/proto/test.proto",
+      "destination": "shenyu-client-core/src/test/proto/test.proto"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-dubbo/shenyu-client-apache-dubbo/src/main/java/org/apache/shenyu/client/apache/dubbo/ApacheDubboApiBeansExtractor.java",
+      "destination": "shenyu-client-dubbo/shenyu-client-apache-dubbo/src/main/java/org/apache/shenyu/client/apache/dubbo/ApacheDubboApiBeansExtractor.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-dubbo/shenyu-client-apache-dubbo/src/main/java/org/apache/shenyu/client/apache/dubbo/ApacheDubboServiceBeanListener.java",
+      "destination": "shenyu-client-dubbo/shenyu-client-apache-dubbo/src/main/java/org/apache/shenyu/client/apache/dubbo/ApacheDubboServiceBeanListener.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-dubbo/shenyu-client-apache-dubbo/src/main/java/org/apache/shenyu/client/apache/dubbo/annotation/ShenyuDubboService.java",
+      "destination": "shenyu-client-dubbo/shenyu-client-apache-dubbo/src/main/java/org/apache/shenyu/client/apache/dubbo/annotation/ShenyuDubboService.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-dubbo/shenyu-client-apache-dubbo/src/main/java/org/apache/shenyu/client/apache/dubbo/annotation/ShenyuService.java",
+      "destination": "shenyu-client-dubbo/shenyu-client-apache-dubbo/src/main/java/org/apache/shenyu/client/apache/dubbo/annotation/ShenyuService.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-dubbo/shenyu-client-apache-dubbo/src/main/java/org/apache/shenyu/client/apache/dubbo/processor/extractor/DubboServiceProcessor.java",
+      "destination": "shenyu-client-dubbo/shenyu-client-apache-dubbo/src/main/java/org/apache/shenyu/client/apache/dubbo/processor/extractor/DubboServiceProcessor.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-dubbo/shenyu-client-apache-dubbo/src/main/java/org/apache/shenyu/client/apache/dubbo/processor/extractor/ServiceProcessor.java",
+      "destination": "shenyu-client-dubbo/shenyu-client-apache-dubbo/src/main/java/org/apache/shenyu/client/apache/dubbo/processor/extractor/ServiceProcessor.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-dubbo/shenyu-client-apache-dubbo/src/main/java/org/apache/shenyu/client/apache/dubbo/processor/register/ShenyuDubboProcessor.java",
+      "destination": "shenyu-client-dubbo/shenyu-client-apache-dubbo/src/main/java/org/apache/shenyu/client/apache/dubbo/processor/register/ShenyuDubboProcessor.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-dubbo/shenyu-client-apache-dubbo/src/main/java/org/apache/shenyu/client/apache/dubbo/validation/ApacheDubboClientValidation.java",
+      "destination": "shenyu-client-dubbo/shenyu-client-apache-dubbo/src/main/java/org/apache/shenyu/client/apache/dubbo/validation/ApacheDubboClientValidation.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-dubbo/shenyu-client-apache-dubbo/src/main/java/org/apache/shenyu/client/apache/dubbo/validation/ApacheDubboClientValidator.java",
+      "destination": "shenyu-client-dubbo/shenyu-client-apache-dubbo/src/main/java/org/apache/shenyu/client/apache/dubbo/validation/ApacheDubboClientValidator.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-dubbo/shenyu-client-apache-dubbo/src/main/resources/META-INF/dubbo/org.apache.dubbo.validation.Validation",
+      "destination": "shenyu-client-dubbo/shenyu-client-apache-dubbo/src/main/resources/META-INF/dubbo/org.apache.dubbo.validation.Validation"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-dubbo/shenyu-client-apache-dubbo/src/test/java/org/apache/shenyu/client/apache/dubbo/annotation/ShenyuDubboServiceDefaultValueTest.java",
+      "destination": "shenyu-client-dubbo/shenyu-client-apache-dubbo/src/test/java/org/apache/shenyu/client/apache/dubbo/annotation/ShenyuDubboServiceDefaultValueTest.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-dubbo/shenyu-client-apache-dubbo/src/test/java/org/apache/shenyu/client/apache/dubbo/processor/extractor/DubboServiceProcessorTest.java",
+      "destination": "shenyu-client-dubbo/shenyu-client-apache-dubbo/src/test/java/org/apache/shenyu/client/apache/dubbo/processor/extractor/DubboServiceProcessorTest.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-dubbo/shenyu-client-apache-dubbo/src/test/java/org/apache/shenyu/client/apache/dubbo/processor/extractor/ServiceProcessorTest.java",
+      "destination": "shenyu-client-dubbo/shenyu-client-apache-dubbo/src/test/java/org/apache/shenyu/client/apache/dubbo/processor/extractor/ServiceProcessorTest.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-dubbo/shenyu-client-apache-dubbo/src/test/java/org/apache/shenyu/client/apache/dubbo/validation/ApacheDubboClientValidationTest.java",
+      "destination": "shenyu-client-dubbo/shenyu-client-apache-dubbo/src/test/java/org/apache/shenyu/client/apache/dubbo/validation/ApacheDubboClientValidationTest.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-dubbo/shenyu-client-apache-dubbo/src/test/java/org/apache/shenyu/client/apache/dubbo/validation/ApacheDubboClientValidatorTest.java",
+      "destination": "shenyu-client-dubbo/shenyu-client-apache-dubbo/src/test/java/org/apache/shenyu/client/apache/dubbo/validation/ApacheDubboClientValidatorTest.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-dubbo/shenyu-client-apache-dubbo/src/test/java/org/apache/shenyu/client/apache/dubbo/validation/mock/MockConstraint.java",
+      "destination": "shenyu-client-dubbo/shenyu-client-apache-dubbo/src/test/java/org/apache/shenyu/client/apache/dubbo/validation/mock/MockConstraint.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-dubbo/shenyu-client-apache-dubbo/src/test/java/org/apache/shenyu/client/apache/dubbo/validation/mock/MockConstraintValidator.java",
+      "destination": "shenyu-client-dubbo/shenyu-client-apache-dubbo/src/test/java/org/apache/shenyu/client/apache/dubbo/validation/mock/MockConstraintValidator.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-dubbo/shenyu-client-apache-dubbo/src/test/java/org/apache/shenyu/client/apache/dubbo/validation/mock/MockEnumType.java",
+      "destination": "shenyu-client-dubbo/shenyu-client-apache-dubbo/src/test/java/org/apache/shenyu/client/apache/dubbo/validation/mock/MockEnumType.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-dubbo/shenyu-client-apache-dubbo/src/test/java/org/apache/shenyu/client/apache/dubbo/validation/mock/MockValidationParameter.java",
+      "destination": "shenyu-client-dubbo/shenyu-client-apache-dubbo/src/test/java/org/apache/shenyu/client/apache/dubbo/validation/mock/MockValidationParameter.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-dubbo/shenyu-client-apache-dubbo/src/test/java/org/apache/shenyu/client/apache/dubbo/validation/mock/MockValidatorTarget.java",
+      "destination": "shenyu-client-dubbo/shenyu-client-apache-dubbo/src/test/java/org/apache/shenyu/client/apache/dubbo/validation/mock/MockValidatorTarget.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-dubbo/shenyu-client-apache-dubbo/src/test/java/org/apache/shenyu/client/apache/dubbo/validation/service/TestService.java",
+      "destination": "shenyu-client-dubbo/shenyu-client-apache-dubbo/src/test/java/org/apache/shenyu/client/apache/dubbo/validation/service/TestService.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-dubbo/shenyu-client-dubbo-common/src/main/java/org/apache/shenyu/client/dubbo/common/annotation/ShenyuDubboClient.java",
+      "destination": "shenyu-client-dubbo/shenyu-client-dubbo-common/src/main/java/org/apache/shenyu/client/dubbo/common/annotation/ShenyuDubboClient.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-dubbo/shenyu-client-dubbo-common/src/main/java/org/apache/shenyu/client/dubbo/common/dto/DubboRpcExt.java",
+      "destination": "shenyu-client-dubbo/shenyu-client-dubbo-common/src/main/java/org/apache/shenyu/client/dubbo/common/dto/DubboRpcExt.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-dubbo/shenyu-client-dubbo-common/src/main/java/org/apache/shenyu/client/dubbo/common/dto/DubboRpcExtBuilders.java",
+      "destination": "shenyu-client-dubbo/shenyu-client-dubbo-common/src/main/java/org/apache/shenyu/client/dubbo/common/dto/DubboRpcExtBuilders.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-dubbo/shenyu-client-dubbo-common/src/main/java/org/apache/shenyu/client/dubbo/common/dto/DubboRpcMethodExt.java",
+      "destination": "shenyu-client-dubbo/shenyu-client-dubbo-common/src/main/java/org/apache/shenyu/client/dubbo/common/dto/DubboRpcMethodExt.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-dubbo/shenyu-client-dubbo-common/src/test/java/org/apache/shenyu/client/dubbo/common/dto/DubboRpcExtBuildersTest.java",
+      "destination": "shenyu-client-dubbo/shenyu-client-dubbo-common/src/test/java/org/apache/shenyu/client/dubbo/common/dto/DubboRpcExtBuildersTest.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-grpc/src/main/java/org/apache/shenyu/client/grpc/GrpcClientEventListener.java",
+      "destination": "shenyu-client-grpc/src/main/java/org/apache/shenyu/client/grpc/GrpcClientEventListener.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-grpc/src/main/java/org/apache/shenyu/client/grpc/common/annotation/ShenyuGrpcClient.java",
+      "destination": "shenyu-client-grpc/src/main/java/org/apache/shenyu/client/grpc/common/annotation/ShenyuGrpcClient.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-grpc/src/main/java/org/apache/shenyu/client/grpc/common/dto/GrpcExt.java",
+      "destination": "shenyu-client-grpc/src/main/java/org/apache/shenyu/client/grpc/common/dto/GrpcExt.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-grpc/src/main/java/org/apache/shenyu/client/grpc/json/JsonForwardingServerCall.java",
+      "destination": "shenyu-client-grpc/src/main/java/org/apache/shenyu/client/grpc/json/JsonForwardingServerCall.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-grpc/src/main/java/org/apache/shenyu/client/grpc/json/JsonServerCallListener.java",
+      "destination": "shenyu-client-grpc/src/main/java/org/apache/shenyu/client/grpc/json/JsonServerCallListener.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-grpc/src/main/java/org/apache/shenyu/client/grpc/json/JsonServerServiceInterceptor.java",
+      "destination": "shenyu-client-grpc/src/main/java/org/apache/shenyu/client/grpc/json/JsonServerServiceInterceptor.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-grpc/src/main/java/org/apache/shenyu/client/grpc/server/GrpcServerBuilder.java",
+      "destination": "shenyu-client-grpc/src/main/java/org/apache/shenyu/client/grpc/server/GrpcServerBuilder.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-grpc/src/main/java/org/apache/shenyu/client/grpc/server/GrpcServerRunner.java",
+      "destination": "shenyu-client-grpc/src/main/java/org/apache/shenyu/client/grpc/server/GrpcServerRunner.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-grpc/src/test/java/org/apache/shenyu/client/grpc/TestRequest.java",
+      "destination": "shenyu-client-grpc/src/test/java/org/apache/shenyu/client/grpc/TestRequest.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-grpc/src/test/java/org/apache/shenyu/client/grpc/TestResponse.java",
+      "destination": "shenyu-client-grpc/src/test/java/org/apache/shenyu/client/grpc/TestResponse.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-grpc/src/test/java/org/apache/shenyu/client/grpc/json/JsonForwardingServerCallTest.java",
+      "destination": "shenyu-client-grpc/src/test/java/org/apache/shenyu/client/grpc/json/JsonForwardingServerCallTest.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-grpc/src/test/java/org/apache/shenyu/client/grpc/json/JsonServerCallListenerTest.java",
+      "destination": "shenyu-client-grpc/src/test/java/org/apache/shenyu/client/grpc/json/JsonServerCallListenerTest.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-grpc/src/test/java/org/apache/shenyu/client/grpc/json/JsonServerServiceInterceptorTest.java",
+      "destination": "shenyu-client-grpc/src/test/java/org/apache/shenyu/client/grpc/json/JsonServerServiceInterceptorTest.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-grpc/src/test/java/org/apache/shenyu/client/grpc/server/GrpcServerRunnerTest.java",
+      "destination": "shenyu-client-grpc/src/test/java/org/apache/shenyu/client/grpc/server/GrpcServerRunnerTest.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-http/shenyu-client-springmvc/src/main/java/org/apache/shenyu/client/springmvc/annotation/ShenyuDeleteMapping.java",
+      "destination": "shenyu-client-http/shenyu-client-springmvc/src/main/java/org/apache/shenyu/client/springmvc/annotation/ShenyuDeleteMapping.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-http/shenyu-client-springmvc/src/main/java/org/apache/shenyu/client/springmvc/annotation/ShenyuGetMapping.java",
+      "destination": "shenyu-client-http/shenyu-client-springmvc/src/main/java/org/apache/shenyu/client/springmvc/annotation/ShenyuGetMapping.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-http/shenyu-client-springmvc/src/main/java/org/apache/shenyu/client/springmvc/annotation/ShenyuPatchMapping.java",
+      "destination": "shenyu-client-http/shenyu-client-springmvc/src/main/java/org/apache/shenyu/client/springmvc/annotation/ShenyuPatchMapping.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-http/shenyu-client-springmvc/src/main/java/org/apache/shenyu/client/springmvc/annotation/ShenyuPostMapping.java",
+      "destination": "shenyu-client-http/shenyu-client-springmvc/src/main/java/org/apache/shenyu/client/springmvc/annotation/ShenyuPostMapping.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-http/shenyu-client-springmvc/src/main/java/org/apache/shenyu/client/springmvc/annotation/ShenyuPutMapping.java",
+      "destination": "shenyu-client-http/shenyu-client-springmvc/src/main/java/org/apache/shenyu/client/springmvc/annotation/ShenyuPutMapping.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-http/shenyu-client-springmvc/src/main/java/org/apache/shenyu/client/springmvc/annotation/ShenyuRequestMapping.java",
+      "destination": "shenyu-client-http/shenyu-client-springmvc/src/main/java/org/apache/shenyu/client/springmvc/annotation/ShenyuRequestMapping.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-http/shenyu-client-springmvc/src/main/java/org/apache/shenyu/client/springmvc/annotation/ShenyuSpringMvcClient.java",
+      "destination": "shenyu-client-http/shenyu-client-springmvc/src/main/java/org/apache/shenyu/client/springmvc/annotation/ShenyuSpringMvcClient.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-http/shenyu-client-springmvc/src/main/java/org/apache/shenyu/client/springmvc/init/SpringMvcClientEventListener.java",
+      "destination": "shenyu-client-http/shenyu-client-springmvc/src/main/java/org/apache/shenyu/client/springmvc/init/SpringMvcClientEventListener.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-http/shenyu-client-springmvc/src/main/java/org/apache/shenyu/client/springmvc/proceeor/extractor/RequestMappingProcessor.java",
+      "destination": "shenyu-client-http/shenyu-client-springmvc/src/main/java/org/apache/shenyu/client/springmvc/proceeor/extractor/RequestMappingProcessor.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-http/shenyu-client-springmvc/src/main/java/org/apache/shenyu/client/springmvc/proceeor/register/ShenyuSpringMvcClientProcessorImpl.java",
+      "destination": "shenyu-client-http/shenyu-client-springmvc/src/main/java/org/apache/shenyu/client/springmvc/proceeor/register/ShenyuSpringMvcClientProcessorImpl.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-http/shenyu-client-springmvc/src/main/java/org/apache/shenyu/client/springmvc/register/SpringMvcApiBeansExtractor.java",
+      "destination": "shenyu-client-http/shenyu-client-springmvc/src/main/java/org/apache/shenyu/client/springmvc/register/SpringMvcApiBeansExtractor.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-http/shenyu-client-springmvc/src/main/java/org/apache/shenyu/client/springmvc/register/SpringMvcApiMetaRegister.java",
+      "destination": "shenyu-client-http/shenyu-client-springmvc/src/main/java/org/apache/shenyu/client/springmvc/register/SpringMvcApiMetaRegister.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-http/shenyu-client-springmvc/src/test/java/org/apache/shenyu/client/springmvc/annotation/ShenyuDeleteMappingTest.java",
+      "destination": "shenyu-client-http/shenyu-client-springmvc/src/test/java/org/apache/shenyu/client/springmvc/annotation/ShenyuDeleteMappingTest.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-http/shenyu-client-springmvc/src/test/java/org/apache/shenyu/client/springmvc/annotation/ShenyuGetMappingTest.java",
+      "destination": "shenyu-client-http/shenyu-client-springmvc/src/test/java/org/apache/shenyu/client/springmvc/annotation/ShenyuGetMappingTest.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-http/shenyu-client-springmvc/src/test/java/org/apache/shenyu/client/springmvc/annotation/ShenyuPatchMappingTest.java",
+      "destination": "shenyu-client-http/shenyu-client-springmvc/src/test/java/org/apache/shenyu/client/springmvc/annotation/ShenyuPatchMappingTest.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-http/shenyu-client-springmvc/src/test/java/org/apache/shenyu/client/springmvc/annotation/ShenyuPostMappingTest.java",
+      "destination": "shenyu-client-http/shenyu-client-springmvc/src/test/java/org/apache/shenyu/client/springmvc/annotation/ShenyuPostMappingTest.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-http/shenyu-client-springmvc/src/test/java/org/apache/shenyu/client/springmvc/annotation/ShenyuPutMappingTest.java",
+      "destination": "shenyu-client-http/shenyu-client-springmvc/src/test/java/org/apache/shenyu/client/springmvc/annotation/ShenyuPutMappingTest.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-http/shenyu-client-springmvc/src/test/java/org/apache/shenyu/client/springmvc/annotation/ShenyuRequestMappingTest.java",
+      "destination": "shenyu-client-http/shenyu-client-springmvc/src/test/java/org/apache/shenyu/client/springmvc/annotation/ShenyuRequestMappingTest.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-http/shenyu-client-springmvc/src/test/java/org/apache/shenyu/client/springmvc/init/SpringMvcClientEventListenerTest.java",
+      "destination": "shenyu-client-http/shenyu-client-springmvc/src/test/java/org/apache/shenyu/client/springmvc/init/SpringMvcClientEventListenerTest.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-http/shenyu-client-springmvc/src/test/java/org/apache/shenyu/client/springmvc/register/SpringMvcApiBeansExtractorTest.java",
+      "destination": "shenyu-client-http/shenyu-client-springmvc/src/test/java/org/apache/shenyu/client/springmvc/register/SpringMvcApiBeansExtractorTest.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-http/shenyu-client-springmvc/src/test/java/org/apache/shenyu/client/springmvc/register/SpringMvcApiMetaRegisterTest.java",
+      "destination": "shenyu-client-http/shenyu-client-springmvc/src/test/java/org/apache/shenyu/client/springmvc/register/SpringMvcApiMetaRegisterTest.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-mcp/shenyu-client-mcp-common/src/main/java/org/apache/shenyu/client/mcp/common/annotation/ShenyuMcpHeader.java",
+      "destination": "shenyu-client-mcp/shenyu-client-mcp-common/src/main/java/org/apache/shenyu/client/mcp/common/annotation/ShenyuMcpHeader.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-mcp/shenyu-client-mcp-common/src/main/java/org/apache/shenyu/client/mcp/common/annotation/ShenyuMcpRequestConfig.java",
+      "destination": "shenyu-client-mcp/shenyu-client-mcp-common/src/main/java/org/apache/shenyu/client/mcp/common/annotation/ShenyuMcpRequestConfig.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-mcp/shenyu-client-mcp-common/src/main/java/org/apache/shenyu/client/mcp/common/annotation/ShenyuMcpTool.java",
+      "destination": "shenyu-client-mcp/shenyu-client-mcp-common/src/main/java/org/apache/shenyu/client/mcp/common/annotation/ShenyuMcpTool.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-mcp/shenyu-client-mcp-common/src/main/java/org/apache/shenyu/client/mcp/common/annotation/ShenyuMcpToolParam.java",
+      "destination": "shenyu-client-mcp/shenyu-client-mcp-common/src/main/java/org/apache/shenyu/client/mcp/common/annotation/ShenyuMcpToolParam.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-mcp/shenyu-client-mcp-common/src/main/java/org/apache/shenyu/client/mcp/common/constants/OpenApiConstants.java",
+      "destination": "shenyu-client-mcp/shenyu-client-mcp-common/src/main/java/org/apache/shenyu/client/mcp/common/constants/OpenApiConstants.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-mcp/shenyu-client-mcp-common/src/main/java/org/apache/shenyu/client/mcp/common/constants/RequestTemplateConstants.java",
+      "destination": "shenyu-client-mcp/shenyu-client-mcp-common/src/main/java/org/apache/shenyu/client/mcp/common/constants/RequestTemplateConstants.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-mcp/shenyu-client-mcp-common/src/main/java/org/apache/shenyu/client/mcp/common/constants/ShenyuToolConfigConstants.java",
+      "destination": "shenyu-client-mcp/shenyu-client-mcp-common/src/main/java/org/apache/shenyu/client/mcp/common/constants/ShenyuToolConfigConstants.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-mcp/shenyu-client-mcp-common/src/main/java/org/apache/shenyu/client/mcp/common/dto/ShenyuMcpRequestConfig.java",
+      "destination": "shenyu-client-mcp/shenyu-client-mcp-common/src/main/java/org/apache/shenyu/client/mcp/common/dto/ShenyuMcpRequestConfig.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-mcp/shenyu-client-mcp-common/src/main/java/org/apache/shenyu/client/mcp/common/dto/ShenyuMcpTool.java",
+      "destination": "shenyu-client-mcp/shenyu-client-mcp-common/src/main/java/org/apache/shenyu/client/mcp/common/dto/ShenyuMcpTool.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-mcp/shenyu-client-mcp-common/src/main/java/org/apache/shenyu/client/mcp/common/eunm/McpParameterType.java",
+      "destination": "shenyu-client-mcp/shenyu-client-mcp-common/src/main/java/org/apache/shenyu/client/mcp/common/eunm/McpParameterType.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-mcp/shenyu-client-mcp-common/src/main/java/org/apache/shenyu/client/mcp/generator/McpOpenApiGenerator.java",
+      "destination": "shenyu-client-mcp/shenyu-client-mcp-common/src/main/java/org/apache/shenyu/client/mcp/generator/McpOpenApiGenerator.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-mcp/shenyu-client-mcp-common/src/main/java/org/apache/shenyu/client/mcp/generator/McpRequestConfigGenerator.java",
+      "destination": "shenyu-client-mcp/shenyu-client-mcp-common/src/main/java/org/apache/shenyu/client/mcp/generator/McpRequestConfigGenerator.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-mcp/shenyu-client-mcp-common/src/main/java/org/apache/shenyu/client/mcp/generator/McpToolsRegisterDTOGenerator.java",
+      "destination": "shenyu-client-mcp/shenyu-client-mcp-common/src/main/java/org/apache/shenyu/client/mcp/generator/McpToolsRegisterDTOGenerator.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-mcp/shenyu-client-mcp-common/src/main/java/org/apache/shenyu/client/mcp/utils/OpenApiConvertorUtil.java",
+      "destination": "shenyu-client-mcp/shenyu-client-mcp-common/src/main/java/org/apache/shenyu/client/mcp/utils/OpenApiConvertorUtil.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-mcp/shenyu-client-mcp-common/src/test/java/org/apache/shenyu/client/mcp/generator/McpCompatibilityAdapterTest.java",
+      "destination": "shenyu-client-mcp/shenyu-client-mcp-common/src/test/java/org/apache/shenyu/client/mcp/generator/McpCompatibilityAdapterTest.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-mcp/shenyu-client-mcp-common/src/test/java/org/apache/shenyu/client/mcp/generator/McpOpenApiGeneratorTest.java",
+      "destination": "shenyu-client-mcp/shenyu-client-mcp-common/src/test/java/org/apache/shenyu/client/mcp/generator/McpOpenApiGeneratorTest.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-mcp/shenyu-client-mcp-register/src/main/java/org/apache/shenyu/client/mcp/McpServiceEventListener.java",
+      "destination": "shenyu-client-mcp/shenyu-client-mcp-register/src/main/java/org/apache/shenyu/client/mcp/McpServiceEventListener.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-sofa/src/main/java/org/apache/shenyu/client/sofa/SofaServiceEventListener.java",
+      "destination": "shenyu-client-sofa/src/main/java/org/apache/shenyu/client/sofa/SofaServiceEventListener.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-sofa/src/main/java/org/apache/shenyu/client/sofa/common/annotation/ShenyuSofaClient.java",
+      "destination": "shenyu-client-sofa/src/main/java/org/apache/shenyu/client/sofa/common/annotation/ShenyuSofaClient.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-sofa/src/main/java/org/apache/shenyu/client/sofa/common/dto/SofaRpcExt.java",
+      "destination": "shenyu-client-sofa/src/main/java/org/apache/shenyu/client/sofa/common/dto/SofaRpcExt.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-sofa/src/test/java/org/apache/shenyu/client/sofa/SofaServiceEventListenerTest.java",
+      "destination": "shenyu-client-sofa/src/test/java/org/apache/shenyu/client/sofa/SofaServiceEventListenerTest.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-tars/src/main/java/org/apache/shenyu/client/tars/TarsServiceBeanEventListener.java",
+      "destination": "shenyu-client-tars/src/main/java/org/apache/shenyu/client/tars/TarsServiceBeanEventListener.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-tars/src/main/java/org/apache/shenyu/client/tars/common/annotation/ShenyuTarsClient.java",
+      "destination": "shenyu-client-tars/src/main/java/org/apache/shenyu/client/tars/common/annotation/ShenyuTarsClient.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-tars/src/main/java/org/apache/shenyu/client/tars/common/annotation/ShenyuTarsService.java",
+      "destination": "shenyu-client-tars/src/main/java/org/apache/shenyu/client/tars/common/annotation/ShenyuTarsService.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-tars/src/main/java/org/apache/shenyu/client/tars/common/dto/TarsRpcExt.java",
+      "destination": "shenyu-client-tars/src/main/java/org/apache/shenyu/client/tars/common/dto/TarsRpcExt.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-tars/src/test/java/org/apache/shenyu/client/tars/TarsRpcExtTest.java",
+      "destination": "shenyu-client-tars/src/test/java/org/apache/shenyu/client/tars/TarsRpcExtTest.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-tars/src/test/java/org/apache/shenyu/client/tars/TarsServiceBeanPostProcessorTest.java",
+      "destination": "shenyu-client-tars/src/test/java/org/apache/shenyu/client/tars/TarsServiceBeanPostProcessorTest.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-websocket/shenyu-client-spring-websocket/src/main/java/org/apache/shenyu/client/spring/websocket/annotation/ShenyuServerEndpoint.java",
+      "destination": "shenyu-client-websocket/shenyu-client-spring-websocket/src/main/java/org/apache/shenyu/client/spring/websocket/annotation/ShenyuServerEndpoint.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-websocket/shenyu-client-spring-websocket/src/main/java/org/apache/shenyu/client/spring/websocket/annotation/ShenyuSpringWebSocketClient.java",
+      "destination": "shenyu-client-websocket/shenyu-client-spring-websocket/src/main/java/org/apache/shenyu/client/spring/websocket/annotation/ShenyuSpringWebSocketClient.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-websocket/shenyu-client-spring-websocket/src/main/java/org/apache/shenyu/client/spring/websocket/init/ShenyuServerEndpointerExporter.java",
+      "destination": "shenyu-client-websocket/shenyu-client-spring-websocket/src/main/java/org/apache/shenyu/client/spring/websocket/init/ShenyuServerEndpointerExporter.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-websocket/shenyu-client-spring-websocket/src/main/java/org/apache/shenyu/client/spring/websocket/init/SpringWebSocketClientEventListener.java",
+      "destination": "shenyu-client-websocket/shenyu-client-spring-websocket/src/main/java/org/apache/shenyu/client/spring/websocket/init/SpringWebSocketClientEventListener.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-websocket/shenyu-client-spring-websocket/src/test/java/org/apache/shenyu/client/spring/websocket/init/ShenyuServerEndpointerExporterTest.java",
+      "destination": "shenyu-client-websocket/shenyu-client-spring-websocket/src/test/java/org/apache/shenyu/client/spring/websocket/init/ShenyuServerEndpointerExporterTest.java"
+    },
+    {
+      "source": "shenyu-client/shenyu-client-websocket/shenyu-client-spring-websocket/src/test/java/org/apache/shenyu/client/spring/websocket/init/SpringWebSocketClientEventListenerTest.java",
+      "destination": "shenyu-client-websocket/shenyu-client-spring-websocket/src/test/java/org/apache/shenyu/client/spring/websocket/init/SpringWebSocketClientEventListenerTest.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-common/src/main/java/org/apache/shenyu/examples/common/aop/InterceptorConfiguration.java",
+      "destination": "shenyu-examples/shenyu-client-examples-common/src/main/java/org/apache/shenyu/examples/common/aop/InterceptorConfiguration.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-common/src/main/java/org/apache/shenyu/examples/common/aop/Log.java",
+      "destination": "shenyu-examples/shenyu-client-examples-common/src/main/java/org/apache/shenyu/examples/common/aop/Log.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-common/src/main/java/org/apache/shenyu/examples/common/aop/LogInterceptor.java",
+      "destination": "shenyu-examples/shenyu-client-examples-common/src/main/java/org/apache/shenyu/examples/common/aop/LogInterceptor.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-common/src/main/java/org/apache/shenyu/examples/common/aop/package-info.java",
+      "destination": "shenyu-examples/shenyu-client-examples-common/src/main/java/org/apache/shenyu/examples/common/aop/package-info.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-common/src/main/resources/1.txt",
+      "destination": "shenyu-examples/shenyu-client-examples-common/src/main/resources/1.txt"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-common/src/main/resources/2.txt",
+      "destination": "shenyu-examples/shenyu-client-examples-common/src/main/resources/2.txt"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-common/src/main/resources/META-INF/spring.factories",
+      "destination": "shenyu-examples/shenyu-client-examples-common/src/main/resources/META-INF/spring.factories"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-common/src/main/resources/META-INF/spring.provides",
+      "destination": "shenyu-examples/shenyu-client-examples-common/src/main/resources/META-INF/spring.provides"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-common/src/main/resources/META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports",
+      "destination": "shenyu-examples/shenyu-client-examples-common/src/main/resources/META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-common/src/test/java/org/apache/shenyu/examples/common/Boot3AutoConfigurationMetadataTest.java",
+      "destination": "shenyu-examples/shenyu-client-examples-common/src/test/java/org/apache/shenyu/examples/common/Boot3AutoConfigurationMetadataTest.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service-annotation/src/main/http/apache-dubbo-class-test-api.http",
+      "destination": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service-annotation/src/main/http/apache-dubbo-class-test-api.http"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service-annotation/src/main/http/apache-dubbo-test-api.http",
+      "destination": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service-annotation/src/main/http/apache-dubbo-test-api.http"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service-annotation/src/main/java/org/apache/shenyu/examples/apache/dubbo/service/annotation/TestApacheDubboAnnotationApplication.java",
+      "destination": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service-annotation/src/main/java/org/apache/shenyu/examples/apache/dubbo/service/annotation/TestApacheDubboAnnotationApplication.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service-annotation/src/main/java/org/apache/shenyu/examples/apache/dubbo/service/annotation/impl/DubboClassMultiParamServiceImpl.java",
+      "destination": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service-annotation/src/main/java/org/apache/shenyu/examples/apache/dubbo/service/annotation/impl/DubboClassMultiParamServiceImpl.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service-annotation/src/main/java/org/apache/shenyu/examples/apache/dubbo/service/annotation/impl/DubboClassTestServiceImpl.java",
+      "destination": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service-annotation/src/main/java/org/apache/shenyu/examples/apache/dubbo/service/annotation/impl/DubboClassTestServiceImpl.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service-annotation/src/main/java/org/apache/shenyu/examples/apache/dubbo/service/annotation/impl/DubboMultiParamServiceImpl.java",
+      "destination": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service-annotation/src/main/java/org/apache/shenyu/examples/apache/dubbo/service/annotation/impl/DubboMultiParamServiceImpl.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service-annotation/src/main/java/org/apache/shenyu/examples/apache/dubbo/service/annotation/impl/DubboProtobufServiceImpl.java",
+      "destination": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service-annotation/src/main/java/org/apache/shenyu/examples/apache/dubbo/service/annotation/impl/DubboProtobufServiceImpl.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service-annotation/src/main/java/org/apache/shenyu/examples/apache/dubbo/service/annotation/impl/DubboTestServiceImpl.java",
+      "destination": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service-annotation/src/main/java/org/apache/shenyu/examples/apache/dubbo/service/annotation/impl/DubboTestServiceImpl.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service-annotation/src/main/resources/application.yml",
+      "destination": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service-annotation/src/main/resources/application.yml"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service-xml/src/main/http/apache-dubbo-class-test-api.http",
+      "destination": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service-xml/src/main/http/apache-dubbo-class-test-api.http"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service-xml/src/main/http/apache-dubbo-test-api.http",
+      "destination": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service-xml/src/main/http/apache-dubbo-test-api.http"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service-xml/src/main/java/org/apache/shenyu/examples/apache/dubbo/service/xml/TestApacheDubboXmlApplication.java",
+      "destination": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service-xml/src/main/java/org/apache/shenyu/examples/apache/dubbo/service/xml/TestApacheDubboXmlApplication.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service-xml/src/main/java/org/apache/shenyu/examples/apache/dubbo/service/xml/impl/DubboClassMultiParamServiceImpl.java",
+      "destination": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service-xml/src/main/java/org/apache/shenyu/examples/apache/dubbo/service/xml/impl/DubboClassMultiParamServiceImpl.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service-xml/src/main/java/org/apache/shenyu/examples/apache/dubbo/service/xml/impl/DubboClassTestServiceImpl.java",
+      "destination": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service-xml/src/main/java/org/apache/shenyu/examples/apache/dubbo/service/xml/impl/DubboClassTestServiceImpl.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service-xml/src/main/java/org/apache/shenyu/examples/apache/dubbo/service/xml/impl/DubboMultiParamServiceImpl.java",
+      "destination": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service-xml/src/main/java/org/apache/shenyu/examples/apache/dubbo/service/xml/impl/DubboMultiParamServiceImpl.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service-xml/src/main/java/org/apache/shenyu/examples/apache/dubbo/service/xml/impl/DubboProtobufServiceImpl.java",
+      "destination": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service-xml/src/main/java/org/apache/shenyu/examples/apache/dubbo/service/xml/impl/DubboProtobufServiceImpl.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service-xml/src/main/java/org/apache/shenyu/examples/apache/dubbo/service/xml/impl/DubboTestServiceImpl.java",
+      "destination": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service-xml/src/main/java/org/apache/shenyu/examples/apache/dubbo/service/xml/impl/DubboTestServiceImpl.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service-xml/src/main/resources/application.yml",
+      "destination": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service-xml/src/main/resources/application.yml"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service-xml/src/main/resources/shenyu.xml",
+      "destination": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service-xml/src/main/resources/shenyu.xml"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service-xml/src/main/resources/spring-dubbo.xml",
+      "destination": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service-xml/src/main/resources/spring-dubbo.xml"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service/src/main/http/apache-dubbo-test-api.http",
+      "destination": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service/src/main/http/apache-dubbo-test-api.http"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service/src/main/java/org/apache/shenyu/examples/apache/dubbo/service/TestApacheDubboApplication.java",
+      "destination": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service/src/main/java/org/apache/shenyu/examples/apache/dubbo/service/TestApacheDubboApplication.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service/src/main/java/org/apache/shenyu/examples/apache/dubbo/service/impl/DubboMultiParamServiceImpl.java",
+      "destination": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service/src/main/java/org/apache/shenyu/examples/apache/dubbo/service/impl/DubboMultiParamServiceImpl.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service/src/main/java/org/apache/shenyu/examples/apache/dubbo/service/impl/DubboProtobufServiceImpl.java",
+      "destination": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service/src/main/java/org/apache/shenyu/examples/apache/dubbo/service/impl/DubboProtobufServiceImpl.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service/src/main/java/org/apache/shenyu/examples/apache/dubbo/service/impl/DubboTestServiceImpl.java",
+      "destination": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service/src/main/java/org/apache/shenyu/examples/apache/dubbo/service/impl/DubboTestServiceImpl.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service/src/main/resources/application.yml",
+      "destination": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service/src/main/resources/application.yml"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service/src/main/resources/spring-dubbo.xml",
+      "destination": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-apache-dubbo-service/src/main/resources/spring-dubbo.xml"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-dubbo-api/src/main/java/org/apache/shenyu/examples/dubbo/api/entity/ComplexBeanTest.java",
+      "destination": "shenyu-examples/shenyu-examples-dubbo/shenyu-client-examples-dubbo-api/src/main/java/org/apache/shenyu/examples/dubbo/api/entity/ComplexBeanTest.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-dubbo-api/src/main/java/org/apache/shenyu/examples/dubbo/api/entity/DubboTest.java",
+      "destination": "shenyu-examples/shenyu-examples-dubbo/shenyu-client-examples-dubbo-api/src/main/java/org/apache/shenyu/examples/dubbo/api/entity/DubboTest.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-dubbo-api/src/main/java/org/apache/shenyu/examples/dubbo/api/entity/ListResp.java",
+      "destination": "shenyu-examples/shenyu-examples-dubbo/shenyu-client-examples-dubbo-api/src/main/java/org/apache/shenyu/examples/dubbo/api/entity/ListResp.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-dubbo-api/src/main/java/org/apache/shenyu/examples/dubbo/api/service/DubboClassMultiParamService.java",
+      "destination": "shenyu-examples/shenyu-examples-dubbo/shenyu-client-examples-dubbo-api/src/main/java/org/apache/shenyu/examples/dubbo/api/service/DubboClassMultiParamService.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-dubbo-api/src/main/java/org/apache/shenyu/examples/dubbo/api/service/DubboClassTestService.java",
+      "destination": "shenyu-examples/shenyu-examples-dubbo/shenyu-client-examples-dubbo-api/src/main/java/org/apache/shenyu/examples/dubbo/api/service/DubboClassTestService.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-dubbo-api/src/main/java/org/apache/shenyu/examples/dubbo/api/service/DubboMultiParamService.java",
+      "destination": "shenyu-examples/shenyu-examples-dubbo/shenyu-client-examples-dubbo-api/src/main/java/org/apache/shenyu/examples/dubbo/api/service/DubboMultiParamService.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-dubbo-api/src/main/java/org/apache/shenyu/examples/dubbo/api/service/DubboTestService.java",
+      "destination": "shenyu-examples/shenyu-examples-dubbo/shenyu-client-examples-dubbo-api/src/main/java/org/apache/shenyu/examples/dubbo/api/service/DubboTestService.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-dubbo/shenyu-examples-dubbo-api/src/main/proto/DubboTestProto.proto",
+      "destination": "shenyu-examples/shenyu-examples-dubbo/shenyu-client-examples-dubbo-api/src/main/proto/DubboTestProto.proto"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-grpc/src/main/http/grpc-class-annotation-test-api.http",
+      "destination": "shenyu-examples/shenyu-examples-grpc/src/main/http/grpc-class-annotation-test-api.http"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-grpc/src/main/http/grpc-test-api.http",
+      "destination": "shenyu-examples/shenyu-examples-grpc/src/main/http/grpc-test-api.http"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-grpc/src/main/java/org/apache/shenyu/examples/grpc/ShenyuGrpcServerBuilder.java",
+      "destination": "shenyu-examples/shenyu-examples-grpc/src/main/java/org/apache/shenyu/examples/grpc/ShenyuGrpcServerBuilder.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-grpc/src/main/java/org/apache/shenyu/examples/grpc/ShenyuTestGrpcApplication.java",
+      "destination": "shenyu-examples/shenyu-examples-grpc/src/main/java/org/apache/shenyu/examples/grpc/ShenyuTestGrpcApplication.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-grpc/src/main/java/org/apache/shenyu/examples/grpc/controller/GrpcTestController.java",
+      "destination": "shenyu-examples/shenyu-examples-grpc/src/main/java/org/apache/shenyu/examples/grpc/controller/GrpcTestController.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-grpc/src/main/java/org/apache/shenyu/examples/grpc/demo/EventServiceImpl.java",
+      "destination": "shenyu-examples/shenyu-examples-grpc/src/main/java/org/apache/shenyu/examples/grpc/demo/EventServiceImpl.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-grpc/src/main/java/org/apache/shenyu/examples/grpc/demo/HelloServiceImpl.java",
+      "destination": "shenyu-examples/shenyu-examples-grpc/src/main/java/org/apache/shenyu/examples/grpc/demo/HelloServiceImpl.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-grpc/src/main/java/org/apache/shenyu/examples/grpc/echo/EchoServiceImpl.java",
+      "destination": "shenyu-examples/shenyu-examples-grpc/src/main/java/org/apache/shenyu/examples/grpc/echo/EchoServiceImpl.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-grpc/src/main/java/org/apache/shenyu/examples/grpc/stream/StreamServiceImpl.java",
+      "destination": "shenyu-examples/shenyu-examples-grpc/src/main/java/org/apache/shenyu/examples/grpc/stream/StreamServiceImpl.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-grpc/src/main/resources/application.yml",
+      "destination": "shenyu-examples/shenyu-examples-grpc/src/main/resources/application.yml"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-grpc/src/main/resources/proto/echo.proto",
+      "destination": "shenyu-examples/shenyu-examples-grpc/src/main/resources/proto/echo.proto"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-grpc/src/main/resources/proto/event.proto",
+      "destination": "shenyu-examples/shenyu-examples-grpc/src/main/resources/proto/event.proto"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-grpc/src/main/resources/proto/hello.proto",
+      "destination": "shenyu-examples/shenyu-examples-grpc/src/main/resources/proto/hello.proto"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-grpc/src/main/resources/proto/stream.proto",
+      "destination": "shenyu-examples/shenyu-examples-grpc/src/main/resources/proto/stream.proto"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-http-swagger3/src/main/java/org/apache/shenyu/examples/http/ShenyuTestSwaggerApplication.java",
+      "destination": "shenyu-examples/shenyu-examples-http-swagger3/src/main/java/org/apache/shenyu/examples/http/ShenyuTestSwaggerApplication.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-http-swagger3/src/main/java/org/apache/shenyu/examples/http/config/HttpServerConfig.java",
+      "destination": "shenyu-examples/shenyu-examples-http-swagger3/src/main/java/org/apache/shenyu/examples/http/config/HttpServerConfig.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-http-swagger3/src/main/java/org/apache/shenyu/examples/http/config/SwaggerConfiguration.java",
+      "destination": "shenyu-examples/shenyu-examples-http-swagger3/src/main/java/org/apache/shenyu/examples/http/config/SwaggerConfiguration.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-http-swagger3/src/main/java/org/apache/shenyu/examples/http/controller/HttpTestController.java",
+      "destination": "shenyu-examples/shenyu-examples-http-swagger3/src/main/java/org/apache/shenyu/examples/http/controller/HttpTestController.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-http-swagger3/src/main/java/org/apache/shenyu/examples/http/controller/OauthController.java",
+      "destination": "shenyu-examples/shenyu-examples-http-swagger3/src/main/java/org/apache/shenyu/examples/http/controller/OauthController.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-http-swagger3/src/main/java/org/apache/shenyu/examples/http/controller/OrderController.java",
+      "destination": "shenyu-examples/shenyu-examples-http-swagger3/src/main/java/org/apache/shenyu/examples/http/controller/OrderController.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-http-swagger3/src/main/java/org/apache/shenyu/examples/http/controller/RequestController.java",
+      "destination": "shenyu-examples/shenyu-examples-http-swagger3/src/main/java/org/apache/shenyu/examples/http/controller/RequestController.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-http-swagger3/src/main/java/org/apache/shenyu/examples/http/controller/ShenyuClientPathController.java",
+      "destination": "shenyu-examples/shenyu-examples-http-swagger3/src/main/java/org/apache/shenyu/examples/http/controller/ShenyuClientPathController.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-http-swagger3/src/main/java/org/apache/shenyu/examples/http/controller/SpringMvcMappingPathController.java",
+      "destination": "shenyu-examples/shenyu-examples-http-swagger3/src/main/java/org/apache/shenyu/examples/http/controller/SpringMvcMappingPathController.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-http-swagger3/src/main/java/org/apache/shenyu/examples/http/controller/UploadController.java",
+      "destination": "shenyu-examples/shenyu-examples-http-swagger3/src/main/java/org/apache/shenyu/examples/http/controller/UploadController.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-http-swagger3/src/main/java/org/apache/shenyu/examples/http/dto/OAuth2DTO.java",
+      "destination": "shenyu-examples/shenyu-examples-http-swagger3/src/main/java/org/apache/shenyu/examples/http/dto/OAuth2DTO.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-http-swagger3/src/main/java/org/apache/shenyu/examples/http/dto/OrderDTO.java",
+      "destination": "shenyu-examples/shenyu-examples-http-swagger3/src/main/java/org/apache/shenyu/examples/http/dto/OrderDTO.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-http-swagger3/src/main/java/org/apache/shenyu/examples/http/dto/RequestDTO.java",
+      "destination": "shenyu-examples/shenyu-examples-http-swagger3/src/main/java/org/apache/shenyu/examples/http/dto/RequestDTO.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-http-swagger3/src/main/java/org/apache/shenyu/examples/http/dto/UserDTO.java",
+      "destination": "shenyu-examples/shenyu-examples-http-swagger3/src/main/java/org/apache/shenyu/examples/http/dto/UserDTO.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-http-swagger3/src/main/java/org/apache/shenyu/examples/http/result/ResultBean.java",
+      "destination": "shenyu-examples/shenyu-examples-http-swagger3/src/main/java/org/apache/shenyu/examples/http/result/ResultBean.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-http-swagger3/src/main/java/org/apache/shenyu/examples/http/result/TreeResult.java",
+      "destination": "shenyu-examples/shenyu-examples-http-swagger3/src/main/java/org/apache/shenyu/examples/http/result/TreeResult.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-http-swagger3/src/main/java/org/apache/shenyu/examples/http/router/ShenyuTestHttpRouter.java",
+      "destination": "shenyu-examples/shenyu-examples-http-swagger3/src/main/java/org/apache/shenyu/examples/http/router/ShenyuTestHttpRouter.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-http-swagger3/src/main/resources/application.yml",
+      "destination": "shenyu-examples/shenyu-examples-http-swagger3/src/main/resources/application.yml"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-http/src/main/http/http-test-api-local.http",
+      "destination": "shenyu-examples/shenyu-examples-http/src/main/http/http-test-api-local.http"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-http/src/main/http/http-test-api.http",
+      "destination": "shenyu-examples/shenyu-examples-http/src/main/http/http-test-api.http"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-http/src/main/java/org/apache/shenyu/examples/http/ShenyuTestHttpApplication.java",
+      "destination": "shenyu-examples/shenyu-examples-http/src/main/java/org/apache/shenyu/examples/http/ShenyuTestHttpApplication.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-http/src/main/java/org/apache/shenyu/examples/http/config/HttpServerConfig.java",
+      "destination": "shenyu-examples/shenyu-examples-http/src/main/java/org/apache/shenyu/examples/http/config/HttpServerConfig.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-http/src/main/java/org/apache/shenyu/examples/http/controller/HttpTestController.java",
+      "destination": "shenyu-examples/shenyu-examples-http/src/main/java/org/apache/shenyu/examples/http/controller/HttpTestController.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-http/src/main/java/org/apache/shenyu/examples/http/controller/OauthController.java",
+      "destination": "shenyu-examples/shenyu-examples-http/src/main/java/org/apache/shenyu/examples/http/controller/OauthController.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-http/src/main/java/org/apache/shenyu/examples/http/controller/OrderController.java",
+      "destination": "shenyu-examples/shenyu-examples-http/src/main/java/org/apache/shenyu/examples/http/controller/OrderController.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-http/src/main/java/org/apache/shenyu/examples/http/controller/RequestController.java",
+      "destination": "shenyu-examples/shenyu-examples-http/src/main/java/org/apache/shenyu/examples/http/controller/RequestController.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-http/src/main/java/org/apache/shenyu/examples/http/controller/ShenyuClientPathController.java",
+      "destination": "shenyu-examples/shenyu-examples-http/src/main/java/org/apache/shenyu/examples/http/controller/ShenyuClientPathController.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-http/src/main/java/org/apache/shenyu/examples/http/controller/SpringMvcMappingPathController.java",
+      "destination": "shenyu-examples/shenyu-examples-http/src/main/java/org/apache/shenyu/examples/http/controller/SpringMvcMappingPathController.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-http/src/main/java/org/apache/shenyu/examples/http/controller/SpringMvcMultiPathController.java",
+      "destination": "shenyu-examples/shenyu-examples-http/src/main/java/org/apache/shenyu/examples/http/controller/SpringMvcMultiPathController.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-http/src/main/java/org/apache/shenyu/examples/http/controller/UploadController.java",
+      "destination": "shenyu-examples/shenyu-examples-http/src/main/java/org/apache/shenyu/examples/http/controller/UploadController.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-http/src/main/java/org/apache/shenyu/examples/http/dto/BigObject.java",
+      "destination": "shenyu-examples/shenyu-examples-http/src/main/java/org/apache/shenyu/examples/http/dto/BigObject.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-http/src/main/java/org/apache/shenyu/examples/http/dto/OAuth2DTO.java",
+      "destination": "shenyu-examples/shenyu-examples-http/src/main/java/org/apache/shenyu/examples/http/dto/OAuth2DTO.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-http/src/main/java/org/apache/shenyu/examples/http/dto/OrderDTO.java",
+      "destination": "shenyu-examples/shenyu-examples-http/src/main/java/org/apache/shenyu/examples/http/dto/OrderDTO.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-http/src/main/java/org/apache/shenyu/examples/http/dto/RequestDTO.java",
+      "destination": "shenyu-examples/shenyu-examples-http/src/main/java/org/apache/shenyu/examples/http/dto/RequestDTO.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-http/src/main/java/org/apache/shenyu/examples/http/dto/UserDTO.java",
+      "destination": "shenyu-examples/shenyu-examples-http/src/main/java/org/apache/shenyu/examples/http/dto/UserDTO.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-http/src/main/java/org/apache/shenyu/examples/http/result/ResultBean.java",
+      "destination": "shenyu-examples/shenyu-examples-http/src/main/java/org/apache/shenyu/examples/http/result/ResultBean.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-http/src/main/java/org/apache/shenyu/examples/http/router/ShenyuTestHttpRouter.java",
+      "destination": "shenyu-examples/shenyu-examples-http/src/main/java/org/apache/shenyu/examples/http/router/ShenyuTestHttpRouter.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-http/src/main/resources/application.yml",
+      "destination": "shenyu-examples/shenyu-examples-http/src/main/resources/application.yml"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-https/src/main/http/https-test-api-local.http",
+      "destination": "shenyu-examples/shenyu-examples-https/src/main/http/https-test-api-local.http"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-https/src/main/http/https-test-api.http",
+      "destination": "shenyu-examples/shenyu-examples-https/src/main/http/https-test-api.http"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-https/src/main/java/org/apache/shenyu/examples/https/ShenyuTestHttpsApplication.java",
+      "destination": "shenyu-examples/shenyu-examples-https/src/main/java/org/apache/shenyu/examples/https/ShenyuTestHttpsApplication.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-https/src/main/java/org/apache/shenyu/examples/https/configuration/HttpsConfiguration.java",
+      "destination": "shenyu-examples/shenyu-examples-https/src/main/java/org/apache/shenyu/examples/https/configuration/HttpsConfiguration.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-https/src/main/java/org/apache/shenyu/examples/https/controller/OrderController.java",
+      "destination": "shenyu-examples/shenyu-examples-https/src/main/java/org/apache/shenyu/examples/https/controller/OrderController.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-https/src/main/java/org/apache/shenyu/examples/https/controller/UploadController.java",
+      "destination": "shenyu-examples/shenyu-examples-https/src/main/java/org/apache/shenyu/examples/https/controller/UploadController.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-https/src/main/java/org/apache/shenyu/examples/https/dto/OrderDTO.java",
+      "destination": "shenyu-examples/shenyu-examples-https/src/main/java/org/apache/shenyu/examples/https/dto/OrderDTO.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-https/src/main/resources/application.yml",
+      "destination": "shenyu-examples/shenyu-examples-https/src/main/resources/application.yml"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-https/src/main/resources/keystore.p12",
+      "destination": "shenyu-examples/shenyu-examples-https/src/main/resources/keystore.p12"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-mcp/src/main/java/org/apache/shenyu/examples/ShenyuTestMcpApplication.java",
+      "destination": "shenyu-examples/shenyu-examples-mcp/src/main/java/org/apache/shenyu/examples/ShenyuTestMcpApplication.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-mcp/src/main/java/org/apache/shenyu/examples/controller/OrderController.java",
+      "destination": "shenyu-examples/shenyu-examples-mcp/src/main/java/org/apache/shenyu/examples/controller/OrderController.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-mcp/src/main/java/org/apache/shenyu/examples/dto/OrderDTO.java",
+      "destination": "shenyu-examples/shenyu-examples-mcp/src/main/java/org/apache/shenyu/examples/dto/OrderDTO.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-mcp/src/main/resources/application.yml",
+      "destination": "shenyu-examples/shenyu-examples-mcp/src/main/resources/application.yml"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-dubbo/shenyu-examples-sdk-apache-dubbo-provider/src/main/http/sdk-apache-dubbo-test-api.http",
+      "destination": "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-dubbo/shenyu-examples-sdk-apache-dubbo-provider/src/main/http/sdk-apache-dubbo-test-api.http"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-dubbo/shenyu-examples-sdk-apache-dubbo-provider/src/main/java/org/apache/shenyu/examples/sdk/apache/provider/ShenyuApacheDubboXmlProviderApplication.java",
+      "destination": "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-dubbo/shenyu-examples-sdk-apache-dubbo-provider/src/main/java/org/apache/shenyu/examples/sdk/apache/provider/ShenyuApacheDubboXmlProviderApplication.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-dubbo/shenyu-examples-sdk-apache-dubbo-provider/src/main/resources/application.yml",
+      "destination": "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-dubbo/shenyu-examples-sdk-apache-dubbo-provider/src/main/resources/application.yml"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-dubbo/shenyu-examples-sdk-apache-dubbo-provider/src/main/resources/shenyu.xml",
+      "destination": "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-dubbo/shenyu-examples-sdk-apache-dubbo-provider/src/main/resources/shenyu.xml"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-dubbo/shenyu-examples-sdk-apache-dubbo-provider/src/main/resources/spring-dubbo.xml",
+      "destination": "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-dubbo/shenyu-examples-sdk-apache-dubbo-provider/src/main/resources/spring-dubbo.xml"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-feign/src/main/http/sdk-http-test-api.http",
+      "destination": "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-feign/src/main/http/sdk-http-test-api.http"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-feign/src/main/java/org/apache/shenyu/examples/sdk/feign/ShenyuSdkHttpExampleApplication.java",
+      "destination": "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-feign/src/main/java/org/apache/shenyu/examples/sdk/feign/ShenyuSdkHttpExampleApplication.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-feign/src/main/java/org/apache/shenyu/examples/sdk/feign/api/ShenyuHttpClientApi.java",
+      "destination": "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-feign/src/main/java/org/apache/shenyu/examples/sdk/feign/api/ShenyuHttpClientApi.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-feign/src/main/java/org/apache/shenyu/examples/sdk/feign/config/SdkConfig.java",
+      "destination": "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-feign/src/main/java/org/apache/shenyu/examples/sdk/feign/config/SdkConfig.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-feign/src/main/java/org/apache/shenyu/examples/sdk/feign/controller/HttpServiceController.java",
+      "destination": "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-feign/src/main/java/org/apache/shenyu/examples/sdk/feign/controller/HttpServiceController.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-feign/src/main/java/org/apache/shenyu/examples/sdk/feign/controller/ShenyuHttpSdkExampleController.java",
+      "destination": "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-feign/src/main/java/org/apache/shenyu/examples/sdk/feign/controller/ShenyuHttpSdkExampleController.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-feign/src/main/java/org/apache/shenyu/examples/sdk/feign/dto/SdkTestDto.java",
+      "destination": "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-feign/src/main/java/org/apache/shenyu/examples/sdk/feign/dto/SdkTestDto.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-feign/src/main/resources/application.yaml",
+      "destination": "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-feign/src/main/resources/application.yaml"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-grpc/shenyu-examples-sdk-grpc-provider/src/main/java/org/apache/shenyu/examples/sdk/grpc/provider/ShenyuSdkGrpcProviderApplication.java",
+      "destination": "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-grpc/shenyu-examples-sdk-grpc-provider/src/main/java/org/apache/shenyu/examples/sdk/grpc/provider/ShenyuSdkGrpcProviderApplication.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-grpc/shenyu-examples-sdk-grpc-provider/src/main/resources/application.yml",
+      "destination": "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-grpc/shenyu-examples-sdk-grpc-provider/src/main/resources/application.yml"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-http/src/main/http/sdk-http-test-api.http",
+      "destination": "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-http/src/main/http/sdk-http-test-api.http"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-http/src/main/java/org/apache/shenyu/examples/sdk/http/ShenyuSdkHttpExampleApplication.java",
+      "destination": "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-http/src/main/java/org/apache/shenyu/examples/sdk/http/ShenyuSdkHttpExampleApplication.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-http/src/main/java/org/apache/shenyu/examples/sdk/http/api/ShenyuHttpClientApi.java",
+      "destination": "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-http/src/main/java/org/apache/shenyu/examples/sdk/http/api/ShenyuHttpClientApi.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-http/src/main/java/org/apache/shenyu/examples/sdk/http/config/SdkConfig.java",
+      "destination": "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-http/src/main/java/org/apache/shenyu/examples/sdk/http/config/SdkConfig.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-http/src/main/java/org/apache/shenyu/examples/sdk/http/controller/HttpServiceController.java",
+      "destination": "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-http/src/main/java/org/apache/shenyu/examples/sdk/http/controller/HttpServiceController.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-http/src/main/java/org/apache/shenyu/examples/sdk/http/controller/ShenyuHttpSdkExampleController.java",
+      "destination": "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-http/src/main/java/org/apache/shenyu/examples/sdk/http/controller/ShenyuHttpSdkExampleController.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-http/src/main/java/org/apache/shenyu/examples/sdk/http/dto/SdkTestDto.java",
+      "destination": "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-http/src/main/java/org/apache/shenyu/examples/sdk/http/dto/SdkTestDto.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-http/src/main/resources/application.yaml",
+      "destination": "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-http/src/main/resources/application.yaml"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-springcloud/shenyu-examples-sdk-springcloud-provider/src/main/java/org/apache/shenyu/examples/sdk/springcloud/provider/ShenyuSdkSpringCloudProviderApplication.java",
+      "destination": "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-springcloud/shenyu-examples-sdk-springcloud-provider/src/main/java/org/apache/shenyu/examples/sdk/springcloud/provider/ShenyuSdkSpringCloudProviderApplication.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-springcloud/shenyu-examples-sdk-springcloud-provider/src/main/resources/application.yml",
+      "destination": "shenyu-examples/shenyu-examples-sdk/shenyu-examples-sdk-springcloud/shenyu-examples-sdk-springcloud-provider/src/main/resources/application.yml"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-springcloud/src/main/http/spring-cloud-test-api-local.http",
+      "destination": "shenyu-examples/shenyu-examples-springcloud/src/main/http/spring-cloud-test-api-local.http"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-springcloud/src/main/http/spring-cloud-test-api.http",
+      "destination": "shenyu-examples/shenyu-examples-springcloud/src/main/http/spring-cloud-test-api.http"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-springcloud/src/main/java/org/apache/shenyu/examples/springcloud/ShenyuTestSpringCloudApplication.java",
+      "destination": "shenyu-examples/shenyu-examples-springcloud/src/main/java/org/apache/shenyu/examples/springcloud/ShenyuTestSpringCloudApplication.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-springcloud/src/main/java/org/apache/shenyu/examples/springcloud/controller/AllController.java",
+      "destination": "shenyu-examples/shenyu-examples-springcloud/src/main/java/org/apache/shenyu/examples/springcloud/controller/AllController.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-springcloud/src/main/java/org/apache/shenyu/examples/springcloud/controller/NewFeatureController.java",
+      "destination": "shenyu-examples/shenyu-examples-springcloud/src/main/java/org/apache/shenyu/examples/springcloud/controller/NewFeatureController.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-springcloud/src/main/java/org/apache/shenyu/examples/springcloud/controller/OrderController.java",
+      "destination": "shenyu-examples/shenyu-examples-springcloud/src/main/java/org/apache/shenyu/examples/springcloud/controller/OrderController.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-springcloud/src/main/java/org/apache/shenyu/examples/springcloud/controller/TestController.java",
+      "destination": "shenyu-examples/shenyu-examples-springcloud/src/main/java/org/apache/shenyu/examples/springcloud/controller/TestController.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-springcloud/src/main/java/org/apache/shenyu/examples/springcloud/controller/UploadController.java",
+      "destination": "shenyu-examples/shenyu-examples-springcloud/src/main/java/org/apache/shenyu/examples/springcloud/controller/UploadController.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-springcloud/src/main/java/org/apache/shenyu/examples/springcloud/dto/EntityResult.java",
+      "destination": "shenyu-examples/shenyu-examples-springcloud/src/main/java/org/apache/shenyu/examples/springcloud/dto/EntityResult.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-springcloud/src/main/java/org/apache/shenyu/examples/springcloud/dto/OrderDTO.java",
+      "destination": "shenyu-examples/shenyu-examples-springcloud/src/main/java/org/apache/shenyu/examples/springcloud/dto/OrderDTO.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-springcloud/src/main/java/org/apache/shenyu/examples/springcloud/dto/UserDTO.java",
+      "destination": "shenyu-examples/shenyu-examples-springcloud/src/main/java/org/apache/shenyu/examples/springcloud/dto/UserDTO.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-springcloud/src/main/resources/application.yml",
+      "destination": "shenyu-examples/shenyu-examples-springcloud/src/main/resources/application.yml"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-springmvc-tomcat/src/main/http/http-test-api-local.http",
+      "destination": "shenyu-examples/shenyu-examples-springmvc-tomcat/src/main/http/http-test-api-local.http"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-springmvc-tomcat/src/main/http/http-test-api.http",
+      "destination": "shenyu-examples/shenyu-examples-springmvc-tomcat/src/main/http/http-test-api.http"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-springmvc-tomcat/src/main/java/org/apache/shenyu/examples/springmvc/controller/HttpTestController.java",
+      "destination": "shenyu-examples/shenyu-examples-springmvc-tomcat/src/main/java/org/apache/shenyu/examples/springmvc/controller/HttpTestController.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-springmvc-tomcat/src/main/java/org/apache/shenyu/examples/springmvc/controller/OrderController.java",
+      "destination": "shenyu-examples/shenyu-examples-springmvc-tomcat/src/main/java/org/apache/shenyu/examples/springmvc/controller/OrderController.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-springmvc-tomcat/src/main/java/org/apache/shenyu/examples/springmvc/controller/UploadController.java",
+      "destination": "shenyu-examples/shenyu-examples-springmvc-tomcat/src/main/java/org/apache/shenyu/examples/springmvc/controller/UploadController.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-springmvc-tomcat/src/main/java/org/apache/shenyu/examples/springmvc/dto/OAuth2DTO.java",
+      "destination": "shenyu-examples/shenyu-examples-springmvc-tomcat/src/main/java/org/apache/shenyu/examples/springmvc/dto/OAuth2DTO.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-springmvc-tomcat/src/main/java/org/apache/shenyu/examples/springmvc/dto/OrderDTO.java",
+      "destination": "shenyu-examples/shenyu-examples-springmvc-tomcat/src/main/java/org/apache/shenyu/examples/springmvc/dto/OrderDTO.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-springmvc-tomcat/src/main/java/org/apache/shenyu/examples/springmvc/dto/UserDTO.java",
+      "destination": "shenyu-examples/shenyu-examples-springmvc-tomcat/src/main/java/org/apache/shenyu/examples/springmvc/dto/UserDTO.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-springmvc-tomcat/src/main/java/org/apache/shenyu/examples/springmvc/result/ResultBean.java",
+      "destination": "shenyu-examples/shenyu-examples-springmvc-tomcat/src/main/java/org/apache/shenyu/examples/springmvc/result/ResultBean.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-springmvc-tomcat/src/main/resources/application.properties",
+      "destination": "shenyu-examples/shenyu-examples-springmvc-tomcat/src/main/resources/application.properties"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-springmvc-tomcat/src/main/resources/context/shenyu.xml",
+      "destination": "shenyu-examples/shenyu-examples-springmvc-tomcat/src/main/resources/context/shenyu.xml"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-springmvc-tomcat/src/main/resources/spring-mvc.xml",
+      "destination": "shenyu-examples/shenyu-examples-springmvc-tomcat/src/main/resources/spring-mvc.xml"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-springmvc-tomcat/src/main/webapp/WEB-INF/web.xml",
+      "destination": "shenyu-examples/shenyu-examples-springmvc-tomcat/src/main/webapp/WEB-INF/web.xml"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-springmvc/src/main/http/http-test-api-local.http",
+      "destination": "shenyu-examples/shenyu-examples-springmvc/src/main/http/http-test-api-local.http"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-springmvc/src/main/http/http-test-api.http",
+      "destination": "shenyu-examples/shenyu-examples-springmvc/src/main/http/http-test-api.http"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-springmvc/src/main/java/org/apache/shenyu/examples/springmvc/TestSpringMvcApplication.java",
+      "destination": "shenyu-examples/shenyu-examples-springmvc/src/main/java/org/apache/shenyu/examples/springmvc/TestSpringMvcApplication.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-springmvc/src/main/java/org/apache/shenyu/examples/springmvc/controller/HttpTestController.java",
+      "destination": "shenyu-examples/shenyu-examples-springmvc/src/main/java/org/apache/shenyu/examples/springmvc/controller/HttpTestController.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-springmvc/src/main/java/org/apache/shenyu/examples/springmvc/controller/OrderController.java",
+      "destination": "shenyu-examples/shenyu-examples-springmvc/src/main/java/org/apache/shenyu/examples/springmvc/controller/OrderController.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-springmvc/src/main/java/org/apache/shenyu/examples/springmvc/controller/UploadController.java",
+      "destination": "shenyu-examples/shenyu-examples-springmvc/src/main/java/org/apache/shenyu/examples/springmvc/controller/UploadController.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-springmvc/src/main/java/org/apache/shenyu/examples/springmvc/dto/OAuth2DTO.java",
+      "destination": "shenyu-examples/shenyu-examples-springmvc/src/main/java/org/apache/shenyu/examples/springmvc/dto/OAuth2DTO.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-springmvc/src/main/java/org/apache/shenyu/examples/springmvc/dto/OrderDTO.java",
+      "destination": "shenyu-examples/shenyu-examples-springmvc/src/main/java/org/apache/shenyu/examples/springmvc/dto/OrderDTO.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-springmvc/src/main/java/org/apache/shenyu/examples/springmvc/dto/UserDTO.java",
+      "destination": "shenyu-examples/shenyu-examples-springmvc/src/main/java/org/apache/shenyu/examples/springmvc/dto/UserDTO.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-springmvc/src/main/java/org/apache/shenyu/examples/springmvc/result/ResultBean.java",
+      "destination": "shenyu-examples/shenyu-examples-springmvc/src/main/java/org/apache/shenyu/examples/springmvc/result/ResultBean.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-springmvc/src/main/resources/application.yml",
+      "destination": "shenyu-examples/shenyu-examples-springmvc/src/main/resources/application.yml"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-springmvc/src/main/resources/context/shenyu.xml",
+      "destination": "shenyu-examples/shenyu-examples-springmvc/src/main/resources/context/shenyu.xml"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-websocket/shenyu-example-spring-annotation-websocket/src/main/java/org/apache/shenyu/examples/websocket/TestAnnotationWebsocketApplication.java",
+      "destination": "shenyu-examples/shenyu-examples-websocket/shenyu-example-spring-annotation-websocket/src/main/java/org/apache/shenyu/examples/websocket/TestAnnotationWebsocketApplication.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-websocket/shenyu-example-spring-annotation-websocket/src/main/java/org/apache/shenyu/examples/websocket/config/WebSocketConfig.java",
+      "destination": "shenyu-examples/shenyu-examples-websocket/shenyu-example-spring-annotation-websocket/src/main/java/org/apache/shenyu/examples/websocket/config/WebSocketConfig.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-websocket/shenyu-example-spring-annotation-websocket/src/main/java/org/apache/shenyu/examples/websocket/service/SaveFile.java",
+      "destination": "shenyu-examples/shenyu-examples-websocket/shenyu-example-spring-annotation-websocket/src/main/java/org/apache/shenyu/examples/websocket/service/SaveFile.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-websocket/shenyu-example-spring-annotation-websocket/src/main/java/org/apache/shenyu/examples/websocket/service/SaveFileImpl.java",
+      "destination": "shenyu-examples/shenyu-examples-websocket/shenyu-example-spring-annotation-websocket/src/main/java/org/apache/shenyu/examples/websocket/service/SaveFileImpl.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-websocket/shenyu-example-spring-annotation-websocket/src/main/java/org/apache/shenyu/examples/websocket/ws/UploadController.java",
+      "destination": "shenyu-examples/shenyu-examples-websocket/shenyu-example-spring-annotation-websocket/src/main/java/org/apache/shenyu/examples/websocket/ws/UploadController.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-websocket/shenyu-example-spring-annotation-websocket/src/main/java/org/apache/shenyu/examples/websocket/ws/WsServerEndpoint.java",
+      "destination": "shenyu-examples/shenyu-examples-websocket/shenyu-example-spring-annotation-websocket/src/main/java/org/apache/shenyu/examples/websocket/ws/WsServerEndpoint.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-websocket/shenyu-example-spring-annotation-websocket/src/main/resources/application.yml",
+      "destination": "shenyu-examples/shenyu-examples-websocket/shenyu-example-spring-annotation-websocket/src/main/resources/application.yml"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-websocket/shenyu-example-spring-native-websocket/src/main/java/org/apache/shenyu/examples/websocket/TestNativeWebsocketApplication.java",
+      "destination": "shenyu-examples/shenyu-examples-websocket/shenyu-example-spring-native-websocket/src/main/java/org/apache/shenyu/examples/websocket/TestNativeWebsocketApplication.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-websocket/shenyu-example-spring-native-websocket/src/main/java/org/apache/shenyu/examples/websocket/config/WebSocketConfig.java",
+      "destination": "shenyu-examples/shenyu-examples-websocket/shenyu-example-spring-native-websocket/src/main/java/org/apache/shenyu/examples/websocket/config/WebSocketConfig.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-websocket/shenyu-example-spring-native-websocket/src/main/java/org/apache/shenyu/examples/websocket/config/WsSessionManager.java",
+      "destination": "shenyu-examples/shenyu-examples-websocket/shenyu-example-spring-native-websocket/src/main/java/org/apache/shenyu/examples/websocket/config/WsSessionManager.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-websocket/shenyu-example-spring-native-websocket/src/main/java/org/apache/shenyu/examples/websocket/controller/TestHttpController.java",
+      "destination": "shenyu-examples/shenyu-examples-websocket/shenyu-example-spring-native-websocket/src/main/java/org/apache/shenyu/examples/websocket/controller/TestHttpController.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-websocket/shenyu-example-spring-native-websocket/src/main/java/org/apache/shenyu/examples/websocket/handler/HttpAuthHandler.java",
+      "destination": "shenyu-examples/shenyu-examples-websocket/shenyu-example-spring-native-websocket/src/main/java/org/apache/shenyu/examples/websocket/handler/HttpAuthHandler.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-websocket/shenyu-example-spring-native-websocket/src/main/java/org/apache/shenyu/examples/websocket/interceptor/WebSocketInterceptor.java",
+      "destination": "shenyu-examples/shenyu-examples-websocket/shenyu-example-spring-native-websocket/src/main/java/org/apache/shenyu/examples/websocket/interceptor/WebSocketInterceptor.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-websocket/shenyu-example-spring-native-websocket/src/main/resources/application.yml",
+      "destination": "shenyu-examples/shenyu-examples-websocket/shenyu-example-spring-native-websocket/src/main/resources/application.yml"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-websocket/shenyu-example-spring-reactive-websocket/src/main/java/org/apache/shenyu/examples/websocket/TestReactiveWebsocketApplication.java",
+      "destination": "shenyu-examples/shenyu-examples-websocket/shenyu-example-spring-reactive-websocket/src/main/java/org/apache/shenyu/examples/websocket/TestReactiveWebsocketApplication.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-websocket/shenyu-example-spring-reactive-websocket/src/main/java/org/apache/shenyu/examples/websocket/config/WebSocketConfiguration.java",
+      "destination": "shenyu-examples/shenyu-examples-websocket/shenyu-example-spring-reactive-websocket/src/main/java/org/apache/shenyu/examples/websocket/config/WebSocketConfiguration.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-websocket/shenyu-example-spring-reactive-websocket/src/main/java/org/apache/shenyu/examples/websocket/handler/EchoHandler.java",
+      "destination": "shenyu-examples/shenyu-examples-websocket/shenyu-example-spring-reactive-websocket/src/main/java/org/apache/shenyu/examples/websocket/handler/EchoHandler.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-websocket/shenyu-example-spring-reactive-websocket/src/main/java/org/apache/shenyu/examples/websocket/handler/UploadFileHandler.java",
+      "destination": "shenyu-examples/shenyu-examples-websocket/shenyu-example-spring-reactive-websocket/src/main/java/org/apache/shenyu/examples/websocket/handler/UploadFileHandler.java"
+    },
+    {
+      "source": "shenyu-examples/shenyu-examples-websocket/shenyu-example-spring-reactive-websocket/src/main/resources/application.yml",
+      "destination": "shenyu-examples/shenyu-examples-websocket/shenyu-example-spring-reactive-websocket/src/main/resources/application.yml"
+    },
+    {
+      "source": "shenyu-register-center/shenyu-register-client/shenyu-register-client-api/src/main/java/org/apache/shenyu/register/client/api/FailbackRegistryRepository.java",
+      "destination": "shenyu-register-client-api/src/main/java/org/apache/shenyu/register/client/api/FailbackRegistryRepository.java"
+    },
+    {
+      "source": "shenyu-register-center/shenyu-register-client/shenyu-register-client-api/src/main/java/org/apache/shenyu/register/client/api/ShenyuClientRegisterRepository.java",
+      "destination": "shenyu-register-client-api/src/main/java/org/apache/shenyu/register/client/api/ShenyuClientRegisterRepository.java"
+    },
+    {
+      "source": "shenyu-register-center/shenyu-register-client/shenyu-register-client-api/src/main/java/org/apache/shenyu/register/client/api/retry/FailureRegistryTask.java",
+      "destination": "shenyu-register-client-api/src/main/java/org/apache/shenyu/register/client/api/retry/FailureRegistryTask.java"
+    },
+    {
+      "source": "shenyu-register-center/shenyu-register-client/shenyu-register-client-api/src/test/java/org/apache/shenyu/register/client/api/FailbackRegistryRepositoryTest.java",
+      "destination": "shenyu-register-client-api/src/test/java/org/apache/shenyu/register/client/api/FailbackRegistryRepositoryTest.java"
+    },
+    {
+      "source": "shenyu-register-center/shenyu-register-client/shenyu-register-client-api/src/test/java/org/apache/shenyu/register/client/api/retry/FailureRegistryTaskTest.java",
+      "destination": "shenyu-register-client-api/src/test/java/org/apache/shenyu/register/client/api/retry/FailureRegistryTaskTest.java"
+    },
+    {
+      "source": "shenyu-register-center/shenyu-register-client/shenyu-register-client-http/src/main/java/org/apache/shenyu/register/client/http/HttpClientRegisterRepository.java",
+      "destination": "shenyu-register-client-http/src/main/java/org/apache/shenyu/register/client/http/HttpClientRegisterRepository.java"
+    },
+    {
+      "source": "shenyu-register-center/shenyu-register-client/shenyu-register-client-http/src/main/java/org/apache/shenyu/register/client/http/utils/RuntimeUtils.java",
+      "destination": "shenyu-register-client-http/src/main/java/org/apache/shenyu/register/client/http/utils/RuntimeUtils.java"
+    },
+    {
+      "source": "shenyu-register-center/shenyu-register-client/shenyu-register-client-http/src/main/java/org/apache/shenyu/register/client/http/utils/SystemUtils.java",
+      "destination": "shenyu-register-client-http/src/main/java/org/apache/shenyu/register/client/http/utils/SystemUtils.java"
+    },
+    {
+      "source": "shenyu-register-center/shenyu-register-client/shenyu-register-client-http/src/main/resources/META-INF/shenyu/org.apache.shenyu.register.client.api.ShenyuClientRegisterRepository",
+      "destination": "shenyu-register-client-http/src/main/resources/META-INF/shenyu/org.apache.shenyu.register.client.api.ShenyuClientRegisterRepository"
+    },
+    {
+      "source": "shenyu-register-center/shenyu-register-client/shenyu-register-client-http/src/test/java/org/apache/shenyu/register/client/http/HttpClientRegisterRepositoryTest.java",
+      "destination": "shenyu-register-client-http/src/test/java/org/apache/shenyu/register/client/http/HttpClientRegisterRepositoryTest.java"
+    },
+    {
+      "source": "shenyu-register-center/shenyu-register-client/shenyu-register-client-http/src/test/java/org/apache/shenyu/register/client/http/utils/RuntimeUtilsTest.java",
+      "destination": "shenyu-register-client-http/src/test/java/org/apache/shenyu/register/client/http/utils/RuntimeUtilsTest.java"
+    },
+    {
+      "source": "shenyu-register-center/shenyu-register-client/shenyu-register-client-http/src/test/java/org/apache/shenyu/register/client/http/utils/SystemUtilsTest.java",
+      "destination": "shenyu-register-client-http/src/test/java/org/apache/shenyu/register/client/http/utils/SystemUtilsTest.java"
+    },
+    {
+      "source": "shenyu-spring-boot-starter/shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-apache-dubbo/src/main/java/org/apache/shenyu/springboot/starter/client/apache/dubbo/ShenyuApacheDubboClientConfiguration.java",
+      "destination": "shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-apache-dubbo/src/main/java/org/apache/shenyu/springboot/starter/client/apache/dubbo/ShenyuApacheDubboClientConfiguration.java"
+    },
+    {
+      "source": "shenyu-spring-boot-starter/shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-apache-dubbo/src/main/resources/META-INF/spring.factories",
+      "destination": "shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-apache-dubbo/src/main/resources/META-INF/spring.factories"
+    },
+    {
+      "source": "shenyu-spring-boot-starter/shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-apache-dubbo/src/main/resources/META-INF/spring.provides",
+      "destination": "shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-apache-dubbo/src/main/resources/META-INF/spring.provides"
+    },
+    {
+      "source": "shenyu-spring-boot-starter/shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-apache-dubbo/src/main/resources/META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports",
+      "destination": "shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-apache-dubbo/src/main/resources/META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports"
+    },
+    {
+      "source": "shenyu-spring-boot-starter/shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-apache-dubbo/src/test/java/org/apache/shenyu/springboot/starter/client/apache/dubbo/ShenyuApacheDubboClientConfigurationTest.java",
+      "destination": "shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-apache-dubbo/src/test/java/org/apache/shenyu/springboot/starter/client/apache/dubbo/ShenyuApacheDubboClientConfigurationTest.java"
+    },
+    {
+      "source": "shenyu-spring-boot-starter/shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-apache-dubbo/src/test/resources/application.properties",
+      "destination": "shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-apache-dubbo/src/test/resources/application.properties"
+    },
+    {
+      "source": "shenyu-spring-boot-starter/shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-common/src/main/java/org/apache/shenyu/springboot/starter/client/common/config/ShenyuClientCommonBeanConfiguration.java",
+      "destination": "shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-common/src/main/java/org/apache/shenyu/springboot/starter/client/common/config/ShenyuClientCommonBeanConfiguration.java"
+    },
+    {
+      "source": "shenyu-spring-boot-starter/shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-common/src/main/resources/META-INF/spring.factories",
+      "destination": "shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-common/src/main/resources/META-INF/spring.factories"
+    },
+    {
+      "source": "shenyu-spring-boot-starter/shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-common/src/main/resources/META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports",
+      "destination": "shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-common/src/main/resources/META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports"
+    },
+    {
+      "source": "shenyu-spring-boot-starter/shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-common/src/test/java/org/apache/shenyu/springboot/starter/client/common/config/ShenyuClientCommonBeanConfigurationTest.java",
+      "destination": "shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-common/src/test/java/org/apache/shenyu/springboot/starter/client/common/config/ShenyuClientCommonBeanConfigurationTest.java"
+    },
+    {
+      "source": "shenyu-spring-boot-starter/shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-grpc/src/main/java/org/apache/springboot/starter/client/grpc/ShenyuGrpcClientConfiguration.java",
+      "destination": "shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-grpc/src/main/java/org/apache/springboot/starter/client/grpc/ShenyuGrpcClientConfiguration.java"
+    },
+    {
+      "source": "shenyu-spring-boot-starter/shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-grpc/src/main/java/org/apache/springboot/starter/client/grpc/ShenyuGrpcDiscoveryConfiguration.java",
+      "destination": "shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-grpc/src/main/java/org/apache/springboot/starter/client/grpc/ShenyuGrpcDiscoveryConfiguration.java"
+    },
+    {
+      "source": "shenyu-spring-boot-starter/shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-grpc/src/main/resources/META-INF/spring.factories",
+      "destination": "shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-grpc/src/main/resources/META-INF/spring.factories"
+    },
+    {
+      "source": "shenyu-spring-boot-starter/shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-grpc/src/main/resources/META-INF/spring.provides",
+      "destination": "shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-grpc/src/main/resources/META-INF/spring.provides"
+    },
+    {
+      "source": "shenyu-spring-boot-starter/shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-grpc/src/main/resources/META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports",
+      "destination": "shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-grpc/src/main/resources/META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports"
+    },
+    {
+      "source": "shenyu-spring-boot-starter/shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-grpc/src/test/java/org/apache/springboot/starter/client/grpc/ShenyuGrpcClientConfigurationTest.java",
+      "destination": "shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-grpc/src/test/java/org/apache/springboot/starter/client/grpc/ShenyuGrpcClientConfigurationTest.java"
+    },
+    {
+      "source": "shenyu-spring-boot-starter/shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-grpc/src/test/java/org/apache/springboot/starter/client/grpc/server/ShenyuGrpcServerBuilderTest.java",
+      "destination": "shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-grpc/src/test/java/org/apache/springboot/starter/client/grpc/server/ShenyuGrpcServerBuilderTest.java"
+    },
+    {
+      "source": "shenyu-spring-boot-starter/shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-mcp/src/main/java/org/apache/shenyu/springboot/starter/client/mcp/ShenyuMcpClientConfiguration.java",
+      "destination": "shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-mcp/src/main/java/org/apache/shenyu/springboot/starter/client/mcp/ShenyuMcpClientConfiguration.java"
+    },
+    {
+      "source": "shenyu-spring-boot-starter/shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-mcp/src/main/resources/META-INF/spring.provides",
+      "destination": "shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-mcp/src/main/resources/META-INF/spring.provides"
+    },
+    {
+      "source": "shenyu-spring-boot-starter/shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-mcp/src/main/resources/META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports",
+      "destination": "shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-mcp/src/main/resources/META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports"
+    },
+    {
+      "source": "shenyu-spring-boot-starter/shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-sofa/src/main/java/org/apache/shenyu/springboot/starter/client/sofa/ShenyuSofaClientConfiguration.java",
+      "destination": "shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-sofa/src/main/java/org/apache/shenyu/springboot/starter/client/sofa/ShenyuSofaClientConfiguration.java"
+    },
+    {
+      "source": "shenyu-spring-boot-starter/shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-sofa/src/main/resources/META-INF/spring.factories",
+      "destination": "shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-sofa/src/main/resources/META-INF/spring.factories"
+    },
+    {
+      "source": "shenyu-spring-boot-starter/shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-sofa/src/main/resources/META-INF/spring.provides",
+      "destination": "shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-sofa/src/main/resources/META-INF/spring.provides"
+    },
+    {
+      "source": "shenyu-spring-boot-starter/shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-sofa/src/main/resources/META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports",
+      "destination": "shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-sofa/src/main/resources/META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports"
+    },
+    {
+      "source": "shenyu-spring-boot-starter/shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-sofa/src/test/java/org/apache/shenyu/springboot/starter/client/sofa/ShenyuSofaClientConfigurationTest.java",
+      "destination": "shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-sofa/src/test/java/org/apache/shenyu/springboot/starter/client/sofa/ShenyuSofaClientConfigurationTest.java"
+    },
+    {
+      "source": "shenyu-spring-boot-starter/shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-spring-websocket/src/main/java/org/apache/shenyu/springboot/starter/client/spring/websocket/ShenyuSpringWebSocketClientConfiguration.java",
+      "destination": "shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-spring-websocket/src/main/java/org/apache/shenyu/springboot/starter/client/spring/websocket/ShenyuSpringWebSocketClientConfiguration.java"
+    },
+    {
+      "source": "shenyu-spring-boot-starter/shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-spring-websocket/src/main/java/org/apache/shenyu/springboot/starter/client/spring/websocket/ShenyuSpringWebSocketDiscoveryConfiguration.java",
+      "destination": "shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-spring-websocket/src/main/java/org/apache/shenyu/springboot/starter/client/spring/websocket/ShenyuSpringWebSocketDiscoveryConfiguration.java"
+    },
+    {
+      "source": "shenyu-spring-boot-starter/shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-spring-websocket/src/main/resources/META-INF/spring.factories",
+      "destination": "shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-spring-websocket/src/main/resources/META-INF/spring.factories"
+    },
+    {
+      "source": "shenyu-spring-boot-starter/shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-spring-websocket/src/main/resources/META-INF/spring.provides",
+      "destination": "shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-spring-websocket/src/main/resources/META-INF/spring.provides"
+    },
+    {
+      "source": "shenyu-spring-boot-starter/shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-spring-websocket/src/main/resources/META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports",
+      "destination": "shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-spring-websocket/src/main/resources/META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports"
+    },
+    {
+      "source": "shenyu-spring-boot-starter/shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-spring-websocket/src/test/java/org/apache/shenyu/springboot/starter/client/spring/websocket/ShenyuSpringWebSocketClientConfigurationTest.java",
+      "destination": "shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-spring-websocket/src/test/java/org/apache/shenyu/springboot/starter/client/spring/websocket/ShenyuSpringWebSocketClientConfigurationTest.java"
+    },
+    {
+      "source": "shenyu-spring-boot-starter/shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-springmvc/src/main/java/org/apache/shenyu/springboot/starter/client/springmvc/ShenyuSpringMvcClientConfiguration.java",
+      "destination": "shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-springmvc/src/main/java/org/apache/shenyu/springboot/starter/client/springmvc/ShenyuSpringMvcClientConfiguration.java"
+    },
+    {
+      "source": "shenyu-spring-boot-starter/shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-springmvc/src/main/java/org/apache/shenyu/springboot/starter/client/springmvc/ShenyuSpringMvcClientInfoRegisterConfiguration.java",
+      "destination": "shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-springmvc/src/main/java/org/apache/shenyu/springboot/starter/client/springmvc/ShenyuSpringMvcClientInfoRegisterConfiguration.java"
+    },
+    {
+      "source": "shenyu-spring-boot-starter/shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-springmvc/src/main/java/org/apache/shenyu/springboot/starter/client/springmvc/ShenyuSpringMvcDiscoveryConfiguration.java",
+      "destination": "shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-springmvc/src/main/java/org/apache/shenyu/springboot/starter/client/springmvc/ShenyuSpringMvcDiscoveryConfiguration.java"
+    },
+    {
+      "source": "shenyu-spring-boot-starter/shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-springmvc/src/main/resources/META-INF/spring.factories",
+      "destination": "shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-springmvc/src/main/resources/META-INF/spring.factories"
+    },
+    {
+      "source": "shenyu-spring-boot-starter/shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-springmvc/src/main/resources/META-INF/spring.provides",
+      "destination": "shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-springmvc/src/main/resources/META-INF/spring.provides"
+    },
+    {
+      "source": "shenyu-spring-boot-starter/shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-springmvc/src/main/resources/META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports",
+      "destination": "shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-springmvc/src/main/resources/META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports"
+    },
+    {
+      "source": "shenyu-spring-boot-starter/shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-springmvc/src/test/java/org/apache/shenyu/springboot/starter/client/springmvc/ShenyuSpringMvcClientConfigurationTest.java",
+      "destination": "shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-springmvc/src/test/java/org/apache/shenyu/springboot/starter/client/springmvc/ShenyuSpringMvcClientConfigurationTest.java"
+    },
+    {
+      "source": "shenyu-spring-boot-starter/shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-tars/src/main/java/org/apache/shenyu/springboot/starter/client/tars/ShenyuTarsClientConfiguration.java",
+      "destination": "shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-tars/src/main/java/org/apache/shenyu/springboot/starter/client/tars/ShenyuTarsClientConfiguration.java"
+    },
+    {
+      "source": "shenyu-spring-boot-starter/shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-tars/src/main/resources/META-INF/spring.factories",
+      "destination": "shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-tars/src/main/resources/META-INF/spring.factories"
+    },
+    {
+      "source": "shenyu-spring-boot-starter/shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-tars/src/main/resources/META-INF/spring.provides",
+      "destination": "shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-tars/src/main/resources/META-INF/spring.provides"
+    },
+    {
+      "source": "shenyu-spring-boot-starter/shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-tars/src/main/resources/META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports",
+      "destination": "shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-tars/src/main/resources/META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports"
+    },
+    {
+      "source": "shenyu-spring-boot-starter/shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-tars/src/test/java/org/apache/shenyu/springboot/starter/client/tars/ShenyuTarsClientConfigurationTest.java",
+      "destination": "shenyu-spring-boot-starter-client/shenyu-spring-boot-starter-client-tars/src/test/java/org/apache/shenyu/springboot/starter/client/tars/ShenyuTarsClientConfigurationTest.java"
+    }
+  ],
+  "foundation_artifacts": [
+    "shenyu-common",
+    "shenyu-protocol-grpc",
+    "shenyu-register-common",
+    "shenyu-register-mcp",
+    "shenyu-registry-api",
+    "shenyu-registry-zookeeper",
+    "shenyu-sdk-core",
+    "shenyu-sdk-httpclient",
+    "shenyu-sdk-okhttp",
+    "shenyu-sdk-spring",
+    "shenyu-spi",
+    "shenyu-spring-boot-starter-sdk",
+    "shenyu-spring-boot-starter-sdk-feign"
+  ],
+  "excluded_modules": [
+    "shenyu-registry-api",
+    "shenyu-register-client-beat",
+    "shenyu-spring-boot-starter-client-beat",
+    "shenyu-client-motan"
+  ]
+}

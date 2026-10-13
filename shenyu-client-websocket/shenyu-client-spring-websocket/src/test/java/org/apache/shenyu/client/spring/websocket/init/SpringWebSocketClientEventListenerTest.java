@@ -17,24 +17,33 @@
 
 package org.apache.shenyu.client.spring.websocket.init;
 
-import org.apache.shenyu.client.core.constant.Constants;
 import org.apache.shenyu.client.core.constant.ShenyuClientConstants;
 import org.apache.shenyu.client.core.disruptor.ShenyuClientRegisterEventPublisher;
-import org.apache.shenyu.client.core.dto.MetaDataRegisterDTO;
-import org.apache.shenyu.client.core.dto.URIRegisterDTO;
-import org.apache.shenyu.client.core.enums.RpcTypeEnum;
-import org.apache.shenyu.client.core.register.ShenyuClientRegisterRepository;
-import org.apache.shenyu.client.core.register.config.PropertiesConfig;
-import org.apache.shenyu.client.core.register.config.ShenyuClientConfig;
-import org.apache.shenyu.client.core.register.config.ShenyuClientConfig.ClientPropertiesConfig;
+import org.apache.shenyu.client.spring.websocket.annotation.ShenyuServerEndpoint;
 import org.apache.shenyu.client.spring.websocket.annotation.ShenyuSpringWebSocketClient;
+import org.apache.shenyu.common.constant.Constants;
+import org.apache.shenyu.common.enums.RpcTypeEnum;
+import org.apache.shenyu.register.client.api.ShenyuClientRegisterRepository;
+import org.apache.shenyu.register.common.config.PropertiesConfig;
+import org.apache.shenyu.register.common.config.ShenyuClientConfig;
+import org.apache.shenyu.register.common.config.ShenyuClientConfig.ClientPropertiesConfig;
+import org.apache.shenyu.register.common.dto.MetaDataRegisterDTO;
+import org.apache.shenyu.register.common.dto.URIRegisterDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.annotation.Annotation;
@@ -43,13 +52,19 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -84,21 +99,7 @@ public class SpringWebSocketClientEventListenerTest {
 
     @BeforeEach
     public void setUp() {
-        MockitoAnnotations.openMocks(this);
-        Properties properties = mock(Properties.class);
-        when(properties.getProperty("appName")).thenReturn("appName");
-        when(properties.getProperty("contextPath")).thenReturn("contextPath");
-        when(properties.getProperty(ShenyuClientConstants.PORT)).thenReturn("8080");
-        when(properties.getProperty(ShenyuClientConstants.HOST)).thenReturn("127.0.0.1");
-        when(properties.getProperty(ShenyuClientConstants.IP_PORT)).thenReturn("127.0.0.1:8080");
-        
-        ShenyuClientConfig clientConfig = mock(ShenyuClientConfig.class);
-        Map<String, ClientPropertiesConfig> client = new HashMap<>();
-        ClientPropertiesConfig clientPropertiesConfig = new ClientPropertiesConfig();
-        clientPropertiesConfig.setProps(properties);
-        client.put(RpcTypeEnum.WEB_SOCKET.getName(), clientPropertiesConfig);
-        when(clientConfig.getClient()).thenReturn(client);
-        eventListener = new SpringWebSocketClientEventListener(clientConfig, registerRepository);
+        eventListener = buildEventListener(false);
     }
 
     @Test
@@ -116,6 +117,41 @@ public class SpringWebSocketClientEventListenerTest {
     }
 
     @Test
+    void registersEndpointsOnceAcrossRepeatedRefreshEvents() {
+        ConfigurableApplicationContext context = mock(ConfigurableApplicationContext.class);
+        DefaultListableBeanFactory beanFactory = new DefaultListableBeanFactory();
+        beanFactory.setAllowBeanDefinitionOverriding(false);
+        ShenyuServerEndpointerExporter exporter = mock(ShenyuServerEndpointerExporter.class);
+        when(context.getAutowireCapableBeanFactory()).thenReturn(beanFactory);
+        when(context.getBean(ShenyuServerEndpointerExporter.class)).thenReturn(exporter);
+        when(context.getBeansWithAnnotation(ShenyuServerEndpoint.class)).thenReturn(Collections.singletonMap("endpoint", new MockClass()));
+        ContextRefreshedEvent event = new ContextRefreshedEvent(context);
+
+        eventListener.onApplicationEvent(event);
+        eventListener.onApplicationEvent(event);
+
+        verify(exporter).registerEndpoint(MockClass.class);
+        assertEquals(1, beanFactory.getBeanDefinitionCount());
+    }
+
+    @Test
+    void emptyParentContextDoesNotConsumeEndpointRegistrationGuard() {
+        eventListener.getBeans(applicationContext);
+        ConfigurableApplicationContext child = mock(ConfigurableApplicationContext.class);
+        DefaultListableBeanFactory beanFactory = new DefaultListableBeanFactory();
+        beanFactory.setAllowBeanDefinitionOverriding(false);
+        ShenyuServerEndpointerExporter exporter = mock(ShenyuServerEndpointerExporter.class);
+        when(child.getAutowireCapableBeanFactory()).thenReturn(beanFactory);
+        when(child.getBean(ShenyuServerEndpointerExporter.class)).thenReturn(exporter);
+        when(child.getBeansWithAnnotation(ShenyuServerEndpoint.class)).thenReturn(Collections.singletonMap("endpoint", new MockClass()));
+
+        eventListener.getBeans(child);
+        eventListener.getBeans(child);
+
+        verify(exporter).registerEndpoint(MockClass.class);
+    }
+
+    @Test
     public void testBuildURIRegisterDTO() {
         URIRegisterDTO uriRegisterDTO = eventListener.buildURIRegisterDTO(applicationContext, Collections.emptyMap(), Constants.SYS_DEFAULT_NAMESPACE_ID);
         assertNotNull(uriRegisterDTO);
@@ -128,6 +164,35 @@ public class SpringWebSocketClientEventListenerTest {
     @Test
     public void testHandle() {
         eventListener.handle("mock", mockClass);
+    }
+
+    @ParameterizedTest
+    @MethodSource("metadataRegistrationCases")
+    void testHandlePreservesRegisterMetaData(final Object bean, final boolean registerMetaData) {
+        try (MockedStatic<ShenyuClientRegisterEventPublisher> publisherMockedStatic = mockStatic(ShenyuClientRegisterEventPublisher.class)) {
+            publisherMockedStatic.when(ShenyuClientRegisterEventPublisher::getInstance).thenReturn(publisher);
+            SpringWebSocketClientEventListener listener = buildEventListener(false);
+
+            listener.handle("endpoint", bean);
+
+            ArgumentCaptor<MetaDataRegisterDTO> captor = ArgumentCaptor.forClass(MetaDataRegisterDTO.class);
+            verify(publisher, atLeastOnce()).publishEvent(captor.capture());
+            for (MetaDataRegisterDTO metadata : captor.getAllValues()) {
+                assertEquals(registerMetaData, metadata.isRegisterMetaData());
+                assertEquals(RpcTypeEnum.WEB_SOCKET.getName(), metadata.getRpcType());
+                assertEquals("/contextPath", metadata.getContextPath());
+            }
+        }
+    }
+
+    private static Stream<Arguments> metadataRegistrationCases() {
+        return Stream.of(
+                Arguments.of(new MockClass(), false),
+                Arguments.of(new MetadataEnabledClient(), true),
+                Arguments.of(new MetadataDisabledClient(), false),
+                Arguments.of(new DefaultEndpoint(), false),
+                Arguments.of(new MetadataEnabledEndpoint(), true),
+                Arguments.of(new MetadataDisabledEndpoint(), false));
     }
 
     @Test
@@ -172,10 +237,62 @@ public class SpringWebSocketClientEventListenerTest {
     }
 
     @Test
+    public void testBuildMetaDataDTOShouldRespectEnabledAttribute() throws NoSuchMethodException {
+        Method method = MockClass.class.getDeclaredMethod("mockMethod");
+        ShenyuSpringWebSocketClient enabledClient = AnnotatedElementUtils.findMergedAnnotation(MockClass.class, ShenyuSpringWebSocketClient.class);
+        ShenyuSpringWebSocketClient disabledClient = AnnotatedElementUtils.findMergedAnnotation(DisabledMockClass.class, ShenyuSpringWebSocketClient.class);
+        MetaDataRegisterDTO enabledMetaData = eventListener.buildMetaDataDTO(mockClass, enabledClient, SUPER_PATH, MockClass.class, method, Constants.SYS_DEFAULT_NAMESPACE_ID);
+        MetaDataRegisterDTO disabledMetaData = eventListener.buildMetaDataDTO(mockClass, disabledClient, SUPER_PATH, DisabledMockClass.class, method, Constants.SYS_DEFAULT_NAMESPACE_ID);
+        assertTrue(enabledMetaData.isEnabled());
+        assertFalse(disabledMetaData.isEnabled());
+    }
+
+    @Test
     public void testGetPort() {
         String port = eventListener.getPort();
         assertNotNull(port);
         assertEquals(port, "8080");
+    }
+
+    @Test
+    public void testOnApplicationEventFullModeShouldRegisterOnce() {
+        try (MockedStatic<ShenyuClientRegisterEventPublisher> publisherMockedStatic = mockStatic(ShenyuClientRegisterEventPublisher.class)) {
+            ShenyuClientRegisterEventPublisher mockPublisher = mock(ShenyuClientRegisterEventPublisher.class);
+            publisherMockedStatic.when(ShenyuClientRegisterEventPublisher::getInstance).thenReturn(mockPublisher);
+            SpringWebSocketClientEventListener fullModeEventListener = buildEventListener(true);
+            ContextRefreshedEvent event = new ContextRefreshedEvent(applicationContext);
+            fullModeEventListener.onApplicationEvent(event);
+            fullModeEventListener.onApplicationEvent(event);
+            verify(mockPublisher, times(1)).start(any());
+            ArgumentCaptor<MetaDataRegisterDTO> metadataCaptor = ArgumentCaptor.forClass(MetaDataRegisterDTO.class);
+            verify(mockPublisher).publishEvent(metadataCaptor.capture());
+            verify(mockPublisher).publishEvent(any(URIRegisterDTO.class));
+            assertEquals("/contextPath", metadataCaptor.getValue().getContextPath());
+            assertEquals("appName", metadataCaptor.getValue().getAppName());
+            assertEquals(RpcTypeEnum.WEB_SOCKET.getName(), metadataCaptor.getValue().getRpcType());
+            assertEquals("/contextPath", metadataCaptor.getValue().getPath());
+            assertEquals("/contextPath", metadataCaptor.getValue().getRuleName());
+            assertEquals(Constants.SYS_DEFAULT_NAMESPACE_ID, metadataCaptor.getValue().getNamespaceId());
+        }
+    }
+
+    private SpringWebSocketClientEventListener buildEventListener(final boolean full) {
+        Properties properties = new Properties();
+        properties.setProperty("appName", "appName");
+        properties.setProperty("contextPath", "contextPath");
+        properties.setProperty(ShenyuClientConstants.PORT, "8080");
+        properties.setProperty(ShenyuClientConstants.HOST, "127.0.0.1");
+        properties.setProperty(ShenyuClientConstants.IP_PORT, "127.0.0.1:8080");
+        properties.setProperty(ShenyuClientConstants.IS_FULL, String.valueOf(full));
+        properties.setProperty(ShenyuClientConstants.DISCOVERY_LOCAL_MODE_KEY, Boolean.TRUE.toString());
+
+        ShenyuClientConfig clientConfig = mock(ShenyuClientConfig.class);
+        Map<String, ClientPropertiesConfig> client = new HashMap<>();
+        ClientPropertiesConfig clientPropertiesConfig = new ClientPropertiesConfig();
+        clientPropertiesConfig.setProps(properties);
+        client.put(RpcTypeEnum.WEB_SOCKET.getName(), clientPropertiesConfig);
+        when(clientConfig.getClient()).thenReturn(client);
+        return new SpringWebSocketClientEventListener(clientConfig, registerRepository);
     }
 
     /**
@@ -184,6 +301,45 @@ public class SpringWebSocketClientEventListenerTest {
     @ShenyuSpringWebSocketClient
     private static class MockClass {
         public void mockMethod() {
+        }
+    }
+
+    /**
+     * class for mock with the enabled attribute set to false.
+     */
+    @ShenyuSpringWebSocketClient(enabled = false)
+    private static class DisabledMockClass {
+        public void mockMethod() {
+        }
+    }
+
+    @ShenyuSpringWebSocketClient(registerMetaData = true)
+    private static class MetadataEnabledClient {
+        public void onMessage() {
+        }
+    }
+
+    @ShenyuSpringWebSocketClient(registerMetaData = false)
+    private static class MetadataDisabledClient {
+        public void onMessage() {
+        }
+    }
+
+    @ShenyuServerEndpoint("/default")
+    private static class DefaultEndpoint {
+        public void onMessage() {
+        }
+    }
+
+    @ShenyuServerEndpoint(value = "/enabled", registerMetaData = true)
+    private static class MetadataEnabledEndpoint {
+        public void onMessage() {
+        }
+    }
+
+    @ShenyuServerEndpoint(value = "/disabled", registerMetaData = false)
+    private static class MetadataDisabledEndpoint {
+        public void onMessage() {
         }
     }
 

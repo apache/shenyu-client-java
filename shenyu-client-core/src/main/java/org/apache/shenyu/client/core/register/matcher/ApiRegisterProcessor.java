@@ -18,8 +18,8 @@
 package org.apache.shenyu.client.core.register.matcher;
 
 import org.apache.shenyu.client.core.register.ApiBean;
-import org.apache.shenyu.client.core.type.DataTypeParent;
-import org.apache.shenyu.client.core.utils.ListUtil;
+import org.apache.shenyu.common.utils.ListUtil;
+import org.apache.shenyu.register.common.type.DataTypeParent;
 
 import java.util.List;
 
@@ -28,14 +28,14 @@ import java.util.List;
  * API bean processor.
  */
 public interface ApiRegisterProcessor extends Matcher<ApiBean> {
-    
+
     /**
      * process.
      *
      * @param apiBean apiBean
      */
     void process(ApiBean apiBean);
-    
+
     /**
      * Determines the order in which processors are executed.
      *
@@ -44,7 +44,7 @@ public interface ApiRegisterProcessor extends Matcher<ApiBean> {
     default int order() {
         return Integer.MAX_VALUE;
     }
-    
+
     /**
      * registerDataType.
      *

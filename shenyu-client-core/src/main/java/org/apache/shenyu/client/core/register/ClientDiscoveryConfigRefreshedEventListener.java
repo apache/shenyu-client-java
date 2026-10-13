@@ -19,11 +19,13 @@ package org.apache.shenyu.client.core.register;
 
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shenyu.client.core.constant.Constants;
-import org.apache.shenyu.client.core.dto.DiscoveryConfigRegisterDTO;
-import org.apache.shenyu.client.core.enums.PluginEnum;
-import org.apache.shenyu.client.core.register.config.ShenyuClientConfig;
-import org.apache.shenyu.client.core.register.config.ShenyuDiscoveryConfig;
+import org.apache.shenyu.common.constant.Constants;
+import org.apache.shenyu.common.enums.PluginEnum;
+import org.apache.shenyu.common.exception.ShenyuException;
+import org.apache.shenyu.register.client.http.HttpClientRegisterRepository;
+import org.apache.shenyu.register.common.config.ShenyuClientConfig;
+import org.apache.shenyu.register.common.config.ShenyuDiscoveryConfig;
+import org.apache.shenyu.register.common.dto.DiscoveryConfigRegisterDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationListener;
@@ -79,11 +81,11 @@ public final class ClientDiscoveryConfigRefreshedEventListener implements Applic
     protected DiscoveryConfigRegisterDTO buildDiscoveryConfigRegisterDTO(final ShenyuDiscoveryConfig shenyuDiscoveryConfig, final String namespaceId) {
         if (StringUtils.isEmpty(shenyuDiscoveryConfig.getServerList())) {
             LOG.error("If using service discovery. The configuration shenyu.discovery.name in xml/yml cannot be null");
-            throw new RuntimeException("The configuration shenyu.discovery.serverList in xml/yml cannot be null");
+            throw new ShenyuException("The configuration shenyu.discovery.serverList in xml/yml cannot be null");
         }
         if (StringUtils.isEmpty(shenyuDiscoveryConfig.getType())) {
             LOG.error("If using service discovery. The configuration shenyu.discovery.name in xml/yml cannot be null");
-            throw new RuntimeException("The configuration shenyu.discovery.type in xml/yml cannot be null");
+            throw new ShenyuException("The configuration shenyu.discovery.type in xml/yml cannot be null");
         }
         return DiscoveryConfigRegisterDTO.builder()
                 .name(discoveryName())

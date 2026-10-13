@@ -20,7 +20,6 @@ package org.apache.shenyu.client.auto.config;
 import org.apache.shenyu.client.core.disruptor.ShenyuClientRegisterEventPublisher;
 import org.apache.shenyu.client.core.register.ClientApiRefreshedEventListener;
 import org.apache.shenyu.client.core.register.ClientRegisterConfig;
-import org.apache.shenyu.client.core.register.ShenyuClientRegisterRepository;
 import org.apache.shenyu.client.core.register.extractor.MultiClientApiBeansExtractorImpl;
 import org.apache.shenyu.client.core.register.extractor.RpcApiBeansExtractor;
 import org.apache.shenyu.client.core.register.matcher.ApiDocProcessorImpl;
@@ -28,6 +27,7 @@ import org.apache.shenyu.client.core.register.matcher.ApiRegisterProcessor;
 import org.apache.shenyu.client.core.register.registrar.ApiDocRegistrarImpl;
 import org.apache.shenyu.client.core.register.registrar.ApiRegistrar;
 import org.apache.shenyu.client.core.register.registrar.MateDataApiRegistrarImpl;
+import org.apache.shenyu.register.client.api.ShenyuClientRegisterRepository;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,7 +36,7 @@ import java.util.List;
 
 @Configuration(proxyBeanMethods = false)
 public class ClientRegisterConfiguration {
-    
+
     /**
      * Gets ContextApiRefreshedEventListener Bean.
      *
@@ -49,7 +49,7 @@ public class ClientRegisterConfiguration {
                                                        final List<ApiRegistrar> apiRegistrars) {
         return new ClientApiRefreshedEventListener(apiRegistrars, new MultiClientApiBeansExtractorImpl(rpcApiBeansExtractors));
     }
-    
+
     /**
      * mate date register.
      *
@@ -78,7 +78,7 @@ public class ClientRegisterConfiguration {
         return apiRegistrarImpl;
     }
 
-    
+
     /**
      * apiDocProcessor.
      *
@@ -89,7 +89,7 @@ public class ClientRegisterConfiguration {
     public ApiDocProcessorImpl apiDocProcessor() {
         return new ApiDocProcessorImpl();
     }
-    
+
     /**
      * Gets ShenyuClientRegisterEventPublisher Bean that is initialized .
      *

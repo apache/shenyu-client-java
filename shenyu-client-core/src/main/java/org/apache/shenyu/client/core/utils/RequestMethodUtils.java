@@ -32,63 +32,57 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-/**
- * Request method utils.
- */
-public final class RequestMethodUtils {
+public class RequestMethodUtils {
 
     private static final ParameterNameDiscoverer PARAMETER_NAME_DISCOVERER = new DefaultParameterNameDiscoverer();
 
-    private RequestMethodUtils() {
-    }
-
     /**
-     * Get supported method types from method.
+     * get the support methodType from method .
      *
      * @param method method
-     * @return the list of method type
+     * @return the list of method Type
      */
     public static List<String> getRequestMethodTypes(final Method method) {
         if (method.isAnnotationPresent(GetMapping.class)) {
-            return Collections.singletonList("GET");
+            return List.of("GET");
         }
         if (method.isAnnotationPresent(PostMapping.class)) {
-            return Collections.singletonList("POST");
+            return List.of("POST");
         }
         if (method.isAnnotationPresent(PutMapping.class)) {
-            return Collections.singletonList("PUT");
+            return List.of("PUT");
         }
         if (method.isAnnotationPresent(DeleteMapping.class)) {
-            return Collections.singletonList("DELETE");
+            return List.of("DELETE");
         }
         if (method.isAnnotationPresent(PatchMapping.class)) {
-            return Collections.singletonList("PATCH");
+            return List.of("PATCH");
         }
         if (method.isAnnotationPresent(RequestMapping.class)) {
             RequestMapping rm = method.getAnnotation(RequestMapping.class);
             RequestMethod[] requestMethods = rm.method();
             if (requestMethods.length == 0) {
-                return Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD");
+                return List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD");
             }
             return Arrays.stream(requestMethods)
                     .map(Enum::name)
                     .collect(Collectors.toList());
         }
-        return Collections.emptyList();
+        return List.of();
     }
 
     /**
-     * Get the parameter position list.
+     * get the parameter position list .
      *
      * @param method method
      * @return positionList
@@ -97,7 +91,9 @@ public final class RequestMethodUtils {
         List<String> positions = new ArrayList<>();
         Annotation[][] parameterAnnotations = method.getParameterAnnotations();
 
-        for (Annotation[] annotations : parameterAnnotations) {
+        for (int i = 0; i < parameterAnnotations.length; i++) {
+            Annotation[] annotations = parameterAnnotations[i];
+
             String position = "query";
 
             for (Annotation annotation : annotations) {
@@ -126,10 +122,10 @@ public final class RequestMethodUtils {
     }
 
     /**
-     * Get the parameter names.
+     * get the parameter names .
      *
      * @param method method
-     * @return the array of parameter names
+     * @return the arr of parameter names
      */
     public static String[] getParameterNames(final Method method) {
         Parameter[] parameters = method.getParameters();
@@ -138,6 +134,7 @@ public final class RequestMethodUtils {
         String[] result = new String[parameters.length];
 
         for (int i = 0; i < parameters.length; i++) {
+            // try to obtain the name from spring annotation
             String nameFromAnnotation = getNameFromSpringAnnotation(parameters[i].getAnnotations());
 
             if (Objects.nonNull(nameFromAnnotation) && !nameFromAnnotation.isEmpty()) {
@@ -153,32 +150,28 @@ public final class RequestMethodUtils {
 
     private static String getNameFromSpringAnnotation(final Annotation[] annotations) {
         for (Annotation annotation : annotations) {
-            if (annotation instanceof RequestParam) {
-                RequestParam requestParam = (RequestParam) annotation;
+            if (annotation instanceof RequestParam requestParam) {
                 if (!requestParam.name().isEmpty()) {
                     return requestParam.name();
                 }
                 if (!requestParam.value().isEmpty()) {
                     return requestParam.value();
                 }
-            } else if (annotation instanceof PathVariable) {
-                PathVariable pathVariable = (PathVariable) annotation;
+            } else if (annotation instanceof PathVariable pathVariable) {
                 if (!pathVariable.name().isEmpty()) {
                     return pathVariable.name();
                 }
                 if (!pathVariable.value().isEmpty()) {
                     return pathVariable.value();
                 }
-            } else if (annotation instanceof RequestHeader) {
-                RequestHeader requestHeader = (RequestHeader) annotation;
+            } else if (annotation instanceof RequestHeader requestHeader) {
                 if (!requestHeader.name().isEmpty()) {
                     return requestHeader.name();
                 }
                 if (!requestHeader.value().isEmpty()) {
                     return requestHeader.value();
                 }
-            } else if (annotation instanceof CookieValue) {
-                CookieValue cookieValue = (CookieValue) annotation;
+            } else if (annotation instanceof CookieValue cookieValue) {
                 if (!cookieValue.name().isEmpty()) {
                     return cookieValue.name();
                 }
@@ -189,4 +182,5 @@ public final class RequestMethodUtils {
         }
         return null;
     }
+
 }

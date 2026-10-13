@@ -20,14 +20,16 @@ package org.apache.shenyu.client.core.register;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.shenyu.client.core.register.config.ShenyuRegisterCenterConfig;
 import org.apache.shenyu.client.core.shutdown.ShenyuClientShutdownHook;
+import org.apache.shenyu.register.client.api.ShenyuClientRegisterRepository;
+import org.apache.shenyu.register.common.config.ShenyuRegisterCenterConfig;
+import org.apache.shenyu.spi.ExtensionLoader;
 
 /**
  * The type shenyu client register repository factory.
  */
 public final class ShenyuClientRegisterRepositoryFactory {
-    
+
     private static final Map<String, ShenyuClientRegisterRepository> REPOSITORY_MAP = new ConcurrentHashMap<>();
 
     /**
@@ -38,7 +40,7 @@ public final class ShenyuClientRegisterRepositoryFactory {
     public static Map<String, ShenyuClientRegisterRepository> getRepositoryMap() {
         return REPOSITORY_MAP;
     }
-    
+
     /**
      * New instance shenyu client register repository.
      *
@@ -47,7 +49,7 @@ public final class ShenyuClientRegisterRepositoryFactory {
      */
     public static ShenyuClientRegisterRepository newInstance(final ShenyuRegisterCenterConfig shenyuRegisterCenterConfig) {
         if (!REPOSITORY_MAP.containsKey(shenyuRegisterCenterConfig.getRegisterType())) {
-            ShenyuClientRegisterRepository result = new HttpClientRegisterRepository();
+            ShenyuClientRegisterRepository result = ExtensionLoader.getExtensionLoader(ShenyuClientRegisterRepository.class).getJoin(shenyuRegisterCenterConfig.getRegisterType());
             result.init(shenyuRegisterCenterConfig);
             ShenyuClientShutdownHook.set(result, shenyuRegisterCenterConfig.getProps());
             REPOSITORY_MAP.put(shenyuRegisterCenterConfig.getRegisterType(), result);

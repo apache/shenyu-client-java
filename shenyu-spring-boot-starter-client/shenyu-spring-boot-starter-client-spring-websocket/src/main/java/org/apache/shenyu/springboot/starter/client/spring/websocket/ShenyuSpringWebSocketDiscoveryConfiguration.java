@@ -17,17 +17,18 @@
 
 package org.apache.shenyu.springboot.starter.client.spring.websocket;
 
+import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shenyu.client.core.constant.ShenyuClientConstants;
 import org.apache.shenyu.client.core.register.ClientDiscoveryConfigRefreshedEventListener;
 import org.apache.shenyu.client.core.register.ClientRegisterConfig;
 import org.apache.shenyu.client.core.register.InstanceRegisterListener;
 import org.apache.shenyu.client.spring.websocket.init.SpringWebSocketClientEventListener;
-import org.apache.shenyu.client.core.dto.DiscoveryUpstreamData;
-import org.apache.shenyu.client.core.enums.PluginEnum;
-import org.apache.shenyu.client.core.register.HttpClientRegisterRepository;
-import org.apache.shenyu.client.core.register.config.ShenyuClientConfig;
-import org.apache.shenyu.client.core.register.config.ShenyuDiscoveryConfig;
+import org.apache.shenyu.common.dto.DiscoveryUpstreamData;
+import org.apache.shenyu.common.enums.PluginEnum;
+import org.apache.shenyu.register.client.http.HttpClientRegisterRepository;
+import org.apache.shenyu.register.common.config.ShenyuClientConfig;
+import org.apache.shenyu.register.common.config.ShenyuDiscoveryConfig;
 import org.apache.shenyu.springboot.starter.client.common.config.ShenyuClientCommonBeanConfiguration;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -41,6 +42,9 @@ import java.util.Objects;
 @Configuration
 @ImportAutoConfiguration(ShenyuClientCommonBeanConfiguration.class)
 public class ShenyuSpringWebSocketDiscoveryConfiguration {
+
+    @Resource
+    private Environment environment;
 
     /**
      * clientDiscoveryConfigRefreshedEventListener.
@@ -67,7 +71,6 @@ public class ShenyuSpringWebSocketDiscoveryConfiguration {
      * @param eventListener         eventListener
      * @param shenyuDiscoveryConfig discoveryConfig
      * @param shenyuClientConfig    shenyuClientConfig
-     * @param environment           environment
      * @return InstanceRegisterListener
      */
     @Bean("websocketInstanceRegisterListener")
@@ -75,8 +78,7 @@ public class ShenyuSpringWebSocketDiscoveryConfiguration {
     @ConditionalOnProperty(prefix = "shenyu.discovery", name = "register", matchIfMissing = false)
     public InstanceRegisterListener instanceRegisterListener(final SpringWebSocketClientEventListener eventListener,
                                                              final ShenyuDiscoveryConfig shenyuDiscoveryConfig,
-                                                             final ShenyuClientConfig shenyuClientConfig,
-                                                             final Environment environment) {
+                                                             final ShenyuClientConfig shenyuClientConfig) {
         DiscoveryUpstreamData discoveryUpstreamData = new DiscoveryUpstreamData();
         discoveryUpstreamData.setProtocol(ShenyuClientConstants.WS);
         discoveryUpstreamData.setStatus(0);

@@ -25,8 +25,8 @@ import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.apache.shenyu.client.core.register.ShenyuClientRegisterRepository;
-import org.apache.shenyu.client.core.register.config.ShenyuRegisterCenterConfig;
+import org.apache.shenyu.register.client.api.ShenyuClientRegisterRepository;
+import org.apache.shenyu.register.common.config.ShenyuRegisterCenterConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -88,12 +88,17 @@ public class ShenyuClientShutdownHook {
                 Field field = clazz.getDeclaredField(props.getProperty("applicationShutdownHooksFieldName", "hooks"));
                 field.setAccessible(true);
                 hooks = (IdentityHashMap<Thread, Thread>) field.get(clazz);
-            } catch (ClassNotFoundException | NoSuchFieldException | IllegalAccessException ex) {
-                LOG.error(ex.getMessage(), ex);
+            } catch (ClassNotFoundException | NoSuchFieldException | IllegalAccessException | RuntimeException ex) {
+                LOG.warn("Failed to access application shutdown hooks, skip delaying other hooks.", ex);
+                return;
+            }
+            if (Objects.isNull(hooks)) {
+                LOG.warn("Application shutdown hooks are null, skip delaying other hooks.");
+                return;
             }
             long s = System.currentTimeMillis();
             while (System.currentTimeMillis() - s < delayOtherHooksExecTime) {
-                for (Iterator<Thread> iterator = Objects.requireNonNull(hooks).keySet().iterator(); iterator.hasNext();) {
+                for (Iterator<Thread> iterator = hooks.keySet().iterator(); iterator.hasNext();) {
                     Thread hook = iterator.next();
                     if (hook.getName().equals(ShutdownHookManager.getHookName())) {
                         continue;

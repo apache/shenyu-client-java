@@ -17,10 +17,10 @@
 
 package org.apache.shenyu.client.springmvc.register;
 
-import org.apache.shenyu.client.core.enums.RpcTypeEnum;
 import org.apache.shenyu.client.core.register.extractor.BaseAnnotationApiBeansExtractor;
 import org.apache.shenyu.client.core.register.extractor.RpcApiBeansExtractor;
 import org.apache.shenyu.client.springmvc.proceeor.extractor.RequestMappingProcessor;
+import org.apache.shenyu.common.enums.RpcTypeEnum;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -29,12 +29,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * It is used to support the extraction of the springMVC interface and convert it to the API Bean protocol.
  */
 public class SpringMvcApiBeansExtractor extends BaseAnnotationApiBeansExtractor implements RpcApiBeansExtractor {
-    
+
     @Override
     public String clientName() {
         return RpcTypeEnum.HTTP.getName();
     }
-    
+
     /**
      * default.
      *
@@ -42,14 +42,14 @@ public class SpringMvcApiBeansExtractor extends BaseAnnotationApiBeansExtractor 
      */
     public static SpringMvcApiBeansExtractor buildDefaultSpringMvcApiBeansExtractor() {
         final SpringMvcApiBeansExtractor extractor = new SpringMvcApiBeansExtractor();
-        
+
         // Annotations supported by class
         extractor.addSupportedApiAnnotations(Controller.class);
         extractor.addSupportedApiAnnotations(RequestMapping.class);
-        
+
         // Annotations supported by the method
         extractor.addSupportedApiDefinitionAnnotations(RequestMapping.class);
-        
+
         extractor.addExtractorProcessor(new RequestMappingProcessor());
         return extractor;
     }

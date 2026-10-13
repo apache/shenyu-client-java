@@ -1,0 +1,528 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.apache.shenyu.register.client.http;
+
+import okhttp3.Headers;
+import org.apache.shenyu.common.constant.Constants;
+import org.apache.shenyu.common.timer.TaskEntity;
+import org.apache.shenyu.common.timer.Timer;
+import org.apache.shenyu.common.timer.TimerTask;
+import org.apache.shenyu.common.timer.WheelTimerFactory;
+import org.apache.shenyu.common.utils.GsonUtils;
+import org.apache.shenyu.register.client.api.FailbackRegistryRepository;
+import org.apache.shenyu.register.client.api.retry.FailureRegistryTask;
+import org.apache.shenyu.register.common.utils.OkHttpTools;
+import org.apache.shenyu.register.client.http.utils.ClientRegisterUtils;
+import org.apache.shenyu.register.client.http.utils.RuntimeUtils;
+import org.apache.shenyu.register.common.config.ShenyuRegisterCenterConfig;
+import org.apache.shenyu.register.common.dto.ApiDocRegisterDTO;
+import org.apache.shenyu.register.common.dto.DiscoveryConfigRegisterDTO;
+import org.apache.shenyu.register.common.dto.InstanceBeatInfoDTO;
+import org.apache.shenyu.register.common.dto.McpToolsRegisterDTO;
+import org.apache.shenyu.register.common.dto.MetaDataRegisterDTO;
+import org.apache.shenyu.register.common.dto.URIRegisterDTO;
+import org.apache.shenyu.register.common.enums.EventType;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.ArgumentCaptor;
+import org.mockito.MockedStatic;
+
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Properties;
+
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
+
+/**
+ * Test cases for {@link HttpClientRegisterRepository}.
+ */
+public final class HttpClientRegisterRepositoryTest {
+
+    private static final String FIRST_SERVER = "http://localhost:9095";
+
+    private static final String SECOND_SERVER = "http://localhost:9096";
+
+    private static final String TOKEN = "test-token";
+
+    private HttpClientRegisterRepository repository;
+
+    @BeforeEach
+    public void setUp() {
+        repository = new HttpClientRegisterRepository(config(FIRST_SERVER));
+    }
+
+    @Test
+    public void persistUriShouldRegisterToEveryServer() {
+        HttpClientRegisterRepository multiServerRepository = new HttpClientRegisterRepository(config(
+                FIRST_SERVER + "," + SECOND_SERVER));
+        URIRegisterDTO uriRegisterDTO = uriRegisterDTO();
+
+        try (MockedStatic<ClientRegisterUtils> registerUtils = mockStatic(ClientRegisterUtils.class);
+             MockedStatic<RuntimeUtils> runtimeUtils = mockStatic(RuntimeUtils.class)) {
+            runtimeUtils.when(() -> RuntimeUtils.listenByOther(anyInt())).thenReturn(false);
+            registerUtils.when(() -> ClientRegisterUtils.doLogin(anyString(), anyString(), anyString()))
+                    .thenReturn(Optional.of(TOKEN));
+
+            multiServerRepository.persistURI(uriRegisterDTO);
+
+            registerUtils.verify(() -> ClientRegisterUtils.doRegister(anyString(),
+                    eq(FIRST_SERVER + Constants.URI_PATH), eq(Constants.URI), eq(TOKEN)));
+            registerUtils.verify(() -> ClientRegisterUtils.doRegister(anyString(),
+                    eq(SECOND_SERVER + Constants.URI_PATH), eq(Constants.URI), eq(TOKEN)));
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {FIRST_SERVER, SECOND_SERVER})
+    public void partialRegistrationFailureMustPropagate(final String failedServer) throws IOException {
+        HttpClientRegisterRepository multiServerRepository = new HttpClientRegisterRepository(config(FIRST_SERVER + "," + SECOND_SERVER));
+        try (MockedStatic<ClientRegisterUtils> registerUtils = mockStatic(ClientRegisterUtils.class);
+                MockedStatic<RuntimeUtils> runtimeUtils = mockStatic(RuntimeUtils.class)) {
+            runtimeUtils.when(() -> RuntimeUtils.listenByOther(anyInt())).thenReturn(false);
+            registerUtils.when(() -> ClientRegisterUtils.doLogin(anyString(), anyString(), anyString())).thenReturn(Optional.of(TOKEN));
+            registerUtils.when(() -> ClientRegisterUtils.doRegister(anyString(), eq(failedServer + Constants.URI_PATH), anyString(), anyString()))
+                    .thenThrow(new IOException("unavailable"));
+            assertThrows(RuntimeException.class, () -> multiServerRepository.doPersistURI(uriRegisterDTO()));
+            for (String server : new String[]{FIRST_SERVER, SECOND_SERVER}) {
+                registerUtils.verify(() -> ClientRegisterUtils.doRegister(anyString(), eq(server + Constants.URI_PATH), eq(Constants.URI), eq(TOKEN)));
+            }
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {FIRST_SERVER, SECOND_SERVER})
+    public void partialHeartbeatFailureMustPropagate(final String failedServer) throws IOException {
+        HttpClientRegisterRepository multiServerRepository = new HttpClientRegisterRepository(config(FIRST_SERVER + "," + SECOND_SERVER));
+        try (MockedStatic<ClientRegisterUtils> registerUtils = mockStatic(ClientRegisterUtils.class);
+                MockedStatic<RuntimeUtils> runtimeUtils = mockStatic(RuntimeUtils.class)) {
+            runtimeUtils.when(() -> RuntimeUtils.listenByOther(anyInt())).thenReturn(false);
+            registerUtils.when(() -> ClientRegisterUtils.doLogin(anyString(), anyString(), anyString())).thenReturn(Optional.of(TOKEN));
+            registerUtils.when(() -> ClientRegisterUtils.doHeartBeat(anyString(), eq(failedServer + Constants.URI_PATH), anyString(), anyString()))
+                    .thenThrow(new IOException("unavailable"));
+            assertThrows(RuntimeException.class, () -> multiServerRepository.sendHeartbeat(uriRegisterDTO()));
+            for (String server : new String[]{FIRST_SERVER, SECOND_SERVER}) {
+                registerUtils.verify(() -> ClientRegisterUtils.doHeartBeat(anyString(), eq(server + Constants.URI_PATH), eq(Constants.HEARTBEAT), eq(TOKEN)));
+            }
+        }
+    }
+
+    @Test
+    public void retainsAllRegistrationFailures() throws IOException {
+        HttpClientRegisterRepository multiServerRepository = new HttpClientRegisterRepository(config(FIRST_SERVER + "," + SECOND_SERVER));
+        try (MockedStatic<ClientRegisterUtils> registerUtils = mockStatic(ClientRegisterUtils.class);
+                MockedStatic<RuntimeUtils> runtimeUtils = mockStatic(RuntimeUtils.class)) {
+            runtimeUtils.when(() -> RuntimeUtils.listenByOther(anyInt())).thenReturn(false);
+            registerUtils.when(() -> ClientRegisterUtils.doLogin(anyString(), anyString(), anyString())).thenReturn(Optional.of(TOKEN));
+            registerUtils.when(() -> ClientRegisterUtils.doRegister(anyString(), anyString(), anyString(), anyString())).thenThrow(new IOException("unavailable"));
+            RuntimeException failure = assertThrows(RuntimeException.class, () -> multiServerRepository.doPersistURI(uriRegisterDTO()));
+            assertEquals(1, failure.getSuppressed().length);
+            assertTrue(failure.getCause() instanceof IOException);
+        }
+    }
+
+    @Test
+    public void persistUriShouldSkipRegistrationWhenPortIsUsedByAnotherProcess() {
+        URIRegisterDTO uriRegisterDTO = uriRegisterDTO();
+
+        try (MockedStatic<ClientRegisterUtils> registerUtils = mockStatic(ClientRegisterUtils.class);
+             MockedStatic<RuntimeUtils> runtimeUtils = mockStatic(RuntimeUtils.class)) {
+            runtimeUtils.when(() -> RuntimeUtils.listenByOther(anyInt())).thenReturn(true);
+
+            repository.doPersistURI(uriRegisterDTO);
+
+            registerUtils.verifyNoInteractions();
+        }
+    }
+
+    @Test
+    public void persistInterfaceApiDocMcpToolsAndDiscoveryShouldUseExpectedPaths() {
+        MetaDataRegisterDTO metaData = metaDataRegisterDTO();
+        ApiDocRegisterDTO apiDocRegisterDTO = ApiDocRegisterDTO.builder()
+                .contextPath("/demo")
+                .apiPath("/hello")
+                .httpMethod(1)
+                .rpcType("http")
+                .build();
+        McpToolsRegisterDTO mcpToolsRegisterDTO = new McpToolsRegisterDTO();
+        mcpToolsRegisterDTO.setMetaDataRegisterDTO(metaData);
+        DiscoveryConfigRegisterDTO discoveryConfigRegisterDTO = DiscoveryConfigRegisterDTO.builder().build();
+
+        try (MockedStatic<ClientRegisterUtils> registerUtils = mockStatic(ClientRegisterUtils.class);
+             MockedStatic<RuntimeUtils> runtimeUtils = mockStatic(RuntimeUtils.class)) {
+            runtimeUtils.when(() -> RuntimeUtils.listenByOther(anyInt())).thenReturn(false);
+            registerUtils.when(() -> ClientRegisterUtils.doLogin(anyString(), anyString(), anyString()))
+                    .thenReturn(Optional.of(TOKEN));
+
+            repository.persistInterface(metaData);
+            repository.persistApiDoc(apiDocRegisterDTO);
+            repository.persistMcpTools(mcpToolsRegisterDTO);
+            repository.doPersistDiscoveryConfig(discoveryConfigRegisterDTO);
+
+            registerUtils.verify(() -> ClientRegisterUtils.doRegister(anyString(),
+                    eq(FIRST_SERVER + Constants.META_PATH), eq(Constants.META_TYPE), eq(TOKEN)));
+            registerUtils.verify(() -> ClientRegisterUtils.doRegister(anyString(),
+                    eq(FIRST_SERVER + Constants.API_DOC_PATH), eq(Constants.API_DOC_TYPE), eq(TOKEN)));
+            registerUtils.verify(() -> ClientRegisterUtils.doRegister(anyString(),
+                    eq(FIRST_SERVER + Constants.MCP_TOOLS_PATH), eq(Constants.MCP_TOOLS_TYPE), eq(TOKEN)));
+            registerUtils.verify(() -> ClientRegisterUtils.doRegister(anyString(),
+                    eq(FIRST_SERVER + Constants.DISCOVERY_CONFIG_PATH), eq(Constants.DISCOVERY_CONFIG_TYPE), eq(TOKEN)));
+        }
+    }
+
+    @Test
+    public void heartbeatAndOfflineShouldSendExpectedRequests() {
+        URIRegisterDTO heartbeatDTO = uriRegisterDTO();
+        URIRegisterDTO offlineDTO = uriRegisterDTO();
+
+        try (MockedStatic<ClientRegisterUtils> registerUtils = mockStatic(ClientRegisterUtils.class);
+             MockedStatic<RuntimeUtils> runtimeUtils = mockStatic(RuntimeUtils.class)) {
+            runtimeUtils.when(() -> RuntimeUtils.listenByOther(anyInt())).thenReturn(false);
+            registerUtils.when(() -> ClientRegisterUtils.doLogin(anyString(), anyString(), anyString()))
+                    .thenReturn(Optional.of(TOKEN));
+
+            repository.sendHeartbeat(heartbeatDTO);
+            repository.offline(offlineDTO);
+
+            registerUtils.verify(() -> ClientRegisterUtils.doHeartBeat(anyString(),
+                    eq(FIRST_SERVER + Constants.URI_PATH), eq(Constants.HEARTBEAT), eq(TOKEN)));
+            registerUtils.verify(() -> ClientRegisterUtils.doUnregister(anyString(),
+                    eq(FIRST_SERVER + Constants.OFFLINE_PATH), eq(TOKEN)));
+        }
+    }
+
+    @Test
+    public void heartbeatShouldSkipWhenPortIsUsedByAnotherProcess() {
+        URIRegisterDTO heartbeatDTO = uriRegisterDTO();
+
+        try (MockedStatic<ClientRegisterUtils> registerUtils = mockStatic(ClientRegisterUtils.class);
+             MockedStatic<RuntimeUtils> runtimeUtils = mockStatic(RuntimeUtils.class)) {
+            runtimeUtils.when(() -> RuntimeUtils.listenByOther(anyInt())).thenReturn(true);
+
+            repository.sendHeartbeat(heartbeatDTO);
+
+            registerUtils.verifyNoInteractions();
+        }
+    }
+
+    @Test
+    public void closeRepositoryShouldUnregisterEveryUriAndApiDoc() {
+        try (MockedStatic<ClientRegisterUtils> registerUtils = mockStatic(ClientRegisterUtils.class);
+             MockedStatic<RuntimeUtils> runtimeUtils = mockStatic(RuntimeUtils.class)) {
+            runtimeUtils.when(() -> RuntimeUtils.listenByOther(anyInt())).thenReturn(false);
+            registerUtils.when(() -> ClientRegisterUtils.doLogin(anyString(), anyString(), anyString()))
+                    .thenReturn(Optional.of(TOKEN));
+
+            URIRegisterDTO firstUri = uriRegisterDTO();
+            URIRegisterDTO secondUri = URIRegisterDTO.builder().appName("demo").rpcType("http")
+                    .host("127.0.0.1").port(18081).build();
+            ApiDocRegisterDTO firstApiDoc = ApiDocRegisterDTO.builder().apiPath("/hello").build();
+            ApiDocRegisterDTO secondApiDoc = ApiDocRegisterDTO.builder().apiPath("/goodbye").build();
+            repository.persistURI(firstUri);
+            repository.persistURI(secondUri);
+            repository.persistApiDoc(firstApiDoc);
+            repository.persistApiDoc(secondApiDoc);
+            repository.closeRepository();
+
+            registerUtils.verify(() -> ClientRegisterUtils.doRegister(anyString(),
+                    eq(FIRST_SERVER + Constants.URI_PATH), eq(Constants.URI), eq(TOKEN)), times(4));
+            registerUtils.verify(() -> ClientRegisterUtils.doRegister(anyString(),
+                    eq(FIRST_SERVER + Constants.API_DOC_PATH), eq(Constants.API_DOC_TYPE), eq(TOKEN)), times(4));
+        }
+    }
+
+    @Test
+    public void repositoriesShouldTrackRegistrationsIndependently() {
+        HttpClientRegisterRepository secondRepository = new HttpClientRegisterRepository(config(FIRST_SERVER));
+        URIRegisterDTO firstUri = uriRegisterDTO();
+        URIRegisterDTO secondUri = URIRegisterDTO.builder().appName("demo").rpcType("http")
+                .host("127.0.0.1").port(18081).build();
+
+        try (MockedStatic<ClientRegisterUtils> registerUtils = mockStatic(ClientRegisterUtils.class);
+             MockedStatic<RuntimeUtils> runtimeUtils = mockStatic(RuntimeUtils.class)) {
+            runtimeUtils.when(() -> RuntimeUtils.listenByOther(anyInt())).thenReturn(false);
+            registerUtils.when(() -> ClientRegisterUtils.doLogin(anyString(), anyString(), anyString()))
+                    .thenReturn(Optional.of(TOKEN));
+            repository.persistURI(firstUri);
+            secondRepository.persistURI(secondUri);
+            registerUtils.clearInvocations();
+
+            repository.closeRepository();
+
+            firstUri.setEventType(EventType.DELETED);
+            registerUtils.verify(() -> ClientRegisterUtils.doRegister(eq(GsonUtils.getInstance().toJson(firstUri)),
+                    eq(FIRST_SERVER + Constants.URI_PATH), eq(Constants.URI), eq(TOKEN)));
+            registerUtils.verify(() -> ClientRegisterUtils.doRegister(eq(GsonUtils.getInstance().toJson(secondUri)),
+                    eq(FIRST_SERVER + Constants.URI_PATH), eq(Constants.URI), eq(TOKEN)), never());
+        }
+    }
+
+    @Test
+    public void doPersistUriShouldThrowWhenEveryServerFails() throws IOException {
+        try (MockedStatic<ClientRegisterUtils> registerUtils = mockStatic(ClientRegisterUtils.class);
+             MockedStatic<RuntimeUtils> runtimeUtils = mockStatic(RuntimeUtils.class)) {
+            runtimeUtils.when(() -> RuntimeUtils.listenByOther(anyInt())).thenReturn(false);
+            registerUtils.when(() -> ClientRegisterUtils.doLogin(anyString(), anyString(), anyString()))
+                    .thenReturn(Optional.of(TOKEN));
+            registerUtils.when(() -> ClientRegisterUtils.doRegister(anyString(), anyString(), anyString(), anyString()))
+                    .thenThrow(new IOException("register failed"));
+
+            RuntimeException exception =
+                    assertThrows(RuntimeException.class, () -> repository.doPersistURI(uriRegisterDTO()));
+
+            assertTrue(exception.getCause() instanceof IOException);
+            assertEquals("register failed", exception.getCause().getMessage());
+        }
+    }
+
+    @Test
+    public void offlineShouldThrowWhenEveryServerFails() throws IOException {
+        try (MockedStatic<ClientRegisterUtils> registerUtils = mockStatic(ClientRegisterUtils.class)) {
+            registerUtils.when(() -> ClientRegisterUtils.doLogin(anyString(), anyString(), anyString()))
+                    .thenReturn(Optional.of(TOKEN));
+            registerUtils.when(() -> ClientRegisterUtils.doUnregister(anyString(), anyString(), anyString()))
+                    .thenThrow(new IOException("unregister failed"));
+
+            RuntimeException exception = assertThrows(RuntimeException.class, () -> repository.offline(uriRegisterDTO()));
+
+            assertTrue(exception.getCause() instanceof IOException);
+            assertEquals("unregister failed", exception.getCause().getMessage());
+        }
+    }
+
+    @Test
+    public void offlineShouldNotThrowWhenOnlyLastServerFails() throws IOException {
+        HttpClientRegisterRepository multiServerRepository = new HttpClientRegisterRepository(config(
+                FIRST_SERVER + "," + SECOND_SERVER));
+        try (MockedStatic<ClientRegisterUtils> registerUtils = mockStatic(ClientRegisterUtils.class)) {
+            registerUtils.when(() -> ClientRegisterUtils.doLogin(anyString(), anyString(), anyString()))
+                    .thenReturn(Optional.of(TOKEN));
+            registerUtils.when(() -> ClientRegisterUtils.doUnregister(anyString(),
+                            eq(SECOND_SERVER + Constants.OFFLINE_PATH), anyString()))
+                    .thenThrow(new IOException("unregister failed"));
+
+            assertDoesNotThrow(() -> multiServerRepository.offline(uriRegisterDTO()));
+
+            registerUtils.verify(() -> ClientRegisterUtils.doUnregister(anyString(),
+                    eq(FIRST_SERVER + Constants.OFFLINE_PATH), eq(TOKEN)));
+            registerUtils.verify(() -> ClientRegisterUtils.doUnregister(anyString(),
+                    eq(SECOND_SERVER + Constants.OFFLINE_PATH), eq(TOKEN)));
+        }
+    }
+
+    @Test
+    public void loginFailureShouldSkipRegistration() {
+        URIRegisterDTO uriRegisterDTO = uriRegisterDTO();
+
+        try (MockedStatic<ClientRegisterUtils> registerUtils = mockStatic(ClientRegisterUtils.class);
+             MockedStatic<RuntimeUtils> runtimeUtils = mockStatic(RuntimeUtils.class)) {
+            runtimeUtils.when(() -> RuntimeUtils.listenByOther(anyInt())).thenReturn(false);
+            registerUtils.when(() -> ClientRegisterUtils.doLogin(anyString(), anyString(), anyString()))
+                    .thenReturn(Optional.empty());
+
+            assertThrows(RuntimeException.class, () -> repository.doPersistURI(uriRegisterDTO));
+            registerUtils.verify(() -> ClientRegisterUtils.doRegister(anyString(),
+                    eq(FIRST_SERVER + Constants.URI_PATH), eq(Constants.URI), eq(TOKEN)), never());
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {FIRST_SERVER, SECOND_SERVER})
+    public void partialInstanceHeartbeatFailureMustPropagate(final String failedServer) throws IOException {
+        HttpClientRegisterRepository multiServerRepository = new HttpClientRegisterRepository(config(FIRST_SERVER + "," + SECOND_SERVER));
+        try (MockedStatic<ClientRegisterUtils> registerUtils = mockStatic(ClientRegisterUtils.class)) {
+            registerUtils.when(() -> ClientRegisterUtils.doLogin(anyString(), anyString(), anyString())).thenReturn(Optional.of(TOKEN));
+            registerUtils.when(() -> ClientRegisterUtils.doHeartBeat(anyString(), eq(failedServer + Constants.BEAT_URI_PATH), anyString(), anyString()))
+                    .thenThrow(new IOException("unavailable"));
+            assertThrows(RuntimeException.class, () -> multiServerRepository.sendHeartbeat(new InstanceBeatInfoDTO()));
+            for (String server : new String[]{FIRST_SERVER, SECOND_SERVER}) {
+                registerUtils.verify(() -> ClientRegisterUtils.doHeartBeat(anyString(), eq(server + Constants.BEAT_URI_PATH), eq(Constants.HEARTBEAT), eq(TOKEN)));
+            }
+        }
+    }
+
+    @Test
+    public void retainsAllHeartbeatFailures() throws IOException {
+        HttpClientRegisterRepository multiServerRepository = new HttpClientRegisterRepository(config(FIRST_SERVER + "," + SECOND_SERVER));
+        try (MockedStatic<ClientRegisterUtils> registerUtils = mockStatic(ClientRegisterUtils.class);
+                MockedStatic<RuntimeUtils> runtimeUtils = mockStatic(RuntimeUtils.class)) {
+            runtimeUtils.when(() -> RuntimeUtils.listenByOther(anyInt())).thenReturn(false);
+            registerUtils.when(() -> ClientRegisterUtils.doLogin(anyString(), anyString(), anyString())).thenReturn(Optional.of(TOKEN));
+            IOException first = new IOException("first unavailable");
+            IOException second = new IOException("second unavailable");
+            registerUtils.when(() -> ClientRegisterUtils.doHeartBeat(anyString(), eq(FIRST_SERVER + Constants.URI_PATH), anyString(), anyString())).thenThrow(first);
+            registerUtils.when(() -> ClientRegisterUtils.doHeartBeat(anyString(), eq(SECOND_SERVER + Constants.URI_PATH), anyString(), anyString())).thenThrow(second);
+            RuntimeException failure = assertThrows(RuntimeException.class, () -> multiServerRepository.sendHeartbeat(uriRegisterDTO()));
+            assertEquals(first, failure.getCause());
+            assertEquals(1, failure.getSuppressed().length);
+            assertEquals(second, failure.getSuppressed()[0]);
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {FIRST_SERVER, SECOND_SERVER})
+    public void responseFailureShouldScheduleRetryAndRetainOtherFailures(final String failedServer) throws IOException {
+        final Timer timer = mock(Timer.class);
+        final OkHttpTools http = mock(OkHttpTools.class);
+        try (MockedStatic<WheelTimerFactory> timers = mockStatic(WheelTimerFactory.class);
+                MockedStatic<OkHttpTools> clients = mockStatic(OkHttpTools.class);
+                MockedStatic<RuntimeUtils> runtime = mockStatic(RuntimeUtils.class)) {
+            timers.when(WheelTimerFactory::getSharedTimer).thenReturn(timer);
+            clients.when(OkHttpTools::getInstance).thenReturn(http);
+            runtime.when(() -> RuntimeUtils.listenByOther(anyInt())).thenReturn(false);
+            when(http.post(anyString(), anyString())).thenReturn("{\"code\":200,\"data\":{\"token\":\"test-token\"}}");
+            when(http.post(anyString(), anyString(), any(Headers.class))).thenReturn(Constants.SUCCESS);
+            when(http.post(eq(failedServer + Constants.URI_PATH), anyString(), any(Headers.class)))
+                    .thenReturn("failure", "failure", Constants.SUCCESS);
+            final HttpClientRegisterRepository actual = new HttpClientRegisterRepository(config(FIRST_SERVER + "," + SECOND_SERVER));
+
+            actual.persistURI(uriRegisterDTO());
+
+            final Map<String, ?> failures = failureMap(actual);
+            assertEquals(1, failures.size());
+            final String uriKey = failures.keySet().iterator().next();
+            ArgumentCaptor<TimerTask> scheduled = ArgumentCaptor.forClass(TimerTask.class);
+            verify(timer).add(scheduled.capture());
+            final FailureRegistryTask task = (FailureRegistryTask) scheduled.getValue();
+
+            when(http.post(eq(FIRST_SERVER + Constants.META_PATH), anyString(), any(Headers.class))).thenReturn("failure");
+            actual.persistInterface(metaDataRegisterDTO());
+            assertEquals(2, failures.size());
+            TaskEntity entity = mock(TaskEntity.class);
+            when(entity.getTimer()).thenReturn(timer);
+            when(entity.getTimerTask()).thenReturn(task);
+
+            task.run(entity);
+            assertEquals(2, failures.size());
+            assertTrue(failures.containsKey(uriKey));
+            task.run(entity);
+            assertEquals(1, failures.size());
+            assertFalse(failures.containsKey(uriKey));
+            for (String server : new String[]{FIRST_SERVER, SECOND_SERVER}) {
+                verify(http, times(3)).post(eq(server + Constants.URI_PATH), anyString(), any(Headers.class));
+            }
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {FIRST_SERVER, SECOND_SERVER})
+    public void responseHeartbeatFailureShouldPropagateWithoutRegisterRetry(final String failedServer) throws IOException {
+        final Timer timer = mock(Timer.class);
+        final OkHttpTools http = mock(OkHttpTools.class);
+        try (MockedStatic<WheelTimerFactory> timers = mockStatic(WheelTimerFactory.class);
+                MockedStatic<OkHttpTools> clients = mockStatic(OkHttpTools.class);
+                MockedStatic<RuntimeUtils> runtime = mockStatic(RuntimeUtils.class)) {
+            timers.when(WheelTimerFactory::getSharedTimer).thenReturn(timer);
+            clients.when(OkHttpTools::getInstance).thenReturn(http);
+            runtime.when(() -> RuntimeUtils.listenByOther(anyInt())).thenReturn(false);
+            when(http.post(anyString(), anyString())).thenReturn("{\"code\":200,\"data\":{\"token\":\"test-token\"}}");
+            when(http.post(anyString(), anyString(), any(Headers.class))).thenReturn(Constants.SUCCESS);
+            when(http.post(eq(failedServer + Constants.URI_PATH), anyString(), any(Headers.class))).thenReturn("failure");
+            HttpClientRegisterRepository actual = new HttpClientRegisterRepository(config(FIRST_SERVER + "," + SECOND_SERVER));
+
+            RuntimeException failure = assertThrows(RuntimeException.class, () -> actual.sendHeartbeat(uriRegisterDTO()));
+
+            assertTrue(failure.getCause() instanceof IOException);
+            assertTrue(failureMap(actual).isEmpty());
+            verifyNoInteractions(timer);
+            for (String server : new String[]{FIRST_SERVER, SECOND_SERVER}) {
+                verify(http).post(eq(server + Constants.URI_PATH), anyString(), any(Headers.class));
+            }
+        }
+    }
+
+    @Test
+    public void responseUnregisterFailureShouldKeepAnyServerSuccessPolicy() throws IOException {
+        final Timer timer = mock(Timer.class);
+        final OkHttpTools http = mock(OkHttpTools.class);
+        try (MockedStatic<WheelTimerFactory> timers = mockStatic(WheelTimerFactory.class);
+                MockedStatic<OkHttpTools> clients = mockStatic(OkHttpTools.class)) {
+            timers.when(WheelTimerFactory::getSharedTimer).thenReturn(timer);
+            clients.when(OkHttpTools::getInstance).thenReturn(http);
+            when(http.post(anyString(), anyString())).thenReturn("{\"code\":200,\"data\":{\"token\":\"test-token\"}}");
+            when(http.post(anyString(), anyString(), any(Headers.class))).thenReturn(Constants.SUCCESS);
+            when(http.post(eq(FIRST_SERVER + Constants.OFFLINE_PATH), anyString(), any(Headers.class))).thenReturn("failure");
+            HttpClientRegisterRepository actual = new HttpClientRegisterRepository(config(FIRST_SERVER + "," + SECOND_SERVER));
+
+            assertDoesNotThrow(() -> actual.offline(uriRegisterDTO()));
+            when(http.post(eq(SECOND_SERVER + Constants.OFFLINE_PATH), anyString(), any(Headers.class))).thenReturn("failure");
+            assertThrows(RuntimeException.class, () -> actual.offline(uriRegisterDTO()));
+            assertTrue(failureMap(actual).isEmpty());
+            verifyNoInteractions(timer);
+            for (String server : new String[]{FIRST_SERVER, SECOND_SERVER}) {
+                verify(http, times(2)).post(eq(server + Constants.OFFLINE_PATH), anyString(), any(Headers.class));
+            }
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private Map<String, ?> failureMap(final HttpClientRegisterRepository actual) {
+        try {
+            Field field = FailbackRegistryRepository.class.getDeclaredField("concurrentHashMap");
+            field.setAccessible(true);
+            return (Map<String, ?>) field.get(actual);
+        } catch (ReflectiveOperationException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    private ShenyuRegisterCenterConfig config(final String serverLists) {
+        Properties props = new Properties();
+        props.setProperty(Constants.USER_NAME, "admin");
+        props.setProperty(Constants.PASS_WORD, "123456");
+        return new ShenyuRegisterCenterConfig("http", serverLists, props);
+    }
+
+    private URIRegisterDTO uriRegisterDTO() {
+        return URIRegisterDTO.builder()
+                .appName("demo")
+                .rpcType("http")
+                .host("127.0.0.1")
+                .port(18080)
+                .build();
+    }
+
+    private MetaDataRegisterDTO metaDataRegisterDTO() {
+        MetaDataRegisterDTO metaDataRegisterDTO = new MetaDataRegisterDTO();
+        metaDataRegisterDTO.setAppName("demo");
+        metaDataRegisterDTO.setRpcType("http");
+        metaDataRegisterDTO.setHost("127.0.0.1");
+        metaDataRegisterDTO.setPort(18080);
+        metaDataRegisterDTO.setPath("/demo");
+        return metaDataRegisterDTO;
+    }
+
+}

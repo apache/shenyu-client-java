@@ -18,8 +18,8 @@
 package org.apache.shenyu.client.core.utils;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shenyu.client.core.enums.RpcTypeEnum;
 import org.apache.shenyu.client.core.register.ApiBean;
+import org.apache.shenyu.common.enums.RpcTypeEnum;
 
 import java.util.Objects;
 
@@ -27,11 +27,11 @@ import java.util.Objects;
  * ApiBeanUtil.
  */
 public final class ApiBeanUtil {
-    
+
     private ApiBeanUtil() {
-    
+
     }
-    
+
     /**
      * get rpc type.
      *
@@ -50,7 +50,7 @@ public final class ApiBeanUtil {
         }
         return rpcType;
     }
-    
+
     /**
      * get rpc type.
      *
@@ -69,5 +69,5 @@ public final class ApiBeanUtil {
         }
         return rpcType;
     }
-    
+
 }

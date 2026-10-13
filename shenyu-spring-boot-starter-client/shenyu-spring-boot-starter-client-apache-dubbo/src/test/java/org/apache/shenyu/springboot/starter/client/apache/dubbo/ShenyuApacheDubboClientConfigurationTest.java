@@ -18,7 +18,7 @@
 package org.apache.shenyu.springboot.starter.client.apache.dubbo;
 
 import org.apache.shenyu.client.apache.dubbo.ApacheDubboServiceBeanListener;
-import org.apache.shenyu.client.core.utils.RegisterUtils;
+import org.apache.shenyu.register.client.http.utils.ClientRegisterUtils;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
@@ -43,8 +43,8 @@ public class ShenyuApacheDubboClientConfigurationTest {
 
     @Test
     public void testShenyuApacheDubboClientConfiguration() {
-        MockedStatic<RegisterUtils> registerUtilsMockedStatic = mockStatic(RegisterUtils.class);
-        registerUtilsMockedStatic.when(() -> RegisterUtils.doLogin(any(), any(), any())).thenReturn(Optional.ofNullable("token"));
+        MockedStatic<ClientRegisterUtils> registerUtilsMockedStatic = mockStatic(ClientRegisterUtils.class);
+        registerUtilsMockedStatic.when(() -> ClientRegisterUtils.doLogin(any(), any(), any())).thenReturn(Optional.ofNullable("token"));
         new ApplicationContextRunner()
             .withConfiguration(AutoConfigurations.of(ShenyuApacheDubboClientConfiguration.class))
             .withBean(ShenyuApacheDubboClientConfigurationTest.class)

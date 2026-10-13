@@ -18,11 +18,11 @@
 package org.apache.shenyu.client.core.register.registrar;
 
 import org.apache.shenyu.client.core.disruptor.ShenyuClientRegisterEventPublisher;
-import org.apache.shenyu.client.core.dto.URIRegisterDTO;
-import org.apache.shenyu.client.core.enums.EventType;
 import org.apache.shenyu.client.core.register.ApiBean;
 import org.apache.shenyu.client.core.register.ClientRegisterConfig;
 import org.apache.shenyu.client.core.utils.ApiBeanUtil;
+import org.apache.shenyu.register.common.dto.URIRegisterDTO;
+import org.apache.shenyu.register.common.enums.EventType;
 
 /**
  * UriApiRegistrarImplImpl.
@@ -30,18 +30,23 @@ import org.apache.shenyu.client.core.utils.ApiBeanUtil;
  * @see URIRegisterDTO
  */
 public class UriApiRegistrarImplImpl extends BaseApiRegistrarImpl {
-    
+
     private final ShenyuClientRegisterEventPublisher publisher = ShenyuClientRegisterEventPublisher.getInstance();
-    
+
     private final ClientRegisterConfig clientRegisterConfig;
-    
+
     public UriApiRegistrarImplImpl(final ClientRegisterConfig clientRegisterConfig) {
         this.clientRegisterConfig = clientRegisterConfig;
     }
-    
+
     @Override
     protected void doRegisterApi(final ApiBean.ApiDefinition api) {
+        clientRegisterConfig.getNamespace().forEach(namespaceId -> registerApi(api, namespaceId));
+    }
+
+    private void registerApi(final ApiBean.ApiDefinition api, final String namespaceId) {
         final URIRegisterDTO uriRegisterDTO = URIRegisterDTO.builder()
+                .namespaceId(namespaceId)
                 .contextPath(clientRegisterConfig.getContextPath())
                 .appName(clientRegisterConfig.getAppName())
                 .eventType(EventType.REGISTER)
@@ -51,10 +56,15 @@ public class UriApiRegistrarImplImpl extends BaseApiRegistrarImpl {
                 .build();
         publisher.publishEvent(uriRegisterDTO);
     }
-    
+
     @Override
     protected void doRegisterBean(final ApiBean apiBean) {
+        clientRegisterConfig.getNamespace().forEach(namespaceId -> registerBean(apiBean, namespaceId));
+    }
+
+    private void registerBean(final ApiBean apiBean, final String namespaceId) {
         final URIRegisterDTO uriRegisterDTO = URIRegisterDTO.builder()
+                .namespaceId(namespaceId)
                 .contextPath(clientRegisterConfig.getContextPath())
                 .appName(clientRegisterConfig.getAppName())
                 .eventType(EventType.REGISTER)
@@ -64,13 +74,13 @@ public class UriApiRegistrarImplImpl extends BaseApiRegistrarImpl {
                 .build();
         publisher.publishEvent(uriRegisterDTO);
     }
-    
+
     private static String getRpcType(final ApiBean.ApiDefinition api) {
         return ApiBeanUtil.getRpcType(api);
     }
-    
+
     private static String getRpcType(final ApiBean api) {
         return ApiBeanUtil.getRpcType(api);
     }
-    
+
 }

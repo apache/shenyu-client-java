@@ -50,13 +50,13 @@
         <property name="format" value="\.printStackTrace"/>
         <property name="message" value="Prohibit invoking .printStackTrace in source code ! Please use org.slf4j.Logger and write log instead."/>
     </module>
-    
+
     <module name="LineLength">
         <property name="max" value="200"/>
         <property name="fileExtensions" value="java"/>
         <property name="ignorePattern" value="^package.*|^import.*|a href|href|http://|https://|ftp://"/>
     </module>
-    
+
     <module name="TreeWalker">
 
         <!-- Naming Conventions -->
@@ -93,7 +93,7 @@
             <property name="tokens" value="METHOD_DEF" />
             <property name="max" value="80" />
         </module>
-        
+
         <module name="OuterTypeNumber"/>
 
         <!-- Whitespace -->
@@ -211,7 +211,7 @@
         <module name="SimplifyBooleanExpression"/>
         <module name="SimplifyBooleanReturn"/>
         <module name="StringLiteralEquality"/>
-        <module name="UnnecessaryParentheses"/>
+<!--        <module name="UnnecessaryParentheses"/>-->
         <module name="VariableDeclarationUsageDistance"/>
         <!--Checks that classes that override equals() also override hashCode()-->
         <module name="EqualsHashCode"/>

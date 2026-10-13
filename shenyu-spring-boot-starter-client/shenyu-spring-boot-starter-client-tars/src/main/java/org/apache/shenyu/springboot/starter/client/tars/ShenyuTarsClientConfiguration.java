@@ -18,9 +18,9 @@
 package org.apache.shenyu.springboot.starter.client.tars;
 
 import org.apache.shenyu.client.tars.TarsServiceBeanEventListener;
-import org.apache.shenyu.client.core.utils.VersionUtils;
-import org.apache.shenyu.client.core.register.ShenyuClientRegisterRepository;
-import org.apache.shenyu.client.core.register.config.ShenyuClientConfig;
+import org.apache.shenyu.common.utils.VersionUtils;
+import org.apache.shenyu.register.client.api.ShenyuClientRegisterRepository;
+import org.apache.shenyu.register.common.config.ShenyuClientConfig;
 import org.apache.shenyu.springboot.starter.client.common.config.ShenyuClientCommonBeanConfiguration;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

@@ -18,11 +18,11 @@
 package org.apache.shenyu.client.core.disruptor.executor;
 
 import com.google.common.collect.Lists;
-import org.apache.shenyu.client.core.register.subsriber.AbstractQueueConsumerFactory;
-import org.apache.shenyu.client.core.register.subsriber.ExecutorTypeSubscriber;
-import org.apache.shenyu.client.core.type.DataType;
-import org.apache.shenyu.client.core.type.DataTypeParent;
 import org.apache.shenyu.disruptor.consumer.QueueConsumerExecutor;
+import org.apache.shenyu.register.common.subsriber.AbstractQueueConsumerFactory;
+import org.apache.shenyu.register.common.subsriber.ExecutorTypeSubscriber;
+import org.apache.shenyu.register.common.type.DataType;
+import org.apache.shenyu.register.common.type.DataTypeParent;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -32,9 +32,9 @@ import java.util.stream.Collectors;
  * The type Consumer executor.
  */
 public final class RegisterClientConsumerExecutor<T extends DataTypeParent> extends QueueConsumerExecutor<T> {
-    
+
     private final Map<DataType, ExecutorTypeSubscriber<T>> subscribers;
-    
+
     private RegisterClientConsumerExecutor(final Map<DataType, ExecutorTypeSubscriber<T>> executorSubscriberMap) {
         this.subscribers = new EnumMap<>(executorSubscriberMap);
     }
@@ -44,12 +44,12 @@ public final class RegisterClientConsumerExecutor<T extends DataTypeParent> exte
         final T data = getData();
         subscribers.get(data.getType()).executor(Lists.newArrayList(data));
     }
-    
+
     /**
      * The type Register client executor factory.
      */
     public static class RegisterClientExecutorFactory<T extends DataTypeParent> extends AbstractQueueConsumerFactory<T> {
-        
+
         @Override
         public RegisterClientConsumerExecutor<T> create() {
             Map<DataType, ExecutorTypeSubscriber<T>> map = getSubscribers()

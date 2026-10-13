@@ -18,6 +18,7 @@
 package org.apache.shenyu.client.core.utils;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.shenyu.common.exception.ShenyuException;
 import org.springframework.beans.factory.BeanFactory;
 
 import javax.management.MBeanServer;
@@ -43,7 +44,7 @@ public class PortUtils {
      *
      * @param beanFactory beanFactory
      * @return port number
-     * @throws RuntimeException when failed to get port
+     * @throws ShenyuException when can not find port
      */
     @SuppressWarnings("all")
     public static int findPort(final BeanFactory beanFactory) {
@@ -61,7 +62,7 @@ public class PortUtils {
             //works for springmvc with external tomcat
             return PortUtils.getPort();
         } catch (Exception e) {
-            throw new RuntimeException("can not find port automatically ! ");
+            throw new ShenyuException("can not find port automatically ! ");
         }
     }
 

@@ -17,16 +17,17 @@
 
 package org.apache.shenyu.springboot.starter.client.springmvc;
 
+import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shenyu.client.core.constant.ShenyuClientConstants;
 import org.apache.shenyu.client.core.register.ClientDiscoveryConfigRefreshedEventListener;
 import org.apache.shenyu.client.core.register.ClientRegisterConfig;
 import org.apache.shenyu.client.core.register.InstanceRegisterListener;
-import org.apache.shenyu.client.core.dto.DiscoveryUpstreamData;
-import org.apache.shenyu.client.core.enums.PluginEnum;
-import org.apache.shenyu.client.core.register.HttpClientRegisterRepository;
-import org.apache.shenyu.client.core.register.config.ShenyuClientConfig;
-import org.apache.shenyu.client.core.register.config.ShenyuDiscoveryConfig;
+import org.apache.shenyu.common.dto.DiscoveryUpstreamData;
+import org.apache.shenyu.common.enums.PluginEnum;
+import org.apache.shenyu.register.client.http.HttpClientRegisterRepository;
+import org.apache.shenyu.register.common.config.ShenyuClientConfig;
+import org.apache.shenyu.register.common.config.ShenyuDiscoveryConfig;
 import org.apache.shenyu.springboot.starter.client.common.config.ShenyuClientCommonBeanConfiguration;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -43,6 +44,9 @@ import java.util.Optional;
 @ConditionalOnBean(ClientRegisterConfig.class)
 @ImportAutoConfiguration(ShenyuClientCommonBeanConfiguration.class)
 public class ShenyuSpringMvcDiscoveryConfiguration {
+
+    @Resource
+    private Environment environment;
 
     /**
      * clientDiscoveryConfigRefreshedEventListener Bean.
@@ -69,7 +73,6 @@ public class ShenyuSpringMvcDiscoveryConfiguration {
      * @param clientRegisterConfig  clientRegisterConfig
      * @param shenyuDiscoveryConfig shenyuDiscoveryConfig
      * @param shenyuClientConfig    shenyuClientConfig
-     * @param environment           environment
      * @return InstanceRegisterListener
      */
     @Bean("springmvcInstanceRegisterListener")
@@ -78,8 +81,7 @@ public class ShenyuSpringMvcDiscoveryConfiguration {
     @Primary
     public InstanceRegisterListener instanceRegisterListener(final ClientRegisterConfig clientRegisterConfig,
                                                              final ShenyuDiscoveryConfig shenyuDiscoveryConfig,
-                                                             final ShenyuClientConfig shenyuClientConfig,
-                                                             final Environment environment) {
+                                                             final ShenyuClientConfig shenyuClientConfig) {
         DiscoveryUpstreamData discoveryUpstreamData = new DiscoveryUpstreamData();
         discoveryUpstreamData.setUrl(clientRegisterConfig.getHost() + ":" + clientRegisterConfig.getPort());
         discoveryUpstreamData.setStatus(0);

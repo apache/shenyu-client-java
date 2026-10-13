@@ -17,32 +17,31 @@
 
 package org.apache.shenyu.client.core.client;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.shenyu.client.apidocs.annotations.ApiDoc;
 import org.apache.shenyu.client.apidocs.annotations.ApiModule;
-import org.apache.shenyu.client.core.constant.Constants;
 import org.apache.shenyu.client.core.constant.ShenyuClientConstants;
 import org.apache.shenyu.client.core.disruptor.ShenyuClientRegisterEventPublisher;
-import org.apache.shenyu.client.core.dto.ApiDocRegisterDTO;
-import org.apache.shenyu.client.core.dto.MetaDataRegisterDTO;
-import org.apache.shenyu.client.core.dto.URIRegisterDTO;
-import org.apache.shenyu.client.core.enums.ApiHttpMethodEnum;
-import org.apache.shenyu.client.core.enums.ApiSourceEnum;
-import org.apache.shenyu.client.core.enums.ApiStateEnum;
-import org.apache.shenyu.client.core.enums.EventType;
-import org.apache.shenyu.client.core.enums.RpcTypeEnum;
 import org.apache.shenyu.client.core.exception.ShenyuClientIllegalArgumentException;
-import org.apache.shenyu.client.core.register.ShenyuClientRegisterRepository;
-import org.apache.shenyu.client.core.register.config.ShenyuClientConfig;
-import org.apache.shenyu.client.core.register.config.ShenyuClientConfig.ClientPropertiesConfig;
-import org.apache.shenyu.client.core.utils.GsonUtils;
-import org.apache.shenyu.client.core.utils.IpUtils;
 import org.apache.shenyu.client.core.utils.OpenApiUtils;
-import org.apache.shenyu.client.core.utils.UriUtils;
+import org.apache.shenyu.common.constant.Constants;
+import org.apache.shenyu.common.enums.ApiHttpMethodEnum;
+import org.apache.shenyu.common.enums.ApiSourceEnum;
+import org.apache.shenyu.common.enums.ApiStateEnum;
+import org.apache.shenyu.common.enums.RpcTypeEnum;
+import org.apache.shenyu.common.utils.GsonUtils;
+import org.apache.shenyu.common.utils.IpUtils;
+import org.apache.shenyu.common.utils.UriUtils;
+import org.apache.shenyu.register.client.api.ShenyuClientRegisterRepository;
+import org.apache.shenyu.register.common.config.ShenyuClientConfig;
+import org.apache.shenyu.register.common.config.ShenyuClientConfig.ClientPropertiesConfig;
+import org.apache.shenyu.register.common.dto.ApiDocRegisterDTO;
+import org.apache.shenyu.register.common.dto.MetaDataRegisterDTO;
+import org.apache.shenyu.register.common.dto.URIRegisterDTO;
+import org.apache.shenyu.register.common.enums.EventType;
 import org.javatuples.Sextet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -147,7 +146,7 @@ public abstract class AbstractContextRefreshedEventListener<T, A extends Annotat
         if (MapUtils.isEmpty(beans)) {
             return;
         }
-        if (!registered.compareAndSet(false, true)) {
+        if (!markRegistered()) {
             return;
         }
         String discoveryMode = context.getEnvironment()
@@ -155,7 +154,12 @@ public abstract class AbstractContextRefreshedEventListener<T, A extends Annotat
         boolean isDiscoveryLocalMode = ShenyuClientConstants.DISCOVERY_LOCAL_MODE.equals(discoveryMode);
         if (isDiscoveryLocalMode) {
             List<String> namespaceIds = this.getNamespace();
-            namespaceIds.forEach(namespaceId -> publisher.publishEvent(buildURIRegisterDTO(context, beans, namespaceId)));
+            namespaceIds.forEach(namespaceId -> {
+                URIRegisterDTO uriRegisterDTO = buildURIRegisterDTO(context, beans, namespaceId);
+                if (Objects.nonNull(uriRegisterDTO)) {
+                    publisher.publishEvent(uriRegisterDTO);
+                }
+            });
         }
         beans.forEach(this::handle);
         Map<String, Object> apiModules = context.getBeansWithAnnotation(ApiModule.class);
@@ -194,10 +198,7 @@ public abstract class AbstractContextRefreshedEventListener<T, A extends Annotat
             return Collections.emptyList();
         }
         Class<?> clazz = AopUtils.isAopProxy(bean) ? AopUtils.getTargetClass(bean) : bean.getClass();
-        String superPath = buildApiSuperPath(clazz, AnnotatedElementUtils.findMergedAnnotation(clazz, getAnnotationType()));
-        if (superPath.contains("*")) {
-            superPath = superPath.substring(0, superPath.lastIndexOf("/"));
-        }
+        List<String> superPaths = buildApiSuperPaths(clazz, AnnotatedElementUtils.findMergedAnnotation(clazz, getAnnotationType()));
         Annotation annotation = AnnotatedElementUtils.findMergedAnnotation(clazz, getAnnotationType());
         if (Objects.isNull(annotation)) {
             return Lists.newArrayList();
@@ -209,30 +210,33 @@ public abstract class AbstractContextRefreshedEventListener<T, A extends Annotat
         String contextPath = getContextPath();
         String[] value0 = sextet.getValue0();
         List<ApiDocRegisterDTO> list = Lists.newArrayList();
-        for (String value : value0) {
-            String apiPath = pathJoin(contextPath, superPath, value);
-            ApiHttpMethodEnum[] value3 = sextet.getValue3();
-            for (ApiHttpMethodEnum apiHttpMethodEnum : value3) {
-                String documentJson = buildDocumentJson(pairs.getRight(), apiPath, method);
-                String extJson = buildExtJson(method);
-                ApiDocRegisterDTO build = ApiDocRegisterDTO.builder()
-                        .consume(sextet.getValue1())
-                        .produce(sextet.getValue2())
-                        .httpMethod(apiHttpMethodEnum.getValue())
-                        .contextPath(contextPath)
-                        .ext(extJson)
-                        .document(documentJson)
-                        .rpcType(sextet.getValue4().getName())
-                        .version(sextet.getValue5())
-                        .apiDesc(pairs.getLeft())
-                        .tags(pairs.getRight())
-                        .apiPath(apiPath)
-                        .apiSource(ApiSourceEnum.ANNOTATION_GENERATION.getValue())
-                        .state(ApiStateEnum.UNPUBLISHED.getState())
-                        .apiOwner("admin")
-                        .eventType(EventType.REGISTER)
-                        .build();
-                list.add(build);
+        for (String rawPath : superPaths) {
+            String superPath = rawPath.contains("*") ? rawPath.substring(0, rawPath.lastIndexOf("/")) : rawPath;
+            for (String value : value0) {
+                String apiPath = pathJoin(contextPath, superPath, value);
+                ApiHttpMethodEnum[] value3 = sextet.getValue3();
+                for (ApiHttpMethodEnum apiHttpMethodEnum : value3) {
+                    String documentJson = buildDocumentJson(pairs.getRight(), apiPath, method, sextet.getValue4());
+                    String extJson = buildExtJson(method);
+                    ApiDocRegisterDTO build = ApiDocRegisterDTO.builder()
+                            .consume(sextet.getValue1())
+                            .produce(sextet.getValue2())
+                            .httpMethod(apiHttpMethodEnum.getValue())
+                            .contextPath(contextPath)
+                            .ext(extJson)
+                            .document(documentJson)
+                            .rpcType(sextet.getValue4().getName())
+                            .version(sextet.getValue5())
+                            .apiDesc(pairs.getLeft())
+                            .tags(pairs.getRight())
+                            .apiPath(apiPath)
+                            .apiSource(ApiSourceEnum.ANNOTATION_GENERATION.getValue())
+                            .state(ApiStateEnum.UNPUBLISHED.getState())
+                            .apiOwner("admin")
+                            .eventType(EventType.REGISTER)
+                            .build();
+                    list.add(build);
+                }
             }
         }
         return list;
@@ -258,15 +262,8 @@ public abstract class AbstractContextRefreshedEventListener<T, A extends Annotat
         return ext;
     }
 
-    private String buildDocumentJson(final List<String> tags, final String path, final Method method) {
-        Map<String, Object> documentMap = ImmutableMap.<String, Object>builder()
-                .put("tags", tags)
-                .put("operationId", path)
-                .put("parameters", OpenApiUtils.generateDocumentParameters(path, method))
-                .put("responses", OpenApiUtils.generateDocumentResponse(path))
-                .put("responseType", Collections.singletonList(OpenApiUtils.parseReturnType(method)))
-                .build();
-        return GsonUtils.getInstance().toJson(documentMap);
+    private String buildDocumentJson(final List<String> tags, final String path, final Method method, final RpcTypeEnum rpcTypeEnum) {
+        return OpenApiUtils.buildDocumentJson(tags, path, method, rpcTypeEnum);
     }
 
     protected abstract Sextet<String[], String, String, ApiHttpMethodEnum[], RpcTypeEnum, String> buildApiDocSextet(Method method, Annotation annotation, Map<String, T> beans);
@@ -277,7 +274,7 @@ public abstract class AbstractContextRefreshedEventListener<T, A extends Annotat
     protected abstract URIRegisterDTO buildURIRegisterDTO(ApplicationContext context,
                                                           Map<String, T> beans,
                                                           String namespaceId);
-    
+
     protected abstract String getClientName();
 
     protected void handle(final String beanName, final T bean) {
@@ -305,6 +302,11 @@ public abstract class AbstractContextRefreshedEventListener<T, A extends Annotat
 
     protected abstract String buildApiSuperPath(Class<?> clazz,
                                                 @Nullable A beanShenyuClient);
+
+    protected List<String> buildApiSuperPaths(final Class<?> clazz,
+                                              @Nullable final A beanShenyuClient) {
+        return Collections.singletonList(buildApiSuperPath(clazz, beanShenyuClient));
+    }
 
     protected void handleClass(final Class<?> clazz,
                                final T bean,
@@ -351,7 +353,7 @@ public abstract class AbstractContextRefreshedEventListener<T, A extends Annotat
         }
         return result.toString();
     }
-    
+
     protected List<String> getNamespace() {
         return namespace;
     }
@@ -370,6 +372,15 @@ public abstract class AbstractContextRefreshedEventListener<T, A extends Annotat
      */
     public ShenyuClientRegisterEventPublisher getPublisher() {
         return publisher;
+    }
+
+    /**
+     * Mark the listener as registered once.
+     *
+     * @return true when this invocation acquires the registration gate
+     */
+    protected boolean markRegistered() {
+        return registered.compareAndSet(false, true);
     }
 
     /**

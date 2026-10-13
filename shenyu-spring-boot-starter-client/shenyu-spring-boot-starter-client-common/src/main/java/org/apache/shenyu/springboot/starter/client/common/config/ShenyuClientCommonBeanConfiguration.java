@@ -18,11 +18,10 @@
 package org.apache.shenyu.springboot.starter.client.common.config;
 
 import org.apache.shenyu.client.core.register.ShenyuClientRegisterRepositoryFactory;
-import org.apache.shenyu.client.core.config.ShenyuConfig;
-import org.apache.shenyu.client.core.register.ShenyuClientRegisterRepository;
-import org.apache.shenyu.client.core.register.config.ShenyuClientConfig;
-import org.apache.shenyu.client.core.register.config.ShenyuDiscoveryConfig;
-import org.apache.shenyu.client.core.register.config.ShenyuRegisterCenterConfig;
+import org.apache.shenyu.register.client.api.ShenyuClientRegisterRepository;
+import org.apache.shenyu.register.common.config.ShenyuClientConfig;
+import org.apache.shenyu.register.common.config.ShenyuDiscoveryConfig;
+import org.apache.shenyu.register.common.config.ShenyuRegisterCenterConfig;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -66,17 +65,6 @@ public class ShenyuClientCommonBeanConfiguration {
     @ConfigurationProperties(prefix = "shenyu")
     public ShenyuClientConfig shenyuClientConfig() {
         return new ShenyuClientConfig();
-    }
-
-    /**
-     * Shenyu config.
-     *
-     * @return the shenyu config
-     */
-    @Bean
-    @ConfigurationProperties(prefix = "shenyu")
-    public ShenyuConfig shenyuConfig() {
-        return new ShenyuConfig();
     }
 
     /**

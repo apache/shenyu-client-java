@@ -18,7 +18,7 @@
 package org.apache.shenyu.springboot.starter.client.sofa;
 
 import org.apache.shenyu.client.sofa.SofaServiceEventListener;
-import org.apache.shenyu.client.core.utils.RegisterUtils;
+import org.apache.shenyu.register.client.http.utils.ClientRegisterUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
@@ -63,8 +63,8 @@ public class ShenyuSofaClientConfigurationTest {
 
     @Test
     public void testSofaServiceEventListener() {
-        MockedStatic<RegisterUtils> registerUtilsMockedStatic = mockStatic(RegisterUtils.class);
-        registerUtilsMockedStatic.when(() -> RegisterUtils.doLogin(any(), any(), any())).thenReturn(Optional.ofNullable("token"));
+        MockedStatic<ClientRegisterUtils> registerUtilsMockedStatic = mockStatic(ClientRegisterUtils.class);
+        registerUtilsMockedStatic.when(() -> ClientRegisterUtils.doLogin(any(), any(), any())).thenReturn(Optional.ofNullable("token"));
         applicationContextRunner.run(context -> {
             SofaServiceEventListener eventListener = context.getBean("sofaServiceEventListener", SofaServiceEventListener.class);
             assertNotNull(eventListener);

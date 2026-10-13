@@ -18,6 +18,7 @@
 package org.apache.shenyu.client.spring.websocket.init;
 
 import org.apache.shenyu.client.spring.websocket.annotation.ShenyuServerEndpoint;
+import org.apache.shenyu.common.exception.ShenyuException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,9 +28,9 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.socket.server.standard.SpringConfigurator;
 
-import javax.websocket.DeploymentException;
-import javax.websocket.server.ServerContainer;
-import javax.websocket.server.ServerEndpointConfig;
+import jakarta.websocket.DeploymentException;
+import jakarta.websocket.server.ServerContainer;
+import jakarta.websocket.server.ServerEndpointConfig;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -110,7 +111,7 @@ public class ShenyuServerEndpointerExporterTest {
      */
     @Test
     public void registerEndpointMissingAnnotationTest() {
-        assertThrows(RuntimeException.class, () -> exporter.registerEndpoint(pojo.getClass()));
+        assertThrows(ShenyuException.class, () -> exporter.registerEndpoint(pojo.getClass()));
         verifyNoInteractions(serverContainer);
     }
 

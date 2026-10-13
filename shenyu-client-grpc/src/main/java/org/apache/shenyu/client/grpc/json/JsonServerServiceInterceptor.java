@@ -28,7 +28,8 @@ import io.grpc.ServerServiceDefinition;
 import io.grpc.ServiceDescriptor;
 import io.grpc.protobuf.ProtoUtils;
 
-import org.apache.shenyu.client.core.utils.ReflectUtils;
+import org.apache.shenyu.common.exception.ShenyuException;
+import org.apache.shenyu.common.utils.ReflectUtils;
 import org.apache.shenyu.protocol.grpc.constant.GrpcConstants;
 import org.apache.shenyu.protocol.grpc.message.JsonMessage;
 
@@ -83,9 +84,9 @@ public class JsonServerServiceInterceptor {
             if (Objects.isNull(defaultInstanceField)) {
                 // Compatible with lower versions. eg: grpc 1.6.0
                 if (requestMarshaller instanceof MethodDescriptor.PrototypeMarshaller) {
-                    PrototypeMarshaller<?> prototypeMarshaller = (PrototypeMarshaller<?>) requestMarshaller;
+                    MethodDescriptor.PrototypeMarshaller<?> prototypeMarshaller = (PrototypeMarshaller<?>) requestMarshaller;
                     if (Objects.isNull(prototypeMarshaller.getMessagePrototype())) {
-                        throw new RuntimeException(String.format("can not get defaultInstance Field of %s", requestMarshaller.getClass()));
+                        throw new ShenyuException(String.format("can not get defaultInstance Field of %s", requestMarshaller.getClass()));
                     }
                     grpcRequestParamClass = prototypeMarshaller.getMessagePrototype().getClass();
                 }
@@ -114,7 +115,7 @@ public class JsonServerServiceInterceptor {
         for (MethodDescriptor<?, ?> md : wrappedDescriptors) {
             Field fullMethodNameField = ReflectUtils.getField(md.getClass(), "fullMethodName");
             if (Objects.isNull(fullMethodNameField)) {
-                throw new RuntimeException(String.format("can not get fullMethodName Field of %s", md.getClass()));
+                throw new ShenyuException(String.format("can not get fullMethodName Field of %s", md.getClass()));
             }
             fullMethodNameField.setAccessible(true);
             String fullMethodName = (String) fullMethodNameField.get(md);

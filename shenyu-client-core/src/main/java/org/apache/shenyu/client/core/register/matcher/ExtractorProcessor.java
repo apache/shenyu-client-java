@@ -17,9 +17,7 @@
 
 package org.apache.shenyu.client.core.register.matcher;
 
-
-
-import org.apache.shenyu.client.core.enums.RpcTypeEnum;
+import org.apache.shenyu.common.enums.RpcTypeEnum;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,7 +28,7 @@ import java.util.stream.Collectors;
  * Supports post-extraction and processing of client metadata.
  */
 public interface ExtractorProcessor extends ApiBeanProcessor {
-    
+
     /**
      * By default, all client pairs are supported.
      *
