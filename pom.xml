@@ -116,7 +116,7 @@
         <motan.version>1.2.1</motan.version>
         <sofa-rpc-all.version>5.7.6</sofa-rpc-all.version>
         <jaxb.api.version>2.3.1</jaxb.api.version>
-        <guava.version>32.0.0-jre</guava.version>
+        <guava.version>33.7.1-jre</guava.version>
         <okhttp.version>4.9.3</okhttp.version>
         <bcprov-jdk18on.version>1.85</bcprov-jdk18on.version>
         <mockito.version>3.5.15</mockito.version>
